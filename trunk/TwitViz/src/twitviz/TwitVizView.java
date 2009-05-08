@@ -11,12 +11,14 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import prefuse.Visualization;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
+import prefuse.data.Node;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
@@ -105,18 +107,58 @@ public class TwitVizView extends FrameView {
     //Function used to display visualization
     public void displayTwitviz(Twitter link, String filter) {
         Twitter.User user = link.show(username.getText());
+
         //Load previous recorded data
         try {
             graph = new GraphMLReader().readGraph("twitviz.xml");
 
-            
+            int i=0;
+            int nodePosition = -1;
 
+            //if we have already this id on the database
+            if(graph.getNodeCount()>0) {
+                while(i<graph.getNodeCount()) {
+                    if(graph.getNode(i).getLong("id")==user.getId()) {
+                        nodePosition = i;
+                        break;
+                    }
+                    i++;
+                }
+            }
+
+            Node viz_node;
+
+            if(nodePosition>=0) {//update previous recorded node
+                viz_node = graph.getNode(nodePosition);
+            }else{//create new node
+                viz_node = graph.addNode();   
+            }
+
+            viz_node.setString("description",user.getDescription());
+            viz_node.setLong("id", user.getId());
+            viz_node.setString("location", user.getLocation());
+            viz_node.setString("name", user.getName());
+            viz_node.setString("profileImageUrl", user.getProfileImageUrl().toString());
+            viz_node.setBoolean("protectedUser", user.isProtectedUser());
+            viz_node.setString("screenName", user.getScreenName());
+            viz_node.setString("status", user.getStatus().getText());
+            viz_node.setString("website", user.getWebsite().toString());
+
+            /* Edge clean-up */
+            for(int j=0;j<graph.getEdgeCount();j++) {
+                graph.removeEdge(j);
+            }
+
+            try{
+                graphWriter.writeGraph(graph, new File("twitviz.xml"));
+            }catch(DataIOException e){
+                e.printStackTrace();
+            }
 
             /* load the data from an XML file */
             vis = new Visualization();
             /* vis is the main object that will run the visualization */
             vis.add("social_network", graph);
-            
             
 
         } catch (DataIOException e) {
