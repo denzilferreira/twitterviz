@@ -31,8 +31,8 @@ public class TwitVizView extends FrameView {
 
     private Graph graph;
     private Visualization vis;
-    private GraphMLWriter graphWriter;
-    private GraphMLReader graphReader;
+    private GraphMLWriter graphWriter = new GraphMLWriter();
+    private GraphMLReader graphReader = new GraphMLReader();
 
     public TwitVizView(SingleFrameApplication app) {
         super(app);
@@ -110,7 +110,7 @@ public class TwitVizView extends FrameView {
 
         //Load previous recorded data
         try {
-            graph = new GraphMLReader().readGraph("twitviz.xml");
+            graph = graphReader.readGraph("twitviz.xml");
 
             int i=0;
             int nodePosition = -1;
@@ -145,9 +145,9 @@ public class TwitVizView extends FrameView {
             viz_node.setString("website", user.getWebsite().toString());
 
             /* Edge clean-up */
-            for(int j=0;j<graph.getEdgeCount();j++) {
+            /*for(int j=0;j<graph.getEdgeCount();j++) {
                 graph.removeEdge(j);
-            }
+            }*/
 
             try{
                 graphWriter.writeGraph(graph, new File("twitviz.xml"));
@@ -162,9 +162,11 @@ public class TwitVizView extends FrameView {
             
 
         } catch (DataIOException e) {
-            e.printStackTrace();
-            System.err.println("Error loading graph. Exiting...");
-            System.exit(1);
+            try{
+                graphWriter.writeGraph(graph, new File("twitviz.xml"));
+            }catch(DataIOException j) {
+                j.printStackTrace();
+            }
         }
     }
 
