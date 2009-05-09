@@ -4,6 +4,7 @@
 
 package twitviz;
 
+import java.awt.Color;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -11,17 +12,34 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.List;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import prefuse.Constants;
+import prefuse.Display;
 import prefuse.Visualization;
+import prefuse.action.ActionList;
+import prefuse.action.RepaintAction;
+import prefuse.action.layout.graph.ForceDirectedLayout;
+import prefuse.activity.Activity;
+import prefuse.controls.Control;
+import prefuse.controls.ControlAdapter;
+import prefuse.controls.DragControl;
+import prefuse.controls.PanControl;
+import prefuse.controls.ToolTipControl;
+import prefuse.controls.ZoomControl;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
 import prefuse.data.Node;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
+import prefuse.render.DefaultRendererFactory;
+import prefuse.render.LabelRenderer;
+import prefuse.visual.VisualItem;
 import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
 
 /**
@@ -31,8 +49,8 @@ public class TwitVizView extends FrameView {
 
     private Graph graph;
     private Visualization vis;
-    private GraphMLWriter graphWriter = new GraphMLWriter();
-    private GraphMLReader graphReader = new GraphMLReader();
+    private GraphMLWriter graphWriter;
+    private GraphMLReader graphReader;
 
     public TwitVizView(SingleFrameApplication app) {
         super(app);
@@ -108,66 +126,164 @@ public class TwitVizView extends FrameView {
     public void displayTwitviz(Twitter link, String filter) {
         Twitter.User user = link.show(username.getText());
 
+        /*System.out.println("description:"+user.getDescription());
+        System.out.println("id:"+user.getId());
+        System.out.println("location:"+user.getLocation());
+        System.out.println("name:"+user.getName());
+        System.out.println("img:"+user.getProfileImageUrl());
+        System.out.println("protected:"+user.isProtectedUser());
+        System.out.println("screenname:"+user.getScreenName());
+        System.out.println("status:"+user.getStatus().getText());
+        System.out.println("website:"+user.getWebsite().toString());*/
+        
         //Load previous recorded data
         try {
-            graph = graphReader.readGraph("twitviz.xml");
+            graph = new Graph();
+            graph = new GraphMLReader().readGraph("twitviz.xml");
+            
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-            int i=0;
-            int nodePosition = -1;
+        int i=0;
+        int nodePosition = -1;
 
-            //if we have already this id on the database
-            if(graph.getNodeCount()>0) {
-                while(i<graph.getNodeCount()) {
-                    if(graph.getNode(i).getLong("id")==user.getId()) {
-                        nodePosition = i;
-                        break;
-                    }
-                    i++;
+        //if we have already this id on the database
+
+        if(graph.getNodeCount()>0) {
+            while(i<graph.getNodeCount()) {
+                if(graph.getNode(i).getLong("id")==user.getId()) {
+                    nodePosition = i;
+                    break;
+                }
+                i++;
+            }
+        }
+
+        Node viz_node;
+
+        if(nodePosition>=0) {//update previous recorded node
+            viz_node = graph.getNode(nodePosition);
+        }else{//create new node
+            viz_node = graph.addNode();
+        }
+
+        viz_node.setString("description",user.getDescription());
+        viz_node.setLong("id", user.getId());
+        viz_node.setString("location", user.getLocation());
+        viz_node.setString("name", user.getName());
+        viz_node.setString("profileImageUrl", user.getProfileImageUrl().toString());
+        viz_node.setBoolean("protectedUser", user.isProtectedUser());
+        viz_node.setString("screenName", user.getScreenName());
+        viz_node.setString("status", user.getStatus().getText());
+        viz_node.setString("website", user.getWebsite().toString());
+
+        /* Edge clean-up for updating */
+        /*for(int j=0;j<graph.getEdgeCount();j++) {
+            graph.removeEdge(j);
+        }*/
+
+        List<Twitter.User> following = link.getFriends();
+        for(int j=0; j<following.size(); j++) {
+            Twitter.User tmp = following.get(j);
+
+            Node follower = null;
+
+            for(int k=0;k<graph.getNodeCount();k++) {
+                if(graph.getNode(k).getLong("id")==tmp.getId()) {
+                    follower = graph.getNode(k);
+                    break;
                 }
             }
 
-            Node viz_node;
-
-            if(nodePosition>=0) {//update previous recorded node
-                viz_node = graph.getNode(nodePosition);
-            }else{//create new node
-                viz_node = graph.addNode();   
+            if(follower == null) {
+                follower = graph.addNode();
+                //connect friend with user
+                graph.addEdge(viz_node, follower);
             }
 
-            viz_node.setString("description",user.getDescription());
-            viz_node.setLong("id", user.getId());
-            viz_node.setString("location", user.getLocation());
-            viz_node.setString("name", user.getName());
-            viz_node.setString("profileImageUrl", user.getProfileImageUrl().toString());
-            viz_node.setBoolean("protectedUser", user.isProtectedUser());
-            viz_node.setString("screenName", user.getScreenName());
-            viz_node.setString("status", user.getStatus().getText());
-            viz_node.setString("website", user.getWebsite().toString());
+            follower.setString("description",tmp.getDescription());
+            follower.setLong("id", tmp.getId());
+            follower.setString("location", tmp.getLocation());
+            follower.setString("name", tmp.getName());
+            follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
+            follower.setBoolean("protectedUser", tmp.isProtectedUser());
+            follower.setString("screenName", tmp.getScreenName());
 
-            /* Edge clean-up */
-            /*for(int j=0;j<graph.getEdgeCount();j++) {
-                graph.removeEdge(j);
-            }*/
+            if(tmp.getStatus()!=null) {
+                follower.setString("status", tmp.getStatus().getText());
+            }else follower.setString("status", "");
 
-            try{
-                graphWriter.writeGraph(graph, new File("twitviz.xml"));
-            }catch(DataIOException e){
-                e.printStackTrace();
-            }
-
-            /* load the data from an XML file */
-            vis = new Visualization();
-            /* vis is the main object that will run the visualization */
-            vis.add("social_network", graph);
-            
-
-        } catch (DataIOException e) {
-            try{
-                graphWriter.writeGraph(graph, new File("twitviz.xml"));
-            }catch(DataIOException j) {
-                j.printStackTrace();
-            }
+            if(tmp.getWebsite()!=null) {
+                follower.setString("website", tmp.getWebsite().toString());
+            }else follower.setString("website", "");
         }
+
+        try{
+            new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+        }catch(DataIOException e){
+            e.printStackTrace();
+        }
+
+        /* load the data from an XML file */
+        vis = new Visualization();
+        /* vis is the main object that will run the visualization */
+        vis.add("social_network", graph);
+        
+
+        LabelRenderer imgLabel = new LabelRenderer("name","profileImageUrl");
+
+        imgLabel.setVerticalAlignment(Constants.BOTTOM);
+        imgLabel.setHorizontalPadding(48);
+        imgLabel.setVerticalPadding(48);
+        imgLabel.setMaxImageDimensions(48,48);
+
+        DefaultRendererFactory drf = new DefaultRendererFactory(imgLabel);
+
+        vis.setRendererFactory(drf);
+
+        ActionList layout = new ActionList(Activity.INFINITY);
+        layout.add(new ForceDirectedLayout("social_network"));
+
+        layout.add(new RepaintAction());
+
+        vis.putAction("layout", layout);
+
+        Display display = new Display(vis);
+        display.setSize(1024, 683); //this is the size of the background image
+        display.pan(400, 300);	// pan to the middle
+        display.addControlListener(new DragControl());
+        display.addControlListener(new PanControl());
+        display.addControlListener(new ZoomControl());
+        
+        ToolTipControl labels = new ToolTipControl("name");
+
+        Control hover = new ControlAdapter(){
+            public void itemEntered(VisualItem item, MouseEvent evt) {
+                //item.setFillColor(ColorLib.color(Color.BLACK));
+
+                item.getVisualization().repaint();
+            }
+
+            public void itemExited(VisualItem item, MouseEvent evt) {
+                item.setFillColor(Color.TRANSLUCENT);
+                item.getVisualization().repaint();
+            }
+        };
+
+        display.addControlListener(labels);
+        display.addControlListener(hover);
+
+        panel_viz.add(display);
+        /* add the display (which holds the visualization) to the window */
+
+        panel_viz.validate();
+        panel_viz.setVisible(true);
+
+        vis.run("colour");
+        vis.run("layout");
+        vis.run("size");
     }
 
     /** This method is called from within the constructor to
@@ -338,7 +454,7 @@ public class TwitVizView extends FrameView {
 
             //establish connection to twitter servers using given credentials
             Twitter link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
-
+            
             displayTwitviz(link,""); //load user social network
 
             //Get current logged user
