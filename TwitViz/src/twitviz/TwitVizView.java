@@ -122,24 +122,63 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
+    //recursive function that will fill out the rest of the nodes relationships
+    public void getFriendsOfFriends(Twitter link, int user_id, Node origin) {
+
+        List<Twitter.User> following = link.getFriends(Integer.toString(user_id));
+
+        int max = (following.size()>5)?5:following.size();
+
+        for(int j=0; j<max; j++) {
+            Twitter.User tmp = following.get(j);
+
+            //there are users that like privacy, so we bypass them...
+            if(!tmp.isProtectedUser()) {
+
+                Node follower = null;
+                for(int k=0;k<graph.getNodeCount();k++) {
+                    if(graph.getNode(k).getLong("id")==tmp.getId()) {
+                        follower = graph.getNode(k);
+                        break;
+                    }
+                }
+
+                if(follower == null) {
+                    follower = graph.addNode();
+                    //connect friend with user
+                    graph.addEdge(origin, follower);
+                }
+
+                follower.setString("description",tmp.getDescription());
+                follower.setLong("id", tmp.getId());
+                follower.setString("location", tmp.getLocation());
+                follower.setString("name", tmp.getName());
+                follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
+                follower.setBoolean("protectedUser", tmp.isProtectedUser());
+                follower.setString("screenName", tmp.getScreenName());
+
+                if(tmp.getStatus()!=null) {
+                    follower.setString("status", tmp.getStatus().getText());
+                }else follower.setString("status", "");
+
+                if(tmp.getWebsite()!=null) {
+                    follower.setString("website", tmp.getWebsite().toString());
+                }else follower.setString("website", "");
+                
+                //getFriendsOfFriends(link, tmp.getId(), follower);
+            }
+        }
+    }
+
     //Function used to display visualization
     public void displayTwitviz(Twitter link, String filter) {
         Twitter.User user = link.show(username.getText());
-
-        /*System.out.println("description:"+user.getDescription());
-        System.out.println("id:"+user.getId());
-        System.out.println("location:"+user.getLocation());
-        System.out.println("name:"+user.getName());
-        System.out.println("img:"+user.getProfileImageUrl());
-        System.out.println("protected:"+user.isProtectedUser());
-        System.out.println("screenname:"+user.getScreenName());
-        System.out.println("status:"+user.getStatus().getText());
-        System.out.println("website:"+user.getWebsite().toString());*/
         
         //Load previous recorded data
         try {
             graph = new Graph();
             graph = new GraphMLReader().readGraph("twitviz.xml");
+            graph.clear(); //cleanup
             
         } catch (DataIOException e) {
             e.printStackTrace();
@@ -176,48 +215,52 @@ public class TwitVizView extends FrameView {
         viz_node.setString("profileImageUrl", user.getProfileImageUrl().toString());
         viz_node.setBoolean("protectedUser", user.isProtectedUser());
         viz_node.setString("screenName", user.getScreenName());
-        viz_node.setString("status", user.getStatus().getText());
-        viz_node.setString("website", user.getWebsite().toString());
+        
+        if(user.getStatus()!=null) viz_node.setString("status", user.getStatus().getText());
+        else viz_node.setString("status", "");
 
-        /* Edge clean-up for updating */
-        /*for(int j=0;j<graph.getEdgeCount();j++) {
-            graph.removeEdge(j);
-        }*/
-
+        if(user.getWebsite()!=null) viz_node.setString("website", user.getWebsite().toString());
+        else viz_node.setString("website", "");
+        
         List<Twitter.User> following = link.getFriends();
         for(int j=0; j<following.size(); j++) {
             Twitter.User tmp = following.get(j);
 
-            Node follower = null;
+            //there are users that like privacy, so we bypass them...
+            if(!tmp.isProtectedUser()) {
 
-            for(int k=0;k<graph.getNodeCount();k++) {
-                if(graph.getNode(k).getLong("id")==tmp.getId()) {
-                    follower = graph.getNode(k);
-                    break;
+                Node follower = null;
+                for(int k=0;k<graph.getNodeCount();k++) {
+                    if(graph.getNode(k).getLong("id")==tmp.getId()) {
+                        follower = graph.getNode(k);
+                        break;
+                    }
                 }
+
+                if(follower == null) {
+                    follower = graph.addNode();
+                    //connect friend with user
+                    graph.addEdge(viz_node, follower);
+                }
+
+                follower.setString("description",tmp.getDescription());
+                follower.setLong("id", tmp.getId());
+                follower.setString("location", tmp.getLocation());
+                follower.setString("name", tmp.getName());
+                follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
+                follower.setBoolean("protectedUser", tmp.isProtectedUser());
+                follower.setString("screenName", tmp.getScreenName());
+
+                if(tmp.getStatus()!=null) {
+                    follower.setString("status", tmp.getStatus().getText());
+                }else follower.setString("status", "");
+
+                if(tmp.getWebsite()!=null) {
+                    follower.setString("website", tmp.getWebsite().toString());
+                }else follower.setString("website", "");
+
+                getFriendsOfFriends(link, tmp.getId(), follower);
             }
-
-            if(follower == null) {
-                follower = graph.addNode();
-                //connect friend with user
-                graph.addEdge(viz_node, follower);
-            }
-
-            follower.setString("description",tmp.getDescription());
-            follower.setLong("id", tmp.getId());
-            follower.setString("location", tmp.getLocation());
-            follower.setString("name", tmp.getName());
-            follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
-            follower.setBoolean("protectedUser", tmp.isProtectedUser());
-            follower.setString("screenName", tmp.getScreenName());
-
-            if(tmp.getStatus()!=null) {
-                follower.setString("status", tmp.getStatus().getText());
-            }else follower.setString("status", "");
-
-            if(tmp.getWebsite()!=null) {
-                follower.setString("website", tmp.getWebsite().toString());
-            }else follower.setString("website", "");
         }
 
         try{
