@@ -178,7 +178,7 @@ public class TwitVizView extends FrameView {
         try {
             graph = new Graph();
             graph = new GraphMLReader().readGraph("twitviz.xml");
-            graph.clear(); //cleanup
+            //graph.clear(); //cleanup
             
         } catch (DataIOException e) {
             e.printStackTrace();
