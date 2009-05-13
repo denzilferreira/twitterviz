@@ -60,6 +60,7 @@ public class TwitVizView extends FrameView {
     private Visualization vis;
     private GraphMLWriter graphWriter;
     private GraphMLReader graphReader;
+    private Twitter.User user;
 
     public TwitVizView(SingleFrameApplication app) {
         super(app);
@@ -136,9 +137,7 @@ public class TwitVizView extends FrameView {
 
         List<Twitter.User> following = link.getFriends(Integer.toString(user_id));
 
-        int max = (following.size()>5)?5:following.size();
-
-        for(int j=0; j<max; j++) {
+        for(int j=0; j<following.size(); j++) {
             Twitter.User tmp = following.get(j);
 
             //there are users that like privacy, so we bypass them...
@@ -174,13 +173,12 @@ public class TwitVizView extends FrameView {
                     follower.setString("website", tmp.getWebsite().toString());
                 }else follower.setString("website", "");
                 
-                //getFriendsOfFriends(link, tmp.getId(), follower);
             }
         }
     }
 
     //Function used to display visualization
-    public void displayTwitviz(Twitter link, String filter) {
+    /*public void displayTwitviz() {
         Twitter.User user = link.show(username.getText());
         
         //Load previous recorded data
@@ -271,7 +269,11 @@ public class TwitVizView extends FrameView {
                         follower.setString("website", tmp.getWebsite().toString());
                     }else follower.setString("website", "");
 
-                    getFriendsOfFriends(link, tmp.getId(), follower);
+                    int k=0;
+                    while (k<3) {
+                        getFriendsOfFriends(link, tmp.getId(), follower);
+                        k++;
+                    }
                 }
             }
         }
@@ -282,9 +284,9 @@ public class TwitVizView extends FrameView {
             e.printStackTrace();
         }
 
-        /* load the data from an XML file */
+        // load the data from an XML file
         vis = new Visualization();
-        /* vis is the main object that will run the visualization */
+        // vis is the main object that will run the visualization
         vis.add("social_network", graph);
 
         //Profile pictures
@@ -343,14 +345,14 @@ public class TwitVizView extends FrameView {
         display.addControlListener(hover);
 
         panel_viz.add(display);
-        /* add the display (which holds the visualization) to the window */
+        // add the display (which holds the visualization) to the window
 
         panel_viz.validate();
         panel_viz.setVisible(true);
 
         vis.run("color");
         vis.run("layout");
-    }
+    }*/
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -514,24 +516,94 @@ public class TwitVizView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void displayTwitviz() {
+        
+        //Read the database
+        try {
+            graph = new Graph();
+            graph = new GraphMLReader().readGraph("twitviz.xml");
+            
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        
+        // load the data from an XML file
+        vis = new Visualization();
+        // vis is the main object that will run the visualization
+        vis.add("social_network", graph);
+
+        //Profile pictures
+        LabelRenderer imgLabel = new LabelRenderer("name","profileImageUrl");
+        imgLabel.setHorizontalAlignment(Constants.BOTTOM);
+        imgLabel.setVerticalAlignment(Constants.BOTTOM);
+        imgLabel.setMaxImageDimensions(48, 48);
+
+        DefaultRendererFactory drf = new DefaultRendererFactory(imgLabel);
+
+        //Relationships
+        EdgeRenderer relationship = new EdgeRenderer();
+        drf.add(new InGroupPredicate("social_network.edges"),relationship);
+
+        vis.setRendererFactory(drf);
+
+        ActionList layout = new ActionList(Activity.INFINITY);
+        layout.add(new ForceDirectedLayout("social_network"));
+        layout.add(new RepaintAction());
+
+        vis.putAction("layout", layout);
+
+        ItemAction edgeColor = new ColorAction("social_network.edges",
+                VisualItem.STROKECOLOR, ColorLib.rgb(200,200,200));
+
+        ActionList color = new ActionList();
+        color.add(edgeColor);
+        vis.putAction("color", color);
+
+        Display display = new Display(vis);
+        display.setSize(1024, 683); //this is the size of the background image
+        display.pan(400, 300);	// pan to the middle
+        display.addControlListener(new DragControl());
+        display.addControlListener(new PanControl());
+        display.addControlListener(new ZoomControl());
+        display.addControlListener(new WheelZoomControl());
+        display.addControlListener(new ZoomToFitControl());
+        display.addControlListener(new NeighborHighlightControl());
+
+        ToolTipControl labels = new ToolTipControl("name");
+
+        Control hover = new ControlAdapter(){
+            public void itemEntered(VisualItem item, MouseEvent evt) {
+                //item.setFillColor(ColorLib.color(Color.BLACK));
+
+                item.getVisualization().repaint();
+            }
+
+            public void itemExited(VisualItem item, MouseEvent evt) {
+                item.setFillColor(Color.TRANSLUCENT);
+                item.getVisualization().repaint();
+            }
+        };
+
+        display.addControlListener(labels);
+        display.addControlListener(hover);
+
+        panel_viz.add(display);
+        // add the display (which holds the visualization) to the window
+
+        panel_viz.validate();
+        panel_viz.setVisible(true);
+
+        vis.run("color");
+        vis.run("layout");
+    }
+
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:
         if(username.getText().length()>0 && password.getPassword().length>0) {
-
             //establish connection to twitter servers using given credentials
-            Twitter link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
-            
-            displayTwitviz(link,""); //load user social network
-
-            //Get current logged user
-            //Twitter.User user = link.show(username.getText());
-            
-
-            //System.out.println(user.getProfileImageUrl());
-
-            //Get status from current user
-            //Twitter.Status stats = link.getStatus();
-            //System.out.println(stats.getText());
+            link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
+            displayTwitviz(); //load visualization
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
@@ -550,6 +622,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
 
+    private Twitter link;
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
