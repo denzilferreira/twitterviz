@@ -23,23 +23,32 @@ import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
+import prefuse.action.ItemAction;
 import prefuse.action.RepaintAction;
+import prefuse.action.assignment.ColorAction;
+import prefuse.action.filter.GraphDistanceFilter;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
 import prefuse.controls.Control;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
+import prefuse.controls.NeighborHighlightControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.ToolTipControl;
+import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
+import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
 import prefuse.data.Node;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
 import prefuse.render.DefaultRendererFactory;
+import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
+import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
+import prefuse.visual.expression.InGroupPredicate;
 import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
 
 /**
@@ -178,7 +187,6 @@ public class TwitVizView extends FrameView {
         try {
             graph = new Graph();
             graph = new GraphMLReader().readGraph("twitviz.xml");
-            //graph.clear(); //cleanup
             
         } catch (DataIOException e) {
             e.printStackTrace();
@@ -205,6 +213,8 @@ public class TwitVizView extends FrameView {
         if(nodePosition>=0) {//update previous recorded node
             viz_node = graph.getNode(nodePosition);
         }else{//create new node
+            //this is a new user logged in, so we need to clear previous graph and rebuild
+            graph.clear();
             viz_node = graph.addNode();
         }
 
@@ -221,45 +231,48 @@ public class TwitVizView extends FrameView {
 
         if(user.getWebsite()!=null) viz_node.setString("website", user.getWebsite().toString());
         else viz_node.setString("website", "");
-        
-        List<Twitter.User> following = link.getFriends();
-        for(int j=0; j<following.size(); j++) {
-            Twitter.User tmp = following.get(j);
 
-            //there are users that like privacy, so we bypass them...
-            if(!tmp.isProtectedUser()) {
+        //we need to build the graph from scratch
+        if(nodePosition==-1) {
+            List<Twitter.User> following = link.getFriends();
+            for(int j=0; j<following.size(); j++) {
+                Twitter.User tmp = following.get(j);
 
-                Node follower = null;
-                for(int k=0;k<graph.getNodeCount();k++) {
-                    if(graph.getNode(k).getLong("id")==tmp.getId()) {
-                        follower = graph.getNode(k);
-                        break;
+                //there are users that like privacy, so we bypass them...
+                if(!tmp.isProtectedUser()) {
+
+                    Node follower = null;
+                    for(int k=0;k<graph.getNodeCount();k++) {
+                        if(graph.getNode(k).getLong("id")==tmp.getId()) {
+                            follower = graph.getNode(k);
+                            break;
+                        }
                     }
+
+                    if(follower == null) {
+                        follower = graph.addNode();
+                        //connect friend with user
+                        graph.addEdge(viz_node, follower);
+                    }
+
+                    follower.setString("description",tmp.getDescription());
+                    follower.setLong("id", tmp.getId());
+                    follower.setString("location", tmp.getLocation());
+                    follower.setString("name", tmp.getName());
+                    follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
+                    follower.setBoolean("protectedUser", tmp.isProtectedUser());
+                    follower.setString("screenName", tmp.getScreenName());
+
+                    if(tmp.getStatus()!=null) {
+                        follower.setString("status", tmp.getStatus().getText());
+                    }else follower.setString("status", "");
+
+                    if(tmp.getWebsite()!=null) {
+                        follower.setString("website", tmp.getWebsite().toString());
+                    }else follower.setString("website", "");
+
+                    getFriendsOfFriends(link, tmp.getId(), follower);
                 }
-
-                if(follower == null) {
-                    follower = graph.addNode();
-                    //connect friend with user
-                    graph.addEdge(viz_node, follower);
-                }
-
-                follower.setString("description",tmp.getDescription());
-                follower.setLong("id", tmp.getId());
-                follower.setString("location", tmp.getLocation());
-                follower.setString("name", tmp.getName());
-                follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
-                follower.setBoolean("protectedUser", tmp.isProtectedUser());
-                follower.setString("screenName", tmp.getScreenName());
-
-                if(tmp.getStatus()!=null) {
-                    follower.setString("status", tmp.getStatus().getText());
-                }else follower.setString("status", "");
-
-                if(tmp.getWebsite()!=null) {
-                    follower.setString("website", tmp.getWebsite().toString());
-                }else follower.setString("website", "");
-
-                getFriendsOfFriends(link, tmp.getId(), follower);
             }
         }
 
@@ -273,25 +286,33 @@ public class TwitVizView extends FrameView {
         vis = new Visualization();
         /* vis is the main object that will run the visualization */
         vis.add("social_network", graph);
-        
 
+        //Profile pictures
         LabelRenderer imgLabel = new LabelRenderer("name","profileImageUrl");
-
+        imgLabel.setHorizontalAlignment(Constants.BOTTOM);
         imgLabel.setVerticalAlignment(Constants.BOTTOM);
-        imgLabel.setHorizontalPadding(48);
-        imgLabel.setVerticalPadding(48);
-        imgLabel.setMaxImageDimensions(48,48);
-
+        imgLabel.setMaxImageDimensions(48, 48);
+        
         DefaultRendererFactory drf = new DefaultRendererFactory(imgLabel);
 
+        //Relationships
+        EdgeRenderer relationship = new EdgeRenderer();
+        drf.add(new InGroupPredicate("social_network.edges"),relationship);
+        
         vis.setRendererFactory(drf);
 
         ActionList layout = new ActionList(Activity.INFINITY);
         layout.add(new ForceDirectedLayout("social_network"));
-
         layout.add(new RepaintAction());
 
         vis.putAction("layout", layout);
+
+        ItemAction edgeColor = new ColorAction("social_network.edges",
+                VisualItem.STROKECOLOR, ColorLib.rgb(200,200,200));
+
+        ActionList color = new ActionList();
+        color.add(edgeColor);
+        vis.putAction("color", color);
 
         Display display = new Display(vis);
         display.setSize(1024, 683); //this is the size of the background image
@@ -299,6 +320,9 @@ public class TwitVizView extends FrameView {
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
+        display.addControlListener(new WheelZoomControl());
+        display.addControlListener(new ZoomToFitControl());
+        display.addControlListener(new NeighborHighlightControl());
         
         ToolTipControl labels = new ToolTipControl("name");
 
@@ -324,9 +348,8 @@ public class TwitVizView extends FrameView {
         panel_viz.validate();
         panel_viz.setVisible(true);
 
-        vis.run("colour");
+        vis.run("color");
         vis.run("layout");
-        vis.run("size");
     }
 
     /** This method is called from within the constructor to
