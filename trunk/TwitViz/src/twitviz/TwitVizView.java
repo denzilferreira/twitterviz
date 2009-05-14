@@ -69,6 +69,8 @@ public class TwitVizView extends FrameView {
 
         initComponents();
 
+        displayTwitviz(); //load visualization
+
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -235,9 +237,9 @@ public class TwitVizView extends FrameView {
         jLabel7 = new javax.swing.JLabel();
         panel_viz = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lbl_username = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lbl_password = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         btn_login = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
@@ -426,15 +428,15 @@ public class TwitVizView extends FrameView {
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        lbl_username.setText(resourceMap.getString("lbl_username.text")); // NOI18N
+        lbl_username.setName("lbl_username"); // NOI18N
 
         username.setText(resourceMap.getString("username.text")); // NOI18N
         username.setToolTipText(resourceMap.getString("username.toolTipText")); // NOI18N
         username.setName("username"); // NOI18N
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
+        lbl_password.setText(resourceMap.getString("lbl_password.text")); // NOI18N
+        lbl_password.setName("lbl_password"); // NOI18N
 
         password.setText(resourceMap.getString("password.text")); // NOI18N
         password.setName("password"); // NOI18N
@@ -463,11 +465,11 @@ public class TwitVizView extends FrameView {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(jPanel1Layout.createSequentialGroup()
-                        .add(jLabel1)
+                        .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jLabel2)
+                        .add(lbl_password)
                         .add(2, 2, 2)
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(9, 9, 9)
@@ -482,8 +484,8 @@ public class TwitVizView extends FrameView {
                     .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jLabel2)
-                    .add(jLabel1)
+                    .add(lbl_password)
+                    .add(lbl_username)
                     .add(btn_login))
                 .add(9, 9, 9)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -574,18 +576,23 @@ public class TwitVizView extends FrameView {
         if(username.getText().length()>0 && password.getPassword().length>0) {
             //establish connection to twitter servers using given credentials
             link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
-            user = link.show(username.getText());
-
-            //depth = 3
-            buildSocialNetwork(user);
-
-            displayTwitviz(); //load visualization
-
+            if(link!=null) {
+                user = link.show(username.getText());
+                lbl_username.setVisible(false);
+                username.setVisible(false);
+                lbl_password.setVisible(false);
+                password.setVisible(false);
+                btn_login.setText("Logout");
+                
+                buildSocialNetwork(user);
+            }
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
+        link.setStatus(updateTextField.getText());
+        updateTextField.setText("");
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void updateTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateTextFieldKeyTyped
@@ -677,8 +684,6 @@ public class TwitVizView extends FrameView {
     private javax.swing.JButton addButton;
     private javax.swing.JButton btn_login;
     private javax.swing.JLabel countLabel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -691,6 +696,8 @@ public class TwitVizView extends FrameView {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField keywordsTextField;
+    private javax.swing.JLabel lbl_password;
+    private javax.swing.JLabel lbl_username;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JPanel panel_viz;
@@ -706,8 +713,8 @@ public class TwitVizView extends FrameView {
     // End of variables declaration//GEN-END:variables
 
     //Twitter API vars
-    private Twitter link;
-    private Twitter.User user;
+    private Twitter link = null;
+    private Twitter.User user = null;
 
     //Prefuse vars
     private Graph graph;
