@@ -14,6 +14,7 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.Timer;
@@ -24,15 +25,21 @@ import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
 import prefuse.action.ActionList;
+import prefuse.action.ItemAction;
 import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.DataColorAction;
 import prefuse.action.assignment.DataSizeAction;
+import prefuse.action.filter.GraphDistanceFilter;
 import prefuse.action.layout.graph.ForceDirectedLayout;
+import prefuse.action.layout.graph.RadialTreeLayout;
 import prefuse.activity.Activity;
+import prefuse.controls.Control;
+import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.controls.NeighborHighlightControl;
 import prefuse.controls.PanControl;
+import prefuse.controls.ToolTipControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
@@ -42,15 +49,14 @@ import prefuse.data.Node;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
+import prefuse.render.AbstractShapeRenderer;
 import prefuse.render.DefaultRendererFactory;
+import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.User;
-//import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
-//import winterwell.jtwitter.Twitter.User;
+import prefuse.visual.expression.InGroupPredicate;
+import twitter4j.*;
 
 /**
  * The application's main frame.
@@ -142,7 +148,7 @@ public class TwitVizView extends FrameView {
         return false;
     }
 
-    private void buildSocialNetwork(User user) {
+    private void buildSocialNetwork(User user) throws TwitterException {
 
         //restore saved database
         try {
@@ -163,20 +169,10 @@ public class TwitVizView extends FrameView {
         source.setInt("relevance", 2);
 
         List<User> friends = null;
-        try {
-            friends = link.getFriends(Integer.toString(user.getId()));
-        } catch (TwitterException ex) {
-            //TODO put warning on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         List<User> followers = null;
-        try {
-            followers = link.getFollowers();
-        } catch (TwitterException ex) {
-            //TODO put warning on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        friends = link.getFriends(Integer.toString(user.getId()));
+        followers = link.getFollowers();
 
         for(int i=0;i<friends.size();i++) {
             User friend = friends.get(i);
@@ -309,8 +305,7 @@ public class TwitVizView extends FrameView {
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                             .add(jPanel2Layout.createSequentialGroup()
                                 .add(searchButton)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -318,7 +313,10 @@ public class TwitVizView extends FrameView {
                         .add(241, 241, 241))
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(jLabel4)
-                        .addContainerGap(99, Short.MAX_VALUE))))
+                        .addContainerGap(115, Short.MAX_VALUE))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                        .add(71, 71, 71))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -332,7 +330,7 @@ public class TwitVizView extends FrameView {
                     .add(addButton))
                 .add(5, 5, 5)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 400, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(46, 46, 46))
+                .add(20, 20, 20))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -390,14 +388,14 @@ public class TwitVizView extends FrameView {
             .add(jPanel3Layout.createSequentialGroup()
                 .add(9, 9, 9)
                 .add(jLabel6)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 168, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 179, Short.MAX_VALUE)
                 .add(countLabel)
                 .add(8, 8, 8))
             .add(updateTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
                 .add(12, 12, 12)
                 .add(jLabel7)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 209, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 232, Short.MAX_VALUE)
                 .add(updateButton))
             .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
         );
@@ -414,9 +412,10 @@ public class TwitVizView extends FrameView {
                     .add(updateButton)
                     .add(jLabel7))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE))
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
         );
 
+        panel_viz.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         panel_viz.setName("panel_viz"); // NOI18N
 
         org.jdesktop.layout.GroupLayout panel_vizLayout = new org.jdesktop.layout.GroupLayout(panel_viz);
@@ -427,7 +426,7 @@ public class TwitVizView extends FrameView {
         );
         panel_vizLayout.setVerticalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 551, Short.MAX_VALUE)
+            .add(0, 527, Short.MAX_VALUE)
         );
 
         jLabel9.setIcon(resourceMap.getIcon("jLabel9.icon")); // NOI18N
@@ -462,7 +461,7 @@ public class TwitVizView extends FrameView {
             .add(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 203, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(14, 14, 14)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
@@ -480,7 +479,7 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(9, 9, 9)
                         .add(btn_login)))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -495,7 +494,7 @@ public class TwitVizView extends FrameView {
                     .add(btn_login))
                 .add(9, 9, 9)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
                     .add(panel_viz, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -511,7 +510,7 @@ public class TwitVizView extends FrameView {
             mainPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(mainPanelLayout.createSequentialGroup()
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -535,7 +534,6 @@ public class TwitVizView extends FrameView {
 
         menuBar.add(helpMenu);
 
-        statusPanel.setBackground(resourceMap.getColor("statusPanel.background")); // NOI18N
         statusPanel.setName("statusPanel"); // NOI18N
 
         statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
@@ -551,11 +549,11 @@ public class TwitVizView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1226, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1216, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1030, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1046, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -580,6 +578,8 @@ public class TwitVizView extends FrameView {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
 
+        try
+        {
         //trying to logout
         if(link!=null) {
 
@@ -589,7 +589,6 @@ public class TwitVizView extends FrameView {
                 //establish connection to twitter servers using given credentials
                 link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
                 if(link!=null) {
-                    try {
                         user = link.getUserDetail(username.getText());
                         lbl_username.setVisible(false);
                         username.setVisible(false);
@@ -600,27 +599,37 @@ public class TwitVizView extends FrameView {
                         buildSocialNetwork(user);
 
                         displayTwitviz();
-                    } catch (TwitterException ex) {
-                        //TODO put warnings on a label
-                        Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
+                lbl_username.setVisible(false);
+                username.setVisible(false);
+                lbl_password.setVisible(false);
+                password.setVisible(false);
+                btn_login.setText("Logout");
+                
+                buildSocialNetwork(user);
+                displayTwitviz();
             }
+        }
+        catch (TwitterException ex) {
+               Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        try {
+        // TODO add your handling code here:
+        try{
             link.updateStatus(updateTextField.getText());
-            updateTextField.setText("");
-        } catch (TwitterException ex) {
-            //TODO put warnings on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        catch(TwitterException e)
+        {
+            System.err.println("Connection Error:" + e.getMessage());
+        }
+        updateTextField.setText("");
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void keywordsTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keywordsTextFieldMouseClicked
+        // TODO add your handling code here:
         keywordsTextField.setText("");
         keywordsTextField.setForeground(Color.BLACK);
 }//GEN-LAST:event_keywordsTextFieldMouseClicked
@@ -645,18 +654,9 @@ public class TwitVizView extends FrameView {
             e.printStackTrace();
             System.exit(1);
         }
-
-        if(vis!=null) {
-            vis.removeGroup("graph");
-            vis.add("graph",graph);
-            vis.repaint();
-            vis.run("colour");
-            vis.run("layout");
-            vis.run("size");
-        }else{
-            vis = new Visualization();
-            vis.add("graph", graph);
-        }
+        
+        Visualization vis = new Visualization();
+        vis.add("graph", graph);
 
         // draw the "name" label for NodeItems
         LabelRenderer r = new LabelRenderer("screenName");
@@ -751,7 +751,7 @@ public class TwitVizView extends FrameView {
 
     //Prefuse vars
     private Graph graph;
-    private Visualization vis = null;
+    private Visualization vis;
     private GraphMLWriter graphWriter;
     private GraphMLReader graphReader;
 
