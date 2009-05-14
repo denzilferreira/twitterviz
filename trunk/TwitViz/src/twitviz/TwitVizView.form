@@ -39,15 +39,13 @@
                           <Component id="jLabel9" min="-2" pref="121" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="panel_viz" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="1">
-                              <Component id="message_output" min="-2" pref="298" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Component id="lbl_username" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="username" min="-2" pref="90" max="-2" attributes="0"/>
@@ -74,7 +72,6 @@
                           <Component id="lbl_password" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_username" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_login" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="message_output" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -379,14 +376,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_loginActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="message_output">
-              <Properties>
-                <Property name="font" type="java.awt.Font" resourceKey="message_output.font"/>
-                <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" resourceKey="message_output.text"/>
-                <Property name="name" type="java.lang.String" value="message_output" noResource="true"/>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>
