@@ -580,26 +580,32 @@ public class TwitVizView extends FrameView {
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
 
-        if(username.getText().length()>0 && password.getPassword().length>0) {
-            //establish connection to twitter servers using given credentials
-            link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
-            if(link!=null) {
-                try {
-                    user = link.getUserDetail(username.getText());
-                    lbl_username.setVisible(false);
-                    username.setVisible(false);
-                    lbl_password.setVisible(false);
-                    password.setVisible(false);
-                    btn_login.setText("Logout");
+        //trying to logout
+        if(link!=null) {
 
-                    buildSocialNetwork(user);
+        //user logging in for the first time
+        }else{
+            if(username.getText().length()>0 && password.getPassword().length>0) {
+                //establish connection to twitter servers using given credentials
+                link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
+                if(link!=null) {
+                    try {
+                        user = link.getUserDetail(username.getText());
+                        lbl_username.setVisible(false);
+                        username.setVisible(false);
+                        lbl_password.setVisible(false);
+                        password.setVisible(false);
+                        btn_login.setText("Logout");
 
-                    displayTwitviz();
-                } catch (TwitterException ex) {
-                    //TODO put warnings on a label
-                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                        buildSocialNetwork(user);
+
+                        displayTwitviz();
+                    } catch (TwitterException ex) {
+                        //TODO put warnings on a label
+                        Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
                 }
-                
             }
         }
 }//GEN-LAST:event_btn_loginActionPerformed
