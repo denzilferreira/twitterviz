@@ -5,6 +5,8 @@
 package twitviz;
 
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -44,8 +46,11 @@ import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
-import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
-import winterwell.jtwitter.Twitter.User;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.User;
+//import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
+//import winterwell.jtwitter.Twitter.User;
 
 /**
  * The application's main frame.
@@ -128,7 +133,7 @@ public class TwitVizView extends FrameView {
         for(int i=0;i<list.size();i++) {
             User tmp = list.get(i);
 
-            if(!tmp.isProtectedUser()) {
+            if(!tmp.isProtected()) {
                 if(tmp.getId()==who.getId()) {
                     return true;
                 }
@@ -154,17 +159,30 @@ public class TwitVizView extends FrameView {
         
         source.setLong("id", user.getId());
         source.setString("screenName", user.getScreenName());
-        source.setBoolean("protectedUser", user.isProtectedUser());
+        source.setBoolean("protectedUser", user.isProtected());
         source.setInt("relevance", 2);
 
-        List<Twitter.User> friends = link.getFriends(Integer.toString(user.getId()));
-        List<Twitter.User> followers = link.getFollowers();
+        List<User> friends = null;
+        try {
+            friends = link.getFriends(Integer.toString(user.getId()));
+        } catch (TwitterException ex) {
+            //TODO put warning on a label
+            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        List<User> followers = null;
+        try {
+            followers = link.getFollowers();
+        } catch (TwitterException ex) {
+            //TODO put warning on a label
+            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         for(int i=0;i<friends.size();i++) {
-            Twitter.User friend = friends.get(i);
+            User friend = friends.get(i);
 
             //There are users with protected profiles and data
-            if(!friend.isProtectedUser()) {
+            if(!friend.isProtected()) {
 
                 Node tmp = null;
                 tmp = graph.addNode();
@@ -172,7 +190,7 @@ public class TwitVizView extends FrameView {
                 //set node data
                 tmp.setLong("id", friend.getId());
                 tmp.setString("screenName", friend.getScreenName());
-                tmp.setBoolean("protectedUser", friend.isProtectedUser());
+                tmp.setBoolean("protectedUser", friend.isProtected());
                 tmp.setInt("relevance", 1);
                 //--end node data
 
@@ -566,28 +584,37 @@ public class TwitVizView extends FrameView {
             //establish connection to twitter servers using given credentials
             link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
             if(link!=null) {
-                user = link.show(username.getText());
-                lbl_username.setVisible(false);
-                username.setVisible(false);
-                lbl_password.setVisible(false);
-                password.setVisible(false);
-                btn_login.setText("Logout");
-                
-                buildSocialNetwork(user);
+                try {
+                    user = link.getUserDetail(username.getText());
+                    lbl_username.setVisible(false);
+                    username.setVisible(false);
+                    lbl_password.setVisible(false);
+                    password.setVisible(false);
+                    btn_login.setText("Logout");
 
-                displayTwitviz();
+                    buildSocialNetwork(user);
+
+                    displayTwitviz();
+                } catch (TwitterException ex) {
+                    //TODO put warnings on a label
+                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        // TODO add your handling code here:
-        link.setStatus(updateTextField.getText());
-        updateTextField.setText("");
+        try {
+            link.updateStatus(updateTextField.getText());
+            updateTextField.setText("");
+        } catch (TwitterException ex) {
+            //TODO put warnings on a label
+            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void keywordsTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keywordsTextFieldMouseClicked
-        // TODO add your handling code here:
         keywordsTextField.setText("");
         keywordsTextField.setForeground(Color.BLACK);
 }//GEN-LAST:event_keywordsTextFieldMouseClicked
@@ -612,9 +639,18 @@ public class TwitVizView extends FrameView {
             e.printStackTrace();
             System.exit(1);
         }
-        
-        Visualization vis = new Visualization();
-        vis.add("graph", graph);
+
+        if(vis!=null) {
+            vis.removeGroup("graph");
+            vis.add("graph",graph);
+            vis.repaint();
+            vis.run("colour");
+            vis.run("layout");
+            vis.run("size");
+        }else{
+            vis = new Visualization();
+            vis.add("graph", graph);
+        }
 
         // draw the "name" label for NodeItems
         LabelRenderer r = new LabelRenderer("screenName");
@@ -705,11 +741,11 @@ public class TwitVizView extends FrameView {
 
     //Twitter API vars
     private Twitter link = null;
-    private Twitter.User user = null;
+    private User user = null;
 
     //Prefuse vars
     private Graph graph;
-    private Visualization vis;
+    private Visualization vis = null;
     private GraphMLWriter graphWriter;
     private GraphMLReader graphReader;
 
