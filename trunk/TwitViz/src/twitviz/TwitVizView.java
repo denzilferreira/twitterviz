@@ -28,6 +28,8 @@ import prefuse.action.ActionList;
 import prefuse.action.ItemAction;
 import prefuse.action.RepaintAction;
 import prefuse.action.assignment.ColorAction;
+import prefuse.action.assignment.DataColorAction;
+import prefuse.action.assignment.DataSizeAction;
 import prefuse.action.filter.GraphDistanceFilter;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.action.layout.graph.RadialTreeLayout;
@@ -41,6 +43,7 @@ import prefuse.controls.ToolTipControl;
 import prefuse.controls.WheelZoomControl;
 import prefuse.controls.ZoomControl;
 import prefuse.controls.ZoomToFitControl;
+import prefuse.data.Edge;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
 import prefuse.data.Node;
 import prefuse.data.io.DataIOException;
@@ -131,52 +134,20 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
-    //Function that will fill out the rest of the nodes relationships
-    public void getFriendsOfFriends(int user_id, Node origin) {
+    private boolean isFollowing(List<User> list, User who) {
+        for(int i=0;i<list.size();i++) {
+            User tmp = list.get(i);
 
-        List<Twitter.User> following = link.getFriends(Integer.toString(user_id));
-
-        for(int j=0; j<following.size(); j++) {
-            Twitter.User tmp = following.get(j);
-
-            //there are users that like privacy, so we bypass them...
             if(!tmp.isProtectedUser()) {
-
-                Node follower = null;
-                for(int k=0;k<graph.getNodeCount();k++) {
-                    if(graph.getNode(k).getLong("id")==tmp.getId()) {
-                        follower = graph.getNode(k);
-                        break;
-                    }
+                if(tmp.getId()==who.getId()) {
+                    return true;
                 }
-
-                if(follower == null) {
-                    follower = graph.addNode();
-                    //connect friend with user
-                    graph.addEdge(origin, follower);
-                }
-
-                follower.setString("description",tmp.getDescription());
-                follower.setLong("id", tmp.getId());
-                follower.setString("location", tmp.getLocation());
-                follower.setString("name", tmp.getName());
-                follower.setString("profileImageUrl", tmp.getProfileImageUrl().toString());
-                follower.setBoolean("protectedUser", tmp.isProtectedUser());
-                follower.setString("screenName", tmp.getScreenName());
-
-                if(tmp.getStatus()!=null) {
-                    follower.setString("status", tmp.getStatus().getText());
-                }else follower.setString("status", "");
-
-                if(tmp.getWebsite()!=null) {
-                    follower.setString("website", tmp.getWebsite().toString());
-                }else follower.setString("website", "");
-                
             }
         }
+        return false;
     }
 
-    private void buildSocialNetwork(User user,int depth) {
+    private void buildSocialNetwork(User user) {
 
         //restore saved database
         try {
@@ -194,26 +165,37 @@ public class TwitVizView extends FrameView {
         source.setLong("id", user.getId());
         source.setString("screenName", user.getScreenName());
         source.setBoolean("protectedUser", user.isProtectedUser());
-        source.setInt("relevance", 0);
+        source.setInt("relevance", 2);
 
         List<Twitter.User> friends = link.getFriends(Integer.toString(user.getId()));
-    
+        List<Twitter.User> followers = link.getFollowers();
+
         for(int i=0;i<friends.size();i++) {
-
-            Node tmp = null;
-            tmp = graph.addNode();
-
             Twitter.User friend = friends.get(i);
 
-            //set node data
-            tmp.setLong("id", friend.getId());
-            tmp.setString("screenName", friend.getScreenName());
-            tmp.setBoolean("protectedUser", friend.isProtectedUser());
-            tmp.setInt("relevance", 0);
-            //--end node data
+            //There are users with protected profiles and data
+            if(!friend.isProtectedUser()) {
 
-            //Link to source
-            graph.addEdge(source, tmp);
+                Node tmp = null;
+                tmp = graph.addNode();
+
+                //set node data
+                tmp.setLong("id", friend.getId());
+                tmp.setString("screenName", friend.getScreenName());
+                tmp.setBoolean("protectedUser", friend.isProtectedUser());
+                tmp.setInt("relevance", 1);
+                //--end node data
+
+                //Link to source
+                graph.addEdge(source, tmp);
+                Edge relation = graph.getEdge(source,tmp);
+
+                if(isFollowing(followers, friend)) {
+                    relation.setInt("relationship", 2);
+                }else{
+                    relation.setInt("relationship", 1);
+                }
+            }
         }
          
         //Save to graph file
@@ -595,7 +577,7 @@ public class TwitVizView extends FrameView {
             user = link.show(username.getText());
 
             //depth = 3
-            buildSocialNetwork(user,3);
+            buildSocialNetwork(user);
 
             displayTwitviz(); //load visualization
 
@@ -642,18 +624,33 @@ public class TwitVizView extends FrameView {
 
         vis.setRendererFactory(new DefaultRendererFactory(r));
 
-        ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
-        ColorAction edges = new ColorAction("graph.edges",VisualItem.STROKECOLOR, ColorLib.gray(200));
+        int[] edgesColor = new int[] {
+            ColorLib.rgb(246,249,0),
+            ColorLib.rgb(58,171,74)
+        };
 
+        ColorAction nodes = new ColorAction("graph.nodes",VisualItem.FILLCOLOR, ColorLib.rgb(174,235,255));
+        ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
+        
+        DataColorAction edges = new DataColorAction("graph.edges", "relationship",
+            Constants.NOMINAL, VisualItem.STROKECOLOR, edgesColor);
+       
         ActionList color = new ActionList();
+        color.add(nodes);
         color.add(text);
         color.add(edges);
+
+        DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
+
+        ActionList size = new ActionList();
+        size.add(sizes);
 
         ActionList layout = new ActionList(Activity.INFINITY);
         layout.add(new ForceDirectedLayout("graph"));
         layout.add(new RepaintAction());
 
         vis.putAction("color", color);
+        vis.putAction("size", size);
         vis.putAction("layout", layout);
 
         Display display = new Display(vis);
@@ -672,6 +669,7 @@ public class TwitVizView extends FrameView {
         panel_viz.setVisible(true);
 
         vis.run("color");  // assign the colors
+        vis.run("size"); //assign the sizes
         vis.run("layout"); // start up the animated layout
     }
 
