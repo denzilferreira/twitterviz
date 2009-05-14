@@ -586,6 +586,7 @@ public class TwitVizView extends FrameView {
                 btn_login.setText("Logout");
                 
                 buildSocialNetwork(user);
+                displayTwitviz();
             }
         }
 }//GEN-LAST:event_btn_loginActionPerformed
@@ -596,23 +597,23 @@ public class TwitVizView extends FrameView {
         updateTextField.setText("");
 }//GEN-LAST:event_updateButtonActionPerformed
 
+    private void keywordsTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keywordsTextFieldMouseClicked
+        // TODO add your handling code here:
+        keywordsTextField.setText("");
+        keywordsTextField.setForeground(Color.BLACK);
+}//GEN-LAST:event_keywordsTextFieldMouseClicked
+
     private void updateTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateTextFieldKeyTyped
         // TODO add your handling code here:
         int cl =140-updateTextField.getText().length();
-        countLabel.setText(Integer.toString(cl));
 
         if(cl<0){
             countLabel.setForeground(Color.RED);
         }else{
             countLabel.setForeground(Color.GRAY);
         }
+        countLabel.setText(Integer.toString(cl));
     }//GEN-LAST:event_updateTextFieldKeyTyped
-
-    private void keywordsTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_keywordsTextFieldMouseClicked
-        // TODO add your handling code here:
-        keywordsTextField.setText("");
-        keywordsTextField.setForeground(Color.BLACK);
-}//GEN-LAST:event_keywordsTextFieldMouseClicked
 
     public void displayTwitviz() {        
         //Read the database
