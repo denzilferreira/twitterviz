@@ -6,7 +6,9 @@ package twitviz;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Label;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
@@ -18,11 +20,14 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import javax.swing.Timer;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.event.DocumentListener;
 import prefuse.Constants;
 import prefuse.Display;
@@ -50,6 +55,7 @@ import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
@@ -71,12 +77,6 @@ public class TwitVizView extends FrameView {
         this.getFrame().setBounds((screen.width-400)/2, (screen.height-200)/2, 400, 200);
         this.getFrame().setResizable(true);
         this.getFrame().setVisible(true);
-
-       /*Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-       MainForm login = new MainForm(this);
-       login.getFrame().setBounds((screen.width-400)/2, (screen.height-200)/2, 400, 200);
-       login.getFrame().setResizable(false);
-       login.getFrame().setVisible(true);*/
 
                 // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -131,7 +131,8 @@ public class TwitVizView extends FrameView {
                 }
             }
         });
- 
+
+
     }
 
     @Action
@@ -253,7 +254,7 @@ public class TwitVizView extends FrameView {
         jLabel6 = new javax.swing.JLabel();
         updateTextField = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        twittsTable = new javax.swing.JTable();
         updateButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         panel_viz = new javax.swing.JPanel();
@@ -370,7 +371,8 @@ public class TwitVizView extends FrameView {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        twittsTable.setAutoCreateColumnsFromModel(false);
+        twittsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -381,8 +383,9 @@ public class TwitVizView extends FrameView {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane2.setViewportView(jTable1);
+        twittsTable.setName("twittsTable"); // NOI18N
+        twittsTable.setShowVerticalLines(false);
+        jScrollPane2.setViewportView(twittsTable);
 
         updateButton.setText(resourceMap.getString("updateButton.text")); // NOI18N
         updateButton.setName("updateButton"); // NOI18N
@@ -569,11 +572,11 @@ public class TwitVizView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1241, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1243, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1045, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1047, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -624,7 +627,28 @@ public class TwitVizView extends FrameView {
                     }
 
                 }
+                try {
+                    List<Status> statusList = link.getFriendsTimeline();
+         
+                    for(int i=0;i<statusList.size();i++){
+                        Status status =statusList.get(i);
+
+                        String screenName = status.getUser().getScreenName();
+                        String text = status.getText();
+                        String dt = status.getCreatedAt().toString();
+                        String twitt = screenName + " " + text + dt;
+                        //System.out.println(twitt);
+
+                        ImageIcon icon = new ImageIcon(status.getUser().getProfileImageURL());
+                        JLabel label = new JLabel(icon);
+                    }
+
+                } catch (TwitterException ex) {
+                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
+
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
@@ -753,7 +777,6 @@ public class TwitVizView extends FrameView {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField keywordsTextField;
     private javax.swing.JLabel lbl_password;
     private javax.swing.JLabel lbl_username;
@@ -766,6 +789,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JTable twittsTable;
     private javax.swing.JPanel twitvizPanel;
     private javax.swing.JButton updateButton;
     private javax.swing.JTextField updateTextField;
