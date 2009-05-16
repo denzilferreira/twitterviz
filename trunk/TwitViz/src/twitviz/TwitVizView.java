@@ -277,10 +277,9 @@ public class TwitVizView extends FrameView {
 
         mainPanel.setName("mainPanel"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(twitviz.TwitVizApp.class).getContext().getResourceMap(TwitVizView.class);
-        twitvizPanel.setBackground(resourceMap.getColor("twitvizPanel.background")); // NOI18N
         twitvizPanel.setName("twitvizPanel"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(twitviz.TwitVizApp.class).getContext().getResourceMap(TwitVizView.class);
         jPanel2.setBackground(resourceMap.getColor("jPanel2.background")); // NOI18N
         jPanel2.setName("jPanel2"); // NOI18N
 
@@ -388,6 +387,7 @@ public class TwitVizView extends FrameView {
         jScrollPane2.setViewportView(twittsTable);
 
         updateButton.setText(resourceMap.getString("updateButton.text")); // NOI18N
+        updateButton.setEnabled(false);
         updateButton.setName("updateButton"); // NOI18N
         updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -600,10 +600,26 @@ public class TwitVizView extends FrameView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
-
         //trying to logout
         if(link!=null) {
+            //restore GUI
+            lbl_username.setVisible(true);
+            username.setText("");
+            username.setVisible(true);
 
+            lbl_password.setVisible(true);
+            password.setText("");
+            password.setVisible(true);
+
+            btn_login.setText("Login");
+
+            link = null;
+            user = null;
+            panel_viz.removeAll();
+            panel_viz.validate();
+            panel_viz.repaint();
+            updateButton.setEnabled(false);
+            
         //user logging in for the first time
         }else{
             if(username.getText().length()>0 && password.getPassword().length>0) {
@@ -612,15 +628,28 @@ public class TwitVizView extends FrameView {
                 if(link!=null) {
                     try {
                         user = link.getUserDetail(username.getText());
+
+                        //Organize GUI
                         lbl_username.setVisible(false);
                         username.setVisible(false);
                         lbl_password.setVisible(false);
                         password.setVisible(false);
                         btn_login.setText("Logout");
 
-                        buildSocialNetwork(user);
+                        updateButton.setEnabled(true);
+
+                        //buildSocialNetwork(user);
 
                         displayTwitviz();
+
+                        //Start public line monitor, updates every 10 seconds
+                        java.util.Timer timer = new java.util.Timer();
+                        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+                            public void run() {
+                                get_PublicLine();
+                            }
+                        }, 5000, 10000); //Get public line every 10 seconds
+
                     } catch (TwitterException ex) {
                         //TODO put warnings on a label
                         Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
@@ -651,6 +680,81 @@ public class TwitVizView extends FrameView {
 
         }
 }//GEN-LAST:event_btn_loginActionPerformed
+    private void get_PublicLine() {
+        try {
+            List<Status> publicStatus = link.getPublicTimeline();
+            
+            for(int i=0; i<publicStatus.size();i++) {
+
+                Status stat = publicStatus.get(i);
+
+                //TODO: if the user has something on the text, etc that we are interested in...
+                User tweeterer = stat.getUser();
+                if(!tweeterer.isProtected()) {
+                    //check if we already have the user or not
+                    int nodePosition = -1;
+                    for(int j=0;j<graph.getNodeCount();j++) {
+                        Node tmp = graph.getNode(j);
+
+                        if(tmp.getInt("id")==tweeterer.getId()) {
+                            nodePosition = j;
+                            break;
+                        }
+                    }
+
+                    Node familiar_stranger = null;
+
+                    if(nodePosition>=0) {
+                        familiar_stranger = graph.getNode(nodePosition);
+                    }else {
+                        familiar_stranger = graph.addNode();
+                    }
+
+                    if(nodePosition==-1) {
+                        familiar_stranger.setLong("id", tweeterer.getId());
+                        familiar_stranger.setString("screenName", tweeterer.getScreenName());
+                        familiar_stranger.setBoolean("protectedUser", tweeterer.isProtected());
+                        familiar_stranger.setInt("relevance", 1);
+                    }else{
+                        //Relevance will change according to how important the user is
+                        familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+1);
+                    }
+
+                    //lets check if the stranger is somehow related to someone already on our list
+                    Node related = getRelatedToSomeone(familiar_stranger);
+                    if(related!=null) {
+                        graph.addEdge(related, familiar_stranger);
+                    }
+                }
+            }
+
+            //Save to graph file
+            try{
+                new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+            }catch(DataIOException e){
+                e.printStackTrace();
+            }
+            //--end save graph file
+
+            //Reload visualization
+            displayTwitviz();
+
+        } catch (TwitterException ex) {
+            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private Node getRelatedToSomeone(Node who) {
+        Node tmp = null;
+        
+        for(int i=0;i<graph.getEdgeCount();i++) {
+            if(graph.getEdge(i).getTargetNode()==who) {
+                tmp = graph.getEdge(i).getSourceNode();
+                break;
+            }
+        }
+        return tmp;
+    }
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
