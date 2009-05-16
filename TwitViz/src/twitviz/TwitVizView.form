@@ -22,6 +22,7 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="twitvizPanel">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="twitvizPanel.background"/>
             <Property name="name" type="java.lang.String" value="twitvizPanel" noResource="true"/>
           </Properties>
 
