@@ -62,8 +62,6 @@ public class TwitVizView extends FrameView {
 
         initComponents();
 
-        displayTwitviz(); //load visualization
-
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
