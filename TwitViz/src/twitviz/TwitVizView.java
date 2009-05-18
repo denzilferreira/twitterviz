@@ -5,8 +5,10 @@
 package twitviz;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Label;
+import java.awt.PopupMenu;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,12 +24,16 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
+import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.event.DocumentListener;
 import prefuse.Constants;
 import prefuse.Display;
@@ -145,6 +151,30 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
+    //TODO: Visualization of keywords and strangers!
+    private void displayKeyviz() {
+
+    }
+
+    private Node getKeywordFromGraph(String name) {
+        Node key = null;
+        for(int i=0;i<graph.getNodeCount();i++) {
+            key = graph.getNode(i);
+            try{
+                if(key.getString("keyword").compareToIgnoreCase(name)==0) {
+                    return key;
+                }
+            }catch(Exception e) {
+                continue;
+            }
+        }
+
+        key = graph.addNode();
+        key.setString("keyword", name);
+        
+        return key;
+    }
+
     private boolean isFollowing(List<User> list, User who) {
         for(int i=0;i<list.size();i++) {
             User tmp = list.get(i);
@@ -182,16 +212,14 @@ public class TwitVizView extends FrameView {
         try {
             friends = link.getFriends(Integer.toString(user.getId()));
         } catch (TwitterException ex) {
-            //TODO put warning on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+            setFeedback("Error loading friends", Color.RED);
         }
 
         List<User> followers = null;
         try {
             followers = link.getFollowers();
         } catch (TwitterException ex) {
-            //TODO put warning on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+            setFeedback("Error loading followers", Color.RED);
         }
 
         for(int i=0;i<friends.size();i++) {
@@ -245,7 +273,7 @@ public class TwitVizView extends FrameView {
         jPanel2 = new javax.swing.JPanel();
         keywordsTextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        keyword_list = new javax.swing.JList();
         jLabel4 = new javax.swing.JLabel();
         addButton = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
@@ -264,6 +292,7 @@ public class TwitVizView extends FrameView {
         lbl_password = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         btn_login = new javax.swing.JButton();
+        feedback_label = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -298,15 +327,10 @@ public class TwitVizView extends FrameView {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jList1.setBackground(resourceMap.getColor("jList1.background")); // NOI18N
-        jList1.setForeground(resourceMap.getColor("jList1.foreground")); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jList1.setName("jList1"); // NOI18N
-        jScrollPane1.setViewportView(jList1);
+        keyword_list.setBackground(resourceMap.getColor("keyword_list.background")); // NOI18N
+        keyword_list.setForeground(resourceMap.getColor("keyword_list.foreground")); // NOI18N
+        keyword_list.setName("keyword_list"); // NOI18N
+        jScrollPane1.setViewportView(keyword_list);
 
         jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
         jLabel4.setForeground(resourceMap.getColor("jLabel4.foreground")); // NOI18N
@@ -315,6 +339,11 @@ public class TwitVizView extends FrameView {
 
         addButton.setText(resourceMap.getString("addButton.text")); // NOI18N
         addButton.setName("addButton"); // NOI18N
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
         searchButton.setText(resourceMap.getString("searchButton.text")); // NOI18N
         searchButton.setName("searchButton"); // NOI18N
@@ -474,6 +503,11 @@ public class TwitVizView extends FrameView {
             }
         });
 
+        feedback_label.setFont(resourceMap.getFont("feedback_label.font")); // NOI18N
+        feedback_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        feedback_label.setText(resourceMap.getString("feedback_label.text")); // NOI18N
+        feedback_label.setName("feedback_label"); // NOI18N
+
         org.jdesktop.layout.GroupLayout twitvizPanelLayout = new org.jdesktop.layout.GroupLayout(twitvizPanel);
         twitvizPanel.setLayout(twitvizPanelLayout);
         twitvizPanelLayout.setHorizontalGroup(
@@ -491,6 +525,8 @@ public class TwitVizView extends FrameView {
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(4, 4, 4))
                     .add(twitvizPanelLayout.createSequentialGroup()
+                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                        .add(189, 189, 189)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -512,7 +548,8 @@ public class TwitVizView extends FrameView {
                     .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(lbl_password)
                     .add(lbl_username)
-                    .add(btn_login))
+                    .add(btn_login)
+                    .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .add(9, 9, 9)
@@ -626,6 +663,12 @@ public class TwitVizView extends FrameView {
             if(username.getText().length()>0 && password.getPassword().length>0) {
                 //establish connection to twitter servers using given credentials
                 link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
+
+                //Lets make publicity :D
+                link.setUserAgent("TwitViz");
+                link.setClientVersion("TwitViz");
+                link.setSource("TwitViz");
+
                 if(link!=null) {
                     try {
                         user = link.getUserDetail(username.getText());
@@ -639,21 +682,20 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        //buildSocialNetwork(user);
+                        buildSocialNetwork(user);
 
                         displayTwitviz();
 
-                        //Start public line monitor, updates every 10 seconds
-                        java.util.Timer timer = new java.util.Timer();
+                        //Start public line monitor, updates every 20 seconds
+                        /*java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 10000); //Get public line every 10 seconds
+                        }, 5000, 20000); //Get public line every 20 */
 
                     } catch (TwitterException ex) {
-                        //TODO put warnings on a label
-                        Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                        setFeedback("Error getting user information, please try again...", Color.RED);
                     }
 
                 }
@@ -674,7 +716,7 @@ public class TwitVizView extends FrameView {
                     }
 
                 } catch (TwitterException ex) {
-                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                    setFeedback("Error loading friends timeline", Color.RED);
                 }
 
             }
@@ -682,88 +724,123 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_btn_loginActionPerformed
     private void get_PublicLine() {
-        try {
-            List<Status> publicStatus = link.getPublicTimeline();
-            
-            for(int i=0; i<publicStatus.size();i++) {
+        //we only start processing the public line if we have keywords on the list!
+        if(keyword_list.getComponentCount()>0) {
 
-                Status stat = publicStatus.get(i);
+            try {
+                List<Status> publicStatus = link.getPublicTimeline();
 
-                //TODO: if the user has something on the text, etc that we are interested in...
-                User tweeterer = stat.getUser();
-                if(!tweeterer.isProtected()) {
-                    //check if we already have the user or not
-                    int nodePosition = -1;
-                    for(int j=0;j<graph.getNodeCount();j++) {
-                        Node tmp = graph.getNode(j);
+                for(int i=0; i<publicStatus.size();i++) {
 
-                        if(tmp.getInt("id")==tweeterer.getId()) {
-                            nodePosition = j;
-                            break;
+                    Status stat = publicStatus.get(i);
+
+                    //If the user has something on the text, etc that we are interested in...
+                    Vector interests = getInterests(stat);
+                    if(interests.size()>0) {
+                        User tweeterer = stat.getUser();
+                        if(!tweeterer.isProtected()) {
+                            //check if we already have the user or not
+                            int nodePosition = -1;
+                            for(int j=0;j<graph.getNodeCount();j++) {
+                                Node tmp = graph.getNode(j);
+
+                                if(tmp.getInt("id")==tweeterer.getId()) {
+                                    nodePosition = j;
+                                    break;
+                                }
+                            }
+
+                            Node familiar_stranger = null;
+
+                            if(nodePosition>=0) {
+                                familiar_stranger = graph.getNode(nodePosition);
+                            }else {
+                                familiar_stranger = graph.addNode();
+                            }
+
+                            if(nodePosition==-1) {
+                                familiar_stranger.setLong("id", tweeterer.getId());
+                                familiar_stranger.setString("screenName", tweeterer.getScreenName());
+                                familiar_stranger.setBoolean("protectedUser", tweeterer.isProtected());
+                                familiar_stranger.setInt("relevance", 1);
+                            }else{
+                                //Relevance will change according to how important the user is
+                                familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+interests.size());
+                            }
+
+                            //lets check if the stranger is somehow related to someone already on our list
+                            List<Node> related = getRelatedToSomeone(familiar_stranger);
+                            if(related!=null) {
+                                for(int k=0;k<related.size();k++) {
+                                    graph.addEdge(related.get(i), familiar_stranger);
+                                }
+                            }
+
+                            //Associate the person to the keywords we are following
+                            for(int k=0;k<keyword_list.getComponentCount();k++) {
+                                Node keyword = getKeywordFromGraph(keyword_list.getComponent(k).getName());
+                                graph.addEdge(keyword, familiar_stranger);
+                            }
                         }
                     }
-
-                    Node familiar_stranger = null;
-
-                    if(nodePosition>=0) {
-                        familiar_stranger = graph.getNode(nodePosition);
-                    }else {
-                        familiar_stranger = graph.addNode();
-                    }
-
-                    if(nodePosition==-1) {
-                        familiar_stranger.setLong("id", tweeterer.getId());
-                        familiar_stranger.setString("screenName", tweeterer.getScreenName());
-                        familiar_stranger.setBoolean("protectedUser", tweeterer.isProtected());
-                        familiar_stranger.setInt("relevance", 1);
-                    }else{
-                        //Relevance will change according to how important the user is
-                        familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+1);
-                    }
-
-                    //lets check if the stranger is somehow related to someone already on our list
-                    Node related = getRelatedToSomeone(familiar_stranger);
-                    if(related!=null) {
-                        graph.addEdge(related, familiar_stranger);
-                    }
                 }
+
+                //Save to graph file
+                try{
+                    new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+                }catch(DataIOException e){
+                    e.printStackTrace();
+                }
+                //--end save graph file
+
+                //Reload visualization
+                displayKeyviz();
+
+            } catch (TwitterException ex) {
+                setFeedback("Error loading public line :(", Color.RED);
             }
-
-            //Save to graph file
-            try{
-                new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
-            }catch(DataIOException e){
-                e.printStackTrace();
-            }
-            //--end save graph file
-
-            //Reload visualization
-            displayTwitviz();
-
-        } catch (TwitterException ex) {
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private Node getRelatedToSomeone(Node who) {
-        Node tmp = null;
+    //Get list of related nodes
+    private List<Node> getRelatedToSomeone(Node who) {
+        List<Node> tmp = null;
         
         for(int i=0;i<graph.getEdgeCount();i++) {
             if(graph.getEdge(i).getTargetNode()==who) {
-                tmp = graph.getEdge(i).getSourceNode();
-                break;
+                tmp.add(graph.getEdge(i).getSourceNode());
             }
         }
         return tmp;
+    }
+
+    private Vector getInterests(Status stat) {
+        Vector keywords = new Vector();
+        for(int i=0;i<keyword_list.getComponentCount();i++) {
+            Component tmp = keyword_list.getComponent(i);
+            if(stat.getText().matches("."+tmp.getName()+".")) {
+                keywords.addElement(tmp.getName());
+            }
+        }
+        return keywords;
+    }
+
+    //Update the feedback_label to specific message + color
+    private void setFeedback(String message, Color color) {
+        feedback_label.setText(message);
+        feedback_label.setForeground(color);
+        //force update on GUI
+        feedback_label.validate(); 
+        feedback_label.repaint();
     }
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
             link.updateStatus(updateTextField.getText());
             updateTextField.setText("");
+            setFeedback("Updated status successful", Color.WHITE);
         } catch (TwitterException ex) {
-            //TODO put warnings on a label
-            Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+            setFeedback("Error updating status", Color.RED);
         }
 }//GEN-LAST:event_updateButtonActionPerformed
 
@@ -792,6 +869,15 @@ public class TwitVizView extends FrameView {
         }
         countLabel.setText(Integer.toString(cl));
     }//GEN-LAST:event_updateTextFieldKeyReleased
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // TODO add your handling code here:
+        if(keywordsTextField.getText().length()>0) {
+            keyword_list.add(new PopupMenu(keywordsTextField.getText()));
+            Node key = getKeywordFromGraph(keywordsTextField.getText());
+
+        }
+    }//GEN-LAST:event_addButtonActionPerformed
 
     public void displayTwitviz() {        
         //Read the database
@@ -873,15 +959,16 @@ public class TwitVizView extends FrameView {
     private javax.swing.JButton addButton;
     private javax.swing.JButton btn_login;
     private javax.swing.JLabel countLabel;
+    private javax.swing.JLabel feedback_label;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList keyword_list;
     private javax.swing.JTextField keywordsTextField;
     private javax.swing.JLabel lbl_password;
     private javax.swing.JLabel lbl_username;
