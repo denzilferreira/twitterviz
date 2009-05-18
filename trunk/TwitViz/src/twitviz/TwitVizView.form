@@ -43,7 +43,9 @@
                               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" attributes="1">
+                              <Component id="feedback_label" pref="374" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="189" max="-2" attributes="0"/>
                               <Component id="lbl_username" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="username" min="-2" pref="90" max="-2" attributes="0"/>
@@ -70,6 +72,7 @@
                           <Component id="lbl_password" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_username" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_login" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="feedback_label" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
@@ -155,20 +158,14 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JList" name="jList1">
+                    <Component class="javax.swing.JList" name="keyword_list">
                       <Properties>
-                        <Property name="background" type="java.awt.Color" resourceKey="jList1.background"/>
-                        <Property name="foreground" type="java.awt.Color" resourceKey="jList1.foreground"/>
+                        <Property name="background" type="java.awt.Color" resourceKey="keyword_list.background"/>
+                        <Property name="foreground" type="java.awt.Color" resourceKey="keyword_list.foreground"/>
                         <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                          <StringArray count="5">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
-                            <StringItem index="4" value="Item 5"/>
-                          </StringArray>
+                          <StringArray count="0"/>
                         </Property>
-                        <Property name="name" type="java.lang.String" value="jList1" noResource="true"/>
+                        <Property name="name" type="java.lang.String" value="keyword_list" noResource="true"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -186,6 +183,9 @@
                     <Property name="text" type="java.lang.String" resourceKey="addButton.text"/>
                     <Property name="name" type="java.lang.String" value="addButton" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="searchButton">
                   <Properties>
@@ -375,6 +375,14 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_loginActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="feedback_label">
+              <Properties>
+                <Property name="font" type="java.awt.Font" resourceKey="feedback_label.font"/>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" resourceKey="feedback_label.text"/>
+                <Property name="name" type="java.lang.String" value="feedback_label" noResource="true"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
