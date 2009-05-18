@@ -172,6 +172,14 @@ public class TwitVizView extends FrameView {
         key = graph.addNode();
         key.setString("keyword", name);
         
+        //Save to graph file
+        try{
+            new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+        }catch(DataIOException e){
+            e.printStackTrace();
+        }
+        //--end save graph file
+
         return key;
     }
 
@@ -198,10 +206,14 @@ public class TwitVizView extends FrameView {
             System.exit(1);
         }
         
-        graph.clear();
-
         Node source = null;
-        source = graph.addNode();
+        if(graph.getNodeCount()>0) {
+            source = graph.getNode(0); //get the first node = user
+            if(user.getId()!=source.getLong("id")) {
+                graph.clear();
+                source = graph.addNode();
+            }
+        }
         
         source.setLong("id", user.getId());
         source.setString("screenName", user.getScreenName());
@@ -229,19 +241,43 @@ public class TwitVizView extends FrameView {
             if(!friend.isProtected()) {
 
                 Node tmp = null;
-                tmp = graph.addNode();
+                int friendPos = -1;
+                for(int a=0;a<graph.getNodeCount();a++) {
+                    tmp = graph.getNode(a);
+                    if(tmp.getLong("id")==friend.getId()) {
+                       friendPos = a;
+                       break;
+                    }
+                }
+
+                //New friend
+                if(friendPos==-1) {
+                    tmp = graph.addNode();
+                //restore saved
+                }else{
+                    tmp = graph.getNode(friendPos);
+                }
 
                 //set node data
                 tmp.setLong("id", friend.getId());
                 tmp.setString("screenName", friend.getScreenName());
                 tmp.setBoolean("protectedUser", friend.isProtected());
-                tmp.setInt("relevance", 1);
+
+                //The relevance might already be a different number!
+                if(friendPos==-1) {
+                    tmp.setInt("relevance", 1);
+                }else{
+                    tmp.setInt("relevance", tmp.getInt("relevance"));
+                }
                 //--end node data
 
                 //Link to source
-                graph.addEdge(source, tmp);
                 Edge relation = graph.getEdge(source,tmp);
-
+                if(relation==null) {
+                    graph.addEdge(source, tmp);
+                    relation = graph.getEdge(source,tmp);
+                }
+                
                 if(isFollowing(followers, friend)) {
                     relation.setInt("relationship", 2);
                 }else{
@@ -686,13 +722,15 @@ public class TwitVizView extends FrameView {
 
                         displayTwitviz();
 
+                        //TODO: load previous stored keywords
+
                         //Start public line monitor, updates every 20 seconds
-                        /*java.util.Timer timer = new java.util.Timer();
+                        java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 20000); //Get public line every 20 */
+                        }, 5000, 20000); //Get public line every 20 
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -725,7 +763,7 @@ public class TwitVizView extends FrameView {
 }//GEN-LAST:event_btn_loginActionPerformed
     private void get_PublicLine() {
         //we only start processing the public line if we have keywords on the list!
-        if(keyword_list.getComponentCount()>0) {
+        if(keywordsmap.getSize()>0) {
 
             try {
                 List<Status> publicStatus = link.getPublicTimeline();
@@ -777,8 +815,8 @@ public class TwitVizView extends FrameView {
                             }
 
                             //Associate the person to the keywords we are following
-                            for(int k=0;k<keyword_list.getComponentCount();k++) {
-                                Node keyword = getKeywordFromGraph(keyword_list.getComponent(k).getName());
+                            for(int k=0;k<keywordsmap.getSize();k++) {
+                                Node keyword = getKeywordFromGraph(keywordsmap.get(k).toString());
                                 graph.addEdge(keyword, familiar_stranger);
                             }
                         }
@@ -816,10 +854,10 @@ public class TwitVizView extends FrameView {
 
     private Vector getInterests(Status stat) {
         Vector keywords = new Vector();
-        for(int i=0;i<keyword_list.getComponentCount();i++) {
-            Component tmp = keyword_list.getComponent(i);
-            if(stat.getText().matches("."+tmp.getName()+".")) {
-                keywords.addElement(tmp.getName());
+
+        for(int i=0;i<keywordsmap.getSize();i++) {
+            if(stat.getText().matches("."+keywordsmap.get(i).toString()+".")) {
+                keywords.addElement(keywordsmap.get(i).toString());
             }
         }
         return keywords;
@@ -873,9 +911,11 @@ public class TwitVizView extends FrameView {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         if(keywordsTextField.getText().length()>0) {
-            keyword_list.add(new PopupMenu(keywordsTextField.getText()));
-            Node key = getKeywordFromGraph(keywordsTextField.getText());
+            keywordsmap.addElement(keywordsTextField.getText());
+            keyword_list.setModel(keywordsmap);
 
+            Node key = getKeywordFromGraph(keywordsTextField.getText());
+            setFeedback("Keyword added successfully", Color.WHITE);
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -911,7 +951,9 @@ public class TwitVizView extends FrameView {
             ColorLib.rgb(58,171,74)
         };
 
+        //Lets colorize! :D
         ColorAction nodes = new ColorAction("graph.nodes",VisualItem.FILLCOLOR, ColorLib.rgb(174,235,255));
+
         ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
         
         DataColorAction edges = new DataColorAction("graph.edges", "relationship",
@@ -997,6 +1039,9 @@ public class TwitVizView extends FrameView {
     private Visualization vis = null;
     private GraphMLWriter graphWriter;
     private GraphMLReader graphReader;
+
+    //Keywords var
+    private DefaultListModel keywordsmap = new DefaultListModel();
 
     private final Timer messageTimer;
     private final Timer busyIconTimer;
