@@ -156,28 +156,105 @@ public class TwitVizView extends FrameView {
 
     //TODO: Visualization of keywords and strangers!
     private void displayKeyviz() {
+        //make tab visible, if it already isn't
+        tabs_control.setSelectedIndex(1);
 
+        //Read the database
+        try {
+            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        if(kwvis!=null) {
+            kwvis.removeGroup("graph");
+            kwvis.add("graph",kwgraph);
+            kwvis.repaint();
+            kwvis.run("colour");
+            kwvis.run("layout");
+            kwvis.run("size");
+        }else{
+            kwvis = new Visualization();
+            kwvis.add("graph", kwgraph);
+        }
+
+        // draw the "keyword" label for NodeItems
+        LabelRenderer r = new LabelRenderer("keyword");
+        r.setRoundedCorner(8, 8); // round the corners
+
+        LabelRenderer names = new LabelRenderer("screenName");
+        r.setRoundedCorner(8,8);
+
+        vis.setRendererFactory(new DefaultRendererFactory(r));
+
+        int[] edgesColor = new int[] {
+            ColorLib.rgb(255,255,153),
+            ColorLib.rgb(153,255,153)
+        };
+
+        //Lets colorize! :D
+        DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
+            Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
+
+        ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
+
+        ColorAction edges = new ColorAction("graph.edges", VisualItem.STROKECOLOR, ColorLib.rgb(0,0,0));
+
+
+        ActionList color = new ActionList();
+        color.add(nodes);
+        color.add(text);
+        color.add(edges);
+
+        DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
+
+        ActionList size = new ActionList();
+        size.add(sizes);
+
+        ActionList layout = new ActionList(Activity.INFINITY);
+        layout.add(new ForceDirectedLayout("graph"));
+        layout.add(new RepaintAction());
+
+        kwvis.putAction("color", color);
+        kwvis.putAction("size", size);
+        kwvis.putAction("layout", layout);
+
+        Display display = new Display(kwvis);
+        display.setSize(1024, 683); //this is the size of the background image
+        display.pan(400, 300);	// pan to the middle
+        display.addControlListener(new DragControl());
+        display.addControlListener(new PanControl());
+        display.addControlListener(new ZoomControl());
+        display.addControlListener(new WheelZoomControl());
+        display.addControlListener(new ZoomToFitControl());
+        display.addControlListener(new NeighborHighlightControl());
+
+        // add the display (which holds the visualization) to the window
+        keyword_viz.add(display);
+        keyword_viz.validate();
+        keyword_viz.setVisible(true);
+
+        kwvis.run("color");  // assign the colors
+        kwvis.run("size"); //assign the sizes
+        kwvis.run("layout"); // start up the animated layout
     }
 
     private Node getKeywordFromGraph(String name) {
         Node key = null;
-        for(int i=0;i<graph.getNodeCount();i++) {
-            key = graph.getNode(i);
-            try{
-                if(key.getString("keyword").compareToIgnoreCase(name)==0) {
-                    return key;
-                }
-            }catch(Exception e) {
-                continue;
+        for(int i=0;i<kwgraph.getNodeCount();i++) {
+            key = kwgraph.getNode(i);
+            if(key.getString("keyword").compareToIgnoreCase(name)==0) {
+                return key;
             }
         }
 
-        key = graph.addNode();
+        key = kwgraph.addNode();
         key.setString("keyword", name);
         
         //Save to graph file
         try{
-            new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
         }catch(DataIOException e){
             e.printStackTrace();
         }
@@ -752,7 +829,7 @@ public class TwitVizView extends FrameView {
                         displayTwitviz();
 
                         //TODO: load previous stored keywords
-
+                        
                         //Start public line monitor, updates every 20 seconds
                         /*java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
@@ -799,7 +876,8 @@ public class TwitVizView extends FrameView {
 
         }
 }//GEN-LAST:event_btn_loginActionPerformed
-    private void get_PublicLine() {
+    //TODO: needs to be adaptated to the new xml file
+    /*private void get_PublicLine() {
         //we only start processing the public line if we have keywords on the list!
         if(keywordsmap.getSize()>0) {
 
@@ -817,8 +895,8 @@ public class TwitVizView extends FrameView {
                         if(!tweeterer.isProtected()) {
                             //check if we already have the user or not
                             int nodePosition = -1;
-                            for(int j=0;j<graph.getNodeCount();j++) {
-                                Node tmp = graph.getNode(j);
+                            for(int j=0;j<kwgraph.getNodeCount();j++) {
+                                Node tmp = kwgraph.getNode(j);
 
                                 if(tmp.getInt("id")==tweeterer.getId()) {
                                     nodePosition = j;
@@ -829,9 +907,9 @@ public class TwitVizView extends FrameView {
                             Node familiar_stranger = null;
 
                             if(nodePosition>=0) {
-                                familiar_stranger = graph.getNode(nodePosition);
+                                familiar_stranger = kwgraph.getNode(nodePosition);
                             }else {
-                                familiar_stranger = graph.addNode();
+                                familiar_stranger = kwgraph.addNode();
                             }
 
                             if(nodePosition==-1) {
@@ -848,14 +926,14 @@ public class TwitVizView extends FrameView {
                             List<Node> related = getRelatedToSomeone(familiar_stranger);
                             if(related!=null) {
                                 for(int k=0;k<related.size();k++) {
-                                    graph.addEdge(related.get(i), familiar_stranger);
+                                    kwgraph.addEdge(related.get(i), familiar_stranger);
                                 }
                             }
 
                             //Associate the person to the keywords we are following
                             for(int k=0;k<keywordsmap.getSize();k++) {
                                 Node keyword = getKeywordFromGraph(keywordsmap.get(k).toString());
-                                graph.addEdge(keyword, familiar_stranger);
+                                kwgraph.addEdge(keyword, familiar_stranger);
                             }
                         }
                     }
@@ -876,15 +954,15 @@ public class TwitVizView extends FrameView {
                 setFeedback("Error loading public line :(", Color.RED);
             }
         }
-    }
+    }*/
 
     //Get list of related nodes
     private List<Node> getRelatedToSomeone(Node who) {
         List<Node> tmp = null;
         
-        for(int i=0;i<graph.getEdgeCount();i++) {
-            if(graph.getEdge(i).getTargetNode()==who) {
-                tmp.add(graph.getEdge(i).getSourceNode());
+        for(int i=0;i<kwgraph.getEdgeCount();i++) {
+            if(kwgraph.getEdge(i).getTargetNode()==who) {
+                tmp.add(kwgraph.getEdge(i).getSourceNode());
             }
         }
         return tmp;
@@ -894,7 +972,7 @@ public class TwitVizView extends FrameView {
         Vector keywords = new Vector();
 
         for(int i=0;i<keywordsmap.getSize();i++) {
-            if(stat.getText().matches("."+keywordsmap.get(i).toString()+".")) {
+            if(stat.getText().matches("[.*]"+keywordsmap.get(i).toString()+"[.*]")) {
                 keywords.addElement(keywordsmap.get(i).toString());
             }
         }
@@ -954,6 +1032,9 @@ public class TwitVizView extends FrameView {
 
             Node key = getKeywordFromGraph(keywordsTextField.getText());
             setFeedback("Keyword added successfully", Color.WHITE);
+
+            //Change to the keyword visualization
+            tabs_control.setSelectedIndex(1);
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -961,6 +1042,7 @@ public class TwitVizView extends FrameView {
     private void tabs_controlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabs_controlStateChanged
         // TODO add your handling code here:
         System.out.println(tabs_control.getSelectedIndex());
+
     }//GEN-LAST:event_tabs_controlStateChanged
 
     public void displayTwitviz() {
@@ -997,14 +1079,6 @@ public class TwitVizView extends FrameView {
             ColorLib.rgb(255,255,153),
             ColorLib.rgb(153,255,153)
         };
-
-        /*
-         ColorLib.rgb(246,249,0),
-         ColorLib.rgb(58,171,74)
-         RGB 116, 207, 96
-         153, 255, 153
-         255, 255, 153
-         */
 
         //Lets colorize! :D
         DataColorAction nodes = new DataColorAction("graph.nodes", "follows",
@@ -1094,7 +1168,9 @@ public class TwitVizView extends FrameView {
 
     //Prefuse vars
     private Graph graph;
+    private Graph kwgraph;
     private Visualization vis = null;
+    private Visualization kwvis = null;
     private GraphMLWriter graphWriter;
     private GraphMLReader graphReader;
 
