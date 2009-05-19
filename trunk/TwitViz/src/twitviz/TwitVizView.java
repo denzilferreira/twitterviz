@@ -84,6 +84,9 @@ public class TwitVizView extends FrameView {
         this.getFrame().setResizable(true);
         this.getFrame().setVisible(true);
 
+        twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+
+
                 // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -319,10 +322,10 @@ public class TwitVizView extends FrameView {
         countLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         updateTextField = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        twittsTable = new javax.swing.JTable();
         updateButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        twittsList = new javax.swing.JList();
         jLabel9 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
@@ -438,24 +441,6 @@ public class TwitVizView extends FrameView {
             }
         });
 
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
-
-        twittsTable.setAutoCreateColumnsFromModel(false);
-        twittsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        twittsTable.setName("twittsTable"); // NOI18N
-        twittsTable.setShowVerticalLines(false);
-        jScrollPane2.setViewportView(twittsTable);
-
         updateButton.setText(resourceMap.getString("updateButton.text")); // NOI18N
         updateButton.setEnabled(false);
         updateButton.setName("updateButton"); // NOI18N
@@ -470,6 +455,16 @@ public class TwitVizView extends FrameView {
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        twittsList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        twittsList.setName("twittsList"); // NOI18N
+        jScrollPane2.setViewportView(twittsList);
+
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -481,12 +476,16 @@ public class TwitVizView extends FrameView {
                 .add(countLabel)
                 .add(8, 8, 8))
             .add(updateTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+            .add(jPanel3Layout.createSequentialGroup()
                 .add(12, 12, 12)
-                .add(jLabel7)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 232, Short.MAX_VALUE)
-                .add(updateButton))
-            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                        .add(20, 20, 20))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel7)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 232, Short.MAX_VALUE)
+                        .add(updateButton))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -500,8 +499,9 @@ public class TwitVizView extends FrameView {
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(updateButton)
                     .add(jLabel7))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel9.setIcon(resourceMap.getIcon("jLabel9.icon")); // NOI18N
@@ -615,15 +615,15 @@ public class TwitVizView extends FrameView {
                     .add(lbl_username)
                     .add(btn_login)
                     .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, twitvizPanelLayout.createSequentialGroup()
                         .add(9, 9, 9)
                         .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(tabs_control)
-                            .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(twitvizPanelLayout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -767,8 +767,12 @@ public class TwitVizView extends FrameView {
 
                 }
                 try {
+
                     List<Status> statusList = link.getFriendsTimeline();
-         
+                    twittsList.setVisibleRowCount(statusList.size());
+                    Vector faces = new Vector();
+                    Vector twitts = new Vector();
+
                     for(int i=0;i<statusList.size();i++){
                         Status status =statusList.get(i);
 
@@ -780,7 +784,12 @@ public class TwitVizView extends FrameView {
 
                         ImageIcon icon = new ImageIcon(status.getUser().getProfileImageURL());
                         JLabel label = new JLabel(icon);
+
+                        faces.addElement(icon);
+                        twitts.addElement(twitt);
                     }
+                    faces.add(twitts);
+                    twittsList.setListData(faces);
 
                 } catch (TwitterException ex) {
                     //setFeedback("Error loading friends timeline", Color.RED);
@@ -1072,7 +1081,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JTabbedPane tabs_control;
-    private javax.swing.JTable twittsTable;
+    private javax.swing.JList twittsList;
     private javax.swing.JPanel twitvizPanel;
     private javax.swing.JButton updateButton;
     private javax.swing.JTextField updateTextField;
