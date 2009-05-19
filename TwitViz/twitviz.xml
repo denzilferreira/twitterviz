@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Mon May 18 12:52:36 WEST 2009 -->
+  <!-- prefuse GraphML Writer | Tue May 19 14:45:29 WEST 2009 -->
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
   </key>
@@ -15,7 +15,9 @@
   <key id="relevance" for="node" attr.name="relevance" attr.type="int">
     <default>-1</default>
   </key>
-  <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
+  <key id="follows" for="node" attr.name="follows" attr.type="boolean">
+    <default>false</default>
+  </key>
   <key id="relationship" for="edge" attr.name="relationship" attr.type="int">
     <default>-1</default>
   </key>
@@ -27,511 +29,511 @@
       <data key="protectedUser">false</data>
       <data key="screenName">liznedarierref</data>
       <data key="relevance">2</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="1">
       <data key="id">19069272L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">marcottsilva</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="2">
       <data key="id">25830147L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">technicnews</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="3">
       <data key="id">14175903L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">elvispt</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="4">
       <data key="id">40019748L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">AAUMa</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="5">
       <data key="id">41553L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">abduzeedo</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="6">
       <data key="id">26541144L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">Design_Innovate</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="7">
       <data key="id">19236701L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">homeautomation</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="8">
       <data key="id">19761445L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">TwitJobSearch</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="9">
       <data key="id">37921380L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">omrac</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="10">
       <data key="id">21897074L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jorgemabreu</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="11">
       <data key="id">36623240L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">euricog</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="12">
       <data key="id">19479557L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">imrui</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="13">
       <data key="id">7822382L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">danwegner</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="14">
       <data key="id">18469945L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">bukkalevy</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="15">
       <data key="id">14568278L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">spegman</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="16">
       <data key="id">29480248L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">NeoGohd</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="17">
       <data key="id">14254504L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">usabilitypost</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="18">
       <data key="id">12741672L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">aatorres</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="19">
       <data key="id">23046181L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">webupd8</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="20">
       <data key="id">19006934L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">DesignNewz</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="21">
       <data key="id">28350075L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jquerystyle</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="22">
       <data key="id">9445012L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">leemunroe</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="23">
       <data key="id">34626988L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">gozilla84</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="24">
       <data key="id">26556980L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">technoworkers</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="25">
       <data key="id">22013577L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">FreelanceSw</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="26">
       <data key="id">19813789L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">ScottHenson</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="27">
       <data key="id">19001215L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">hieuuk</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="28">
       <data key="id">31082651L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">TwitCommerce</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="29">
       <data key="id">14325914L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">webholics</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="30">
       <data key="id">16336800L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">wpstudios</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="31">
       <data key="id">30692008L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">DrunkZdan</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="32">
       <data key="id">28527071L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">andrefdoria</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="33">
       <data key="id">9453872L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">elijahmanor</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="34">
       <data key="id">21977919L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">tutlist</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="35">
       <data key="id">20536157L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">google</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="36">
       <data key="id">12368532L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">rworth</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="37">
       <data key="id">17622041L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">valums</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="38">
       <data key="id">15438672L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">masilli</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="39">
       <data key="id">14538601L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jquery</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="40">
       <data key="id">752673L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jeresig</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="41">
       <data key="id">1589691L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">reybango</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="42">
       <data key="id">14538636L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jqueryui</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="43">
       <data key="id">2833931L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">Bzook</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="44">
       <data key="id">16401507L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">pedrogteixeira</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="45">
       <data key="id">15808827L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jquerysites</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="46">
       <data key="id">18860468L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">mootools</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="47">
       <data key="id">16437833L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">itjobs_pt</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="48">
       <data key="id">14538956L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">prototypejs</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="49">
       <data key="id">19258798L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">commandlinefu</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="50">
       <data key="id">20508477L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">WebDesignDev</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="51">
       <data key="id">14724363L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">CodeIgniter</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="52">
       <data key="id">16453939L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">FowlerSoftware</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="53">
       <data key="id">18814284L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">IfThenRadio</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="54">
       <data key="id">19266681L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">tomkinners</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="55">
       <data key="id">9689232L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">Woork</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="56">
       <data key="id">16303871L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">creattica</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="57">
       <data key="id">18191193L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">SteveReynolds</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="58">
       <data key="id">16745570L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">koozies</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="59">
       <data key="id">15736190L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">smashingmag</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="60">
       <data key="id">19760877L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">frac_madtech</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="61">
       <data key="id">19647578L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">madeiratech</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="62">
       <data key="id">15773675L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">MuscleNerd</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="63">
       <data key="id">18562764L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">insanelymac</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="64">
       <data key="id">17484254L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">jolicloud</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="65">
       <data key="id">14370686L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">nfavas</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="66">
       <data key="id">17311493L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">presidencia</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="67">
       <data key="id">9548932L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">pcamacho</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="68">
       <data key="id">18457642L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">Traveller83</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="69">
       <data key="id">16540939L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">iphone_dev</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="70">
       <data key="id">14343457L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">mobilidades</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">true</data>
     </node>
     <node id="71">
       <data key="id">677013L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">njn</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
     <node id="72">
       <data key="id">16491107L</data>
       <data key="protectedUser">false</data>
       <data key="screenName">mariafreitas</data>
       <data key="relevance">1</data>
-      <data key="keyword">null</data>
+      <data key="follows">false</data>
     </node>
 
     <!-- edges -->
@@ -542,7 +544,7 @@
       <data key="relationship">2</data>
     </edge>
     <edge id="2" source="0" target="3">
-      <data key="relationship">1</data>
+      <data key="relationship">2</data>
     </edge>
     <edge id="3" source="0" target="4">
       <data key="relationship">2</data>
