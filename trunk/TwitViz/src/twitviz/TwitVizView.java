@@ -279,8 +279,10 @@ public class TwitVizView extends FrameView {
                 }
                 
                 if(isFollowing(followers, friend)) {
+                    tmp.setBoolean("follows", true);
                     relation.setInt("relationship", 2);
                 }else{
+                    tmp.setBoolean("follows", false);
                     relation.setInt("relationship", 1);
                 }
             }
@@ -321,7 +323,6 @@ public class TwitVizView extends FrameView {
         twittsTable = new javax.swing.JTable();
         updateButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        panel_viz = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
@@ -329,6 +330,9 @@ public class TwitVizView extends FrameView {
         password = new javax.swing.JPasswordField();
         btn_login = new javax.swing.JButton();
         feedback_label = new javax.swing.JLabel();
+        tabs_control = new javax.swing.JTabbedPane();
+        panel_viz = new javax.swing.JPanel();
+        keyword_viz = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -412,7 +416,7 @@ public class TwitVizView extends FrameView {
                     .add(addButton))
                 .add(5, 5, 5)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 400, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -497,21 +501,7 @@ public class TwitVizView extends FrameView {
                     .add(updateButton)
                     .add(jLabel7))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE))
-        );
-
-        panel_viz.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        panel_viz.setName("panel_viz"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout panel_vizLayout = new org.jdesktop.layout.GroupLayout(panel_viz);
-        panel_viz.setLayout(panel_vizLayout);
-        panel_vizLayout.setHorizontalGroup(
-            panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 587, Short.MAX_VALUE)
-        );
-        panel_vizLayout.setVerticalGroup(
-            panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 562, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE))
         );
 
         jLabel9.setIcon(resourceMap.getIcon("jLabel9.icon")); // NOI18N
@@ -544,6 +534,45 @@ public class TwitVizView extends FrameView {
         feedback_label.setText(resourceMap.getString("feedback_label.text")); // NOI18N
         feedback_label.setName("feedback_label"); // NOI18N
 
+        tabs_control.setName("tabs_control"); // NOI18N
+        tabs_control.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabs_controlStateChanged(evt);
+            }
+        });
+
+        panel_viz.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        panel_viz.setName("panel_viz"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout panel_vizLayout = new org.jdesktop.layout.GroupLayout(panel_viz);
+        panel_viz.setLayout(panel_vizLayout);
+        panel_vizLayout.setHorizontalGroup(
+            panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 562, Short.MAX_VALUE)
+        );
+        panel_vizLayout.setVerticalGroup(
+            panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 596, Short.MAX_VALUE)
+        );
+
+        tabs_control.addTab(resourceMap.getString("panel_viz.TabConstraints.tabTitle"), null, panel_viz, resourceMap.getString("panel_viz.TabConstraints.tabToolTip")); // NOI18N
+
+        keyword_viz.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        keyword_viz.setName("keyword_viz"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout keyword_vizLayout = new org.jdesktop.layout.GroupLayout(keyword_viz);
+        keyword_viz.setLayout(keyword_vizLayout);
+        keyword_vizLayout.setHorizontalGroup(
+            keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 562, Short.MAX_VALUE)
+        );
+        keyword_vizLayout.setVerticalGroup(
+            keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 596, Short.MAX_VALUE)
+        );
+
+        tabs_control.addTab(resourceMap.getString("keyword_viz.TabConstraints.tabTitle"), null, keyword_viz, resourceMap.getString("keyword_viz.TabConstraints.tabToolTip")); // NOI18N
+
         org.jdesktop.layout.GroupLayout twitvizPanelLayout = new org.jdesktop.layout.GroupLayout(twitvizPanel);
         twitvizPanel.setLayout(twitvizPanelLayout);
         twitvizPanelLayout.setHorizontalGroup(
@@ -556,8 +585,8 @@ public class TwitVizView extends FrameView {
                 .add(14, 14, 14)
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(panel_viz, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 585, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(4, 4, 4))
                     .add(twitvizPanelLayout.createSequentialGroup()
@@ -572,7 +601,7 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(9, 9, 9)
                         .add(btn_login)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(396, Short.MAX_VALUE))
         );
         twitvizPanelLayout.setVerticalGroup(
             twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -588,13 +617,13 @@ public class TwitVizView extends FrameView {
                     .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(twitvizPanelLayout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, twitvizPanelLayout.createSequentialGroup()
                         .add(9, 9, 9)
                         .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .add(panel_viz, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .add(twitvizPanelLayout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .add(tabs_control)
+                            .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -646,11 +675,11 @@ public class TwitVizView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1243, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1622, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1047, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1426, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -725,12 +754,12 @@ public class TwitVizView extends FrameView {
                         //TODO: load previous stored keywords
 
                         //Start public line monitor, updates every 20 seconds
-                        java.util.Timer timer = new java.util.Timer();
+                        /*java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 20000); //Get public line every 20 
+                        }, 5000, 20000); //Get public line every 20 */
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -754,7 +783,7 @@ public class TwitVizView extends FrameView {
                     }
 
                 } catch (TwitterException ex) {
-                    setFeedback("Error loading friends timeline", Color.RED);
+                    //setFeedback("Error loading friends timeline", Color.RED);
                 }
 
             }
@@ -919,7 +948,16 @@ public class TwitVizView extends FrameView {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
-    public void displayTwitviz() {        
+    //Function that refreshes the view according to the tab clicked
+    private void tabs_controlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabs_controlStateChanged
+        // TODO add your handling code here:
+        System.out.println(tabs_control.getSelectedIndex());
+    }//GEN-LAST:event_tabs_controlStateChanged
+
+    public void displayTwitviz() {
+        //make tab visible, if it already isn't
+        tabs_control.setSelectedIndex(0);
+
         //Read the database
         try {
             graph = new GraphMLReader().readGraph("twitviz.xml");
@@ -947,12 +985,21 @@ public class TwitVizView extends FrameView {
         vis.setRendererFactory(new DefaultRendererFactory(r));
 
         int[] edgesColor = new int[] {
-            ColorLib.rgb(246,249,0),
-            ColorLib.rgb(58,171,74)
+            ColorLib.rgb(255,255,153),
+            ColorLib.rgb(153,255,153)
         };
 
+        /*
+         ColorLib.rgb(246,249,0),
+         ColorLib.rgb(58,171,74)
+         RGB 116, 207, 96
+         153, 255, 153
+         255, 255, 153
+         */
+
         //Lets colorize! :D
-        ColorAction nodes = new ColorAction("graph.nodes",VisualItem.FILLCOLOR, ColorLib.rgb(174,235,255));
+        DataColorAction nodes = new DataColorAction("graph.nodes", "follows",
+            Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
 
         ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
         
@@ -1011,6 +1058,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList keyword_list;
+    private javax.swing.JPanel keyword_viz;
     private javax.swing.JTextField keywordsTextField;
     private javax.swing.JLabel lbl_password;
     private javax.swing.JLabel lbl_username;
@@ -1023,6 +1071,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JTabbedPane tabs_control;
     private javax.swing.JTable twittsTable;
     private javax.swing.JPanel twitvizPanel;
     private javax.swing.JButton updateButton;
