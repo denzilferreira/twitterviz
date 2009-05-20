@@ -467,6 +467,11 @@ public class TwitVizView extends FrameView {
 
         searchButton.setText(resourceMap.getString("searchButton.text")); // NOI18N
         searchButton.setName("searchButton"); // NOI18N
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -481,7 +486,7 @@ public class TwitVizView extends FrameView {
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(searchButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -496,7 +501,7 @@ public class TwitVizView extends FrameView {
                     .add(addButton))
                 .add(5, 5, 5)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 400, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(139, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -549,7 +554,7 @@ public class TwitVizView extends FrameView {
             .add(jPanel3Layout.createSequentialGroup()
                 .add(9, 9, 9)
                 .add(jLabel6)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 191, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 202, Short.MAX_VALUE)
                 .add(countLabel)
                 .add(8, 8, 8))
             .add(updateTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
@@ -561,7 +566,7 @@ public class TwitVizView extends FrameView {
                         .add(20, 20, 20))
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(jLabel7)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 232, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 255, Short.MAX_VALUE)
                         .add(updateButton))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -625,11 +630,11 @@ public class TwitVizView extends FrameView {
         panel_viz.setLayout(panel_vizLayout);
         panel_vizLayout.setHorizontalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 562, Short.MAX_VALUE)
+            .add(0, 578, Short.MAX_VALUE)
         );
         panel_vizLayout.setVerticalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 596, Short.MAX_VALUE)
+            .add(0, 645, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("panel_viz.TabConstraints.tabTitle"), null, panel_viz, resourceMap.getString("panel_viz.TabConstraints.tabToolTip")); // NOI18N
@@ -641,11 +646,11 @@ public class TwitVizView extends FrameView {
         keyword_viz.setLayout(keyword_vizLayout);
         keyword_vizLayout.setHorizontalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 562, Short.MAX_VALUE)
+            .add(0, 578, Short.MAX_VALUE)
         );
         keyword_vizLayout.setVerticalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 596, Short.MAX_VALUE)
+            .add(0, 645, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("keyword_viz.TabConstraints.tabTitle"), null, keyword_viz, resourceMap.getString("keyword_viz.TabConstraints.tabToolTip")); // NOI18N
@@ -667,7 +672,7 @@ public class TwitVizView extends FrameView {
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(4, 4, 4))
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE)
+                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
                         .add(189, 189, 189)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -678,7 +683,7 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(9, 9, 9)
                         .add(btn_login)))
-                .addContainerGap(396, Short.MAX_VALUE))
+                .addContainerGap(411, Short.MAX_VALUE))
         );
         twitvizPanelLayout.setVerticalGroup(
             twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -696,7 +701,7 @@ public class TwitVizView extends FrameView {
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .add(9, 9, 9)
                         .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(tabs_control)
+                            .add(tabs_control, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 675, Short.MAX_VALUE)
                             .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -756,7 +761,7 @@ public class TwitVizView extends FrameView {
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1426, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1452, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -1044,6 +1049,13 @@ public class TwitVizView extends FrameView {
         System.out.println(tabs_control.getSelectedIndex());
 
     }//GEN-LAST:event_tabs_controlStateChanged
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+
+        if(keywordsTextField.getText().length() > 0){
+            
+        }
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     public void displayTwitviz() {
         //make tab visible, if it already isn't
