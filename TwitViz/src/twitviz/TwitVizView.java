@@ -61,10 +61,7 @@ import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
 import prefuse.util.ColorLib;
 import prefuse.visual.VisualItem;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.User;
+import twitter4j.*;
 //import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
 //import winterwell.jtwitter.Twitter.User;
 
@@ -1050,10 +1047,24 @@ public class TwitVizView extends FrameView {
 
     }//GEN-LAST:event_tabs_controlStateChanged
 
+    //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
 
         if(keywordsTextField.getText().length() > 0){
-            
+            QueryResult results = null;
+            List<Tweet> twitts = null;
+            Query queryString = new Query(keywordsTextField.getText());
+            try {
+                results = link.search(queryString);
+                twitts = results.getTweets();
+            } catch (TwitterException ex) {
+                setFeedback("Error while searching:" + ex.getMessage(), Color.RED);
+            }
+            for(Tweet twitt : twitts)
+            {
+                keywordsmap.addElement(twitt.getText());
+                keyword_list.setModel(keywordsmap);
+            }
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
