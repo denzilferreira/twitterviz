@@ -181,9 +181,11 @@ public class TwitVizView extends FrameView {
         r.setRoundedCorner(8, 8); // round the corners
 
         LabelRenderer names = new LabelRenderer("screenName");
-        r.setRoundedCorner(8,8);
+        names.setRoundedCorner(8,8);
 
-        vis.setRendererFactory(new DefaultRendererFactory(r));
+        DefaultRendererFactory drf = new DefaultRendererFactory(r,names);
+
+        kwvis.setRendererFactory(drf);
 
         int[] edgesColor = new int[] {
             ColorLib.rgb(255,255,153),
@@ -237,11 +239,22 @@ public class TwitVizView extends FrameView {
         kwvis.run("layout"); // start up the animated layout
     }
 
+    //Function that gets a specific node by keyword.
+    //--If it doesn't exist, creates one automatically and returns it
     private Node getKeywordFromGraph(String name) {
+        
+        try {
+            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         Node key = null;
         for(int i=0;i<kwgraph.getNodeCount();i++) {
             key = kwgraph.getNode(i);
-            if(key.getString("keyword").compareToIgnoreCase(name)==0) {
+            //screenName == null when its a keyword node
+            if(key.getString("keyword").compareToIgnoreCase(name)==0 && key.getString("screenName").compareTo("null")==0) {
                 return key;
             }
         }
@@ -256,10 +269,10 @@ public class TwitVizView extends FrameView {
             e.printStackTrace();
         }
         //--end save graph file
-
         return key;
     }
 
+    //Function that checks if someone is following you back
     private boolean isFollowing(List<User> list, User who) {
         for(int i=0;i<list.size();i++) {
             User tmp = list.get(i);
@@ -273,6 +286,7 @@ public class TwitVizView extends FrameView {
         return false;
     }
 
+    //Function that builds the logged in user's network
     private void buildSocialNetwork(User user) {
 
         //restore saved database
@@ -362,6 +376,13 @@ public class TwitVizView extends FrameView {
                     tmp.setBoolean("follows", false);
                     relation.setInt("relationship", 1);
                 }
+
+                while(depth>0) {
+                    try{
+                        getSubfriends(link.getFriends(Integer.toString(friend.getId())),tmp);
+                    }catch(Exception e) {}
+                    depth--;
+                }
             }
         }
          
@@ -372,6 +393,70 @@ public class TwitVizView extends FrameView {
             e.printStackTrace();
         }
         //--end save graph file
+    }
+
+    private void getSubfriends(List<User> friends, Node source) {
+        for(User friend: friends) {
+            //There are users with protected profiles and data
+            List<User> followers = null;
+            try {
+                followers = link.getFollowers(Integer.toString(friend.getId()));
+            } catch (TwitterException ex) {
+                Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if(!friend.isProtected()) {
+                Node tmp = null;
+                int friendPos = -1;
+                for(int a=0;a<graph.getNodeCount();a++) {
+                    tmp = graph.getNode(a);
+                    if(tmp.getLong("id")==friend.getId()) {
+                       friendPos = a;
+                       break;
+                    }
+                }
+
+                //New friend
+                if(friendPos==-1) {
+                    tmp = graph.addNode();
+                //restore saved
+                }else{
+                    tmp = graph.getNode(friendPos);
+                }
+
+                //set node data
+                tmp.setLong("id", friend.getId());
+                tmp.setString("screenName", friend.getScreenName());
+                tmp.setBoolean("protectedUser", friend.isProtected());
+
+                //The relevance might already be a different number!
+                if(friendPos==-1) {
+                    tmp.setInt("relevance", 1);
+                }else{
+                    tmp.setInt("relevance", tmp.getInt("relevance"));
+                }
+                //--end node data
+
+                //Link to source
+                Edge relation = graph.getEdge(source,tmp);
+                if(relation==null) {
+                    graph.addEdge(source, tmp);
+                    relation = graph.getEdge(source,tmp);
+                }
+
+                if(isFollowing(followers, friend)) {
+                    tmp.setBoolean("follows", true);
+                    relation.setInt("relationship", 2);
+                }else{
+                    tmp.setBoolean("follows", false);
+                    relation.setInt("relationship", 1);
+                }
+
+                try{
+                    getSubfriends(link.getFriends(Integer.toString(friend.getId())),tmp);
+                }catch(Exception e) {}
+            }
+        }
     }
 
     /** This method is called from within the constructor to
@@ -826,12 +911,14 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
+                        depth = 1;
                         buildSocialNetwork(user);
 
                         displayTwitviz();
 
                         //TODO: load previous stored keywords
-                        
+                        loadKeywords();
+
                         //Start public line monitor, updates every 20 seconds
                         /*java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
@@ -981,6 +1068,10 @@ public class TwitVizView extends FrameView {
         return keywords;
     }
 
+    private void loadKeywords() {
+        
+    }
+
     //Update the feedback_label to specific message + color
     private void setFeedback(String message, Color color) {
         feedback_label.setText(message);
@@ -1029,21 +1120,33 @@ public class TwitVizView extends FrameView {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         if(keywordsTextField.getText().length()>0) {
-            keywordsmap.addElement(keywordsTextField.getText());
-            keyword_list.setModel(keywordsmap);
+            
+            boolean alreadyDefined = false;
+            for(int i=0;i<keywordsmap.size();i++) {
+                if(((String)keywordsmap.get(i)).compareTo(keywordsTextField.getText())==0) {
+                    alreadyDefined=true;
+                    break;
+                }
+            }
+            if(! alreadyDefined) {
+                keywordsmap.addElement(keywordsTextField.getText());
+                keyword_list.setModel(keywordsmap);
+            }
 
             Node key = getKeywordFromGraph(keywordsTextField.getText());
-            setFeedback("Keyword added successfully", Color.WHITE);
+            if(! alreadyDefined) {
+                setFeedback("Keyword added successfully", Color.WHITE);
+            }
 
             //Change to the keyword visualization
             tabs_control.setSelectedIndex(1);
+            displayKeyviz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
     //Function that refreshes the view according to the tab clicked
     private void tabs_controlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabs_controlStateChanged
-        // TODO add your handling code here:
-        System.out.println(tabs_control.getSelectedIndex());
+        
 
     }//GEN-LAST:event_tabs_controlStateChanged
 
@@ -1205,6 +1308,8 @@ public class TwitVizView extends FrameView {
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
+
+    private int depth = 1;
 
     private JDialog aboutBox;
 }
