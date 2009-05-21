@@ -1,0 +1,17 @@
+-classpath '/Users/yusukey/opensource/twitter4j/target/classes:/Users/yusukey/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/Users/yusukey/.m2/repository/org/slf4j/nlog4j/1.2.25/nlog4j-1.2.25.jar:/Users/yusukey/.m2/repository/jdom/jdom/1.0/jdom-1.0.jar:/Users/yusukey/.m2/repository/rome/rome/0.9/rome-0.9.jar'
+ -protected
+-sourcepath
+'/Users/yusukey/opensource/twitter4j/src/main/java'
+-author
+-bottom
+'Copyright © 2009. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/yusukey/opensource/twitter4j/target/apidocs'
+-doctitle
+'twitter4j 2.0.3 API'
+-use
+-version
+-windowtitle
+'twitter4j 2.0.3 API'
