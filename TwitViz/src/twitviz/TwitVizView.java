@@ -974,7 +974,7 @@ public class TwitVizView extends FrameView {
         Vector keywords = new Vector();
 
         for(int i=0;i<keywordsmap.getSize();i++) {
-            if(stat.getText().matches("[.*]"+keywordsmap.get(i).toString()+"[.*]")) {
+            if(stat.getText().matches(".*"+keywordsmap.get(i).toString()+".*")) {
                 keywords.addElement(keywordsmap.get(i).toString());
             }
         }
