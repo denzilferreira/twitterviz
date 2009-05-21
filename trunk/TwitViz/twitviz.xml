@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Thu May 21 00:37:43 BST 2009 -->
+  <!-- prefuse GraphML Writer | Thu May 21 17:36:28 WEST 2009 -->
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
   </key>
@@ -25,33 +25,13 @@
   <graph edgedefault="undirected">
     <!-- nodes -->
     <node id="0">
-      <data key="id">38315704L</data>
+      <data key="id">31128534L</data>
       <data key="protectedUser">false</data>
-      <data key="screenName">ArchiMast</data>
+      <data key="screenName">Blingfactor</data>
       <data key="relevance">2</data>
-      <data key="follows">false</data>
-    </node>
-    <node id="1">
-      <data key="id">10029012L</data>
-      <data key="protectedUser">false</data>
-      <data key="screenName">jprod</data>
-      <data key="relevance">1</data>
-      <data key="follows">false</data>
-    </node>
-    <node id="2">
-      <data key="id">16492188L</data>
-      <data key="protectedUser">false</data>
-      <data key="screenName">liznedarierref</data>
-      <data key="relevance">1</data>
       <data key="follows">false</data>
     </node>
 
     <!-- edges -->
-    <edge id="0" source="0" target="1">
-      <data key="relationship">1</data>
-    </edge>
-    <edge id="1" source="0" target="2">
-      <data key="relationship">1</data>
-    </edge>
   </graph>
 </graphml>

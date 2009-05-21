@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Tue May 19 14:45:29 WEST 2009 -->
-  <key id="keyword" for="node" attr.name="keyword" attr.type="string"></key>
+  <!-- prefuse GraphML Writer | Thu May 21 17:16:24 WEST 2009 -->
+  <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
   </key>
@@ -16,16 +16,17 @@
   <key id="friend" for="node" attr.name="friend" attr.type="boolean">
     <default>false</default>
   </key>
-  
+
   <graph edgedefault="undirected">
     <!-- nodes -->
     <node id="0">
-      <data key="keyword">null</data>
-      <data key="id">0</data>
+      <data key="keyword">HCI</data>
+      <data key="id">0L</data>
       <data key="screenName">null</data>
       <data key="relevance">-1</data>
       <data key="friend">false</data>
     </node>
-    
+
+    <!-- edges -->
   </graph>
 </graphml>
