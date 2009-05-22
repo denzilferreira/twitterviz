@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Fri May 22 12:21:30 WEST 2009 -->
+  <!-- prefuse GraphML Writer | Fri May 22 13:32:43 WEST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -20,13 +20,21 @@
   <graph edgedefault="undirected">
     <!-- nodes -->
     <node id="0">
-      <data key="keyword">HCI</data>
+      <data key="keyword">love</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
       <data key="relevance">-1</data>
       <data key="friend">false</data>
     </node>
+    <node id="1">
+      <data key="keyword">null</data>
+      <data key="id">22439061L</data>
+      <data key="screenName">carterjl</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+    </node>
 
     <!-- edges -->
+    <edge id="0" source="0" target="1"/>
   </graph>
 </graphml>
