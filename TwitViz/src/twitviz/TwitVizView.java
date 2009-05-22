@@ -394,6 +394,7 @@ public class TwitVizView extends FrameView {
         //--end save graph file
     }
 
+    //Recursive function that will get friends of a friend
     private void getSubfriends(List<User> friends, Node source) {
         depth--;
         if(depth>0) {
@@ -869,6 +870,28 @@ public class TwitVizView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    private Node getUserFromKeyGraph(User tweeterer) {
+        int nodePosition = -1;
+        for(int j=0;j<kwgraph.getNodeCount();j++) {
+            Node tmp = kwgraph.getNode(j);
+
+            if(tmp.getInt("id")==tweeterer.getId()) {
+                nodePosition = j;
+                break;
+            }
+        }
+
+        Node user = null;
+
+        if(nodePosition>=0) {
+            user = kwgraph.getNode(nodePosition);
+        }else {
+            user = kwgraph.addNode();
+        }
+
+        return user;
+    }
+
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         //trying to logout
         if(link!=null) {
@@ -914,7 +937,7 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        buildSocialNetwork(user);
+                        //buildSocialNetwork(user);
 
                         displayTwitviz();
 
@@ -968,7 +991,7 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_btn_loginActionPerformed
     //TODO: needs to be adaptated to the new xml file
-    /*private void get_PublicLine() {
+    private void get_PublicLine() {
         //we only start processing the public line if we have keywords on the list!
         if(keywordsmap.getSize()>0) {
 
@@ -981,29 +1004,16 @@ public class TwitVizView extends FrameView {
 
                     //If the user has something on the text, etc that we are interested in...
                     Vector interests = getInterests(stat);
+                    
                     if(interests.size()>0) {
+
                         User tweeterer = stat.getUser();
                         if(!tweeterer.isProtected()) {
-                            //check if we already have the user or not
-                            int nodePosition = -1;
-                            for(int j=0;j<kwgraph.getNodeCount();j++) {
-                                Node tmp = kwgraph.getNode(j);
 
-                                if(tmp.getInt("id")==tweeterer.getId()) {
-                                    nodePosition = j;
-                                    break;
-                                }
-                            }
+                            //check if we already have the user or not    
+                            Node familiar_stranger = getUserFromKeyGraph(tweeterer);
 
-                            Node familiar_stranger = null;
-
-                            if(nodePosition>=0) {
-                                familiar_stranger = kwgraph.getNode(nodePosition);
-                            }else {
-                                familiar_stranger = kwgraph.addNode();
-                            }
-
-                            if(nodePosition==-1) {
+                            if(familiar_stranger.getString("screenName").compareTo("null")==0) {
                                 familiar_stranger.setLong("id", tweeterer.getId());
                                 familiar_stranger.setString("screenName", tweeterer.getScreenName());
                                 familiar_stranger.setBoolean("protectedUser", tweeterer.isProtected());
@@ -1023,7 +1033,7 @@ public class TwitVizView extends FrameView {
 
                             //Associate the person to the keywords we are following
                             for(int k=0;k<keywordsmap.getSize();k++) {
-                                Node keyword = getKeywordFromGraph(keywordsmap.get(k).toString());
+                                Node keyword = getKeywordFromGraph((String)keywordsmap.get(k));
                                 kwgraph.addEdge(keyword, familiar_stranger);
                             }
                         }
@@ -1032,7 +1042,7 @@ public class TwitVizView extends FrameView {
 
                 //Save to graph file
                 try{
-                    new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
+                    new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
                 }catch(DataIOException e){
                     e.printStackTrace();
                 }
@@ -1045,7 +1055,7 @@ public class TwitVizView extends FrameView {
                 setFeedback("Error loading public line :(", Color.RED);
             }
         }
-    }*/
+    }
 
     //Get list of related nodes
     private List<Node> getRelatedToSomeone(Node who) {
@@ -1072,7 +1082,23 @@ public class TwitVizView extends FrameView {
 
     //Load previous selected keywords
     private void loadKeywords() {
-        
+        try {
+            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        Node key = null;
+        for(int i=0;i<kwgraph.getNodeCount();i++) {
+            key = kwgraph.getNode(i);
+            //screenName == null when its a keyword node
+            if(key.getString("keyword").compareTo("null")!=0 && key.getString("screenName").compareTo("null")==0) {
+                keywordsmap.addElement(key.getString("keyword"));
+            }
+        }
+
+        keyword_list.setModel(keywordsmap);
     }
 
     //Update the feedback_label to specific message + color
