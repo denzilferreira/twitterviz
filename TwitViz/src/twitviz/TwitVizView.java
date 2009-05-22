@@ -262,6 +262,28 @@ public class TwitVizView extends FrameView {
         return key;
     }
 
+    private Node getUserFromKeyGraph(int id) {
+        int nodePosition = -1;
+        for(int j=0;j<kwgraph.getNodeCount();j++) {
+            Node tmp = kwgraph.getNode(j);
+
+            if(tmp.getInt("id") == id) {
+                nodePosition = j;
+                break;
+            }
+        }
+
+        Node user = null;
+
+        if(nodePosition>=0) {
+            user = kwgraph.getNode(nodePosition);
+        }else {
+            user = kwgraph.addNode();
+        }
+
+        return user;
+    }
+
     //Function that checks if someone is following you back
     private boolean isFollowing(List<User> list, User who) {
         for(int i=0;i<list.size();i++) {
@@ -860,42 +882,6 @@ public class TwitVizView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
-    private Node getUserFromKeyGraph(User tweeterer) {
-        
-        int nodePosition = -1;
-
-        for(int j=0;j<kwgraph.getNodeCount();j++) {
-            Node tmp = kwgraph.getNode(j);
-
-            if(tmp.getInt("id")==tweeterer.getId()) {
-                nodePosition = j;
-                break;
-            }
-        }
-
-        Node user = null;
-
-        if(nodePosition>=0) {
-            user = kwgraph.getNode(nodePosition);
-        }else {
-            user = kwgraph.addNode();
-
-            user.setLong("id", tweeterer.getId());
-            user.setString("screenName", tweeterer.getScreenName());
-            user.setInt("relevance", 1);
-            user.setBoolean("friend", isStrangerAFriend(tweeterer));
-        }
-
-        //Save to graph file
-        try{
-            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-        }catch(DataIOException e){
-            e.printStackTrace();
-        }
-        //--end save graph file
-
-        return user;
-    }
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         //trying to logout
@@ -1041,7 +1027,7 @@ public class TwitVizView extends FrameView {
                         if(!tweeterer.isProtected()) {
 
                             //check if we already have the user or not    
-                            Node familiar_stranger = getUserFromKeyGraph(tweeterer);
+                            Node familiar_stranger = getUserFromKeyGraph(tweeterer.getId());
 
                             if(familiar_stranger!=null) {
                                 
@@ -1178,7 +1164,7 @@ public class TwitVizView extends FrameView {
     }//GEN-LAST:event_updateTextFieldKeyReleased
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // TODO add your handling code here:
+
         if(keywordsTextField.getText().length()>0) {
             
             boolean alreadyDefined = false;
@@ -1213,23 +1199,73 @@ public class TwitVizView extends FrameView {
     //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
 
-        if(keywordsTextField.getText().length() > 0){
-            QueryResult results = null;
-            List<Tweet> twitts = null;
-            Query queryString = new Query(keywordsTextField.getText());
-            try {
-                results = link.search(queryString);
-                twitts = results.getTweets();
-            } catch (TwitterException ex) {
-                setFeedback("Error while searching:" + ex.getMessage(), Color.RED);
-            }
-            for(Tweet twitt : twitts)
-            {
-                keywordsmap.addElement(twitt.getText());
-                keyword_list.setModel(keywordsmap);
-            }
+            if(keywordsTextField.getText().length()>0) {
+
+                boolean alreadyDefined = false;
+                for(int i=0;i<keywordsmap.size();i++) {
+                    if(((String)keywordsmap.get(i)).compareTo(keywordsTextField.getText())==0) {
+                        alreadyDefined=true;
+                        break;
+                    }
+                }
+                if(! alreadyDefined) {
+                    keywordsmap.addElement(keywordsTextField.getText());
+                    keyword_list.setModel(keywordsmap);
+                }
+
+                Node key = getKeywordFromGraph(keywordsTextField.getText());
+                if(! alreadyDefined) {
+                    setFeedback("Keyword added successfully", Color.WHITE);
+                }
+
+                QueryResult results = null;
+                List<Tweet> twitts = null;
+                Query queryString = new Query(keywordsTextField.getText());
+                try {
+                    results = link.search(queryString);
+                    twitts = results.getTweets();
+                } catch (TwitterException ex) {
+                    setFeedback("Error while searching:" + ex.getMessage(), Color.RED);
+                }
+
+                processTwitts(twitts);
+
+                //Change to the keyword visualization
+                tabs_control.setSelectedIndex(1);
+                displayKeyviz();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    public void processTwitts(List<Tweet> twitts){
+        try{
+        for(Tweet twitt : twitts)
+        {
+            Node user = getUserFromKeyGraph(twitt.getFromUserId());
+            if(user.getString("screenName") != null){
+                // set user data
+                //User twitter = link.getUserDetail(String.valueOf(twitt.getFromUserId()));
+                user.setString("keyword", null);
+                user.setLong("id", 0);
+                user.setString("screenName", twitt.getFromUser());
+                user.setInt("relevance", 1);
+                user.setBoolean("friend", )
+
+                // end setting user data
+
+                //Link to source
+                    Edge relation = keyword_viz.getEdge(,tmp);
+                    if(relation==null) {
+                        keyword_viz.addEdge(source, tmp);
+                        relation = keyword_viz.getEdge(source,tmp);
+                    }
+            }
+        }
+        }
+        catch(TwitterException e)
+        {
+             setFeedback("Error loading public line :(", Color.RED);
+        }
+    }
 
     public void displayTwitviz() {
         //make tab visible, if it already isn't
