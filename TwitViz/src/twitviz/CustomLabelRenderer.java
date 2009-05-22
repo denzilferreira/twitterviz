@@ -22,9 +22,10 @@ public class CustomLabelRenderer extends LabelRenderer {
         if (item instanceof NodeItem && item!=null) {
             if(item.canGetString("screenName") && item.getString("screenName").compareTo("null")!=0) {
                 safety = item.getString("screenName");
-            }else safety = item.getString("keyword");
+            }else if(item.canGetString("keyword") && item.getString("keyword").compareTo("null")!=0) {
+                safety = item.getString("keyword");
+            }
         }
-
         return safety;
     }
 
