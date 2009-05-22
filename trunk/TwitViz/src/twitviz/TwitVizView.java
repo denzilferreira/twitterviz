@@ -7,9 +7,11 @@ package twitviz;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Label;
 import java.awt.PopupMenu;
 import java.awt.Toolkit;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,12 +56,23 @@ import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
 import prefuse.data.Node;
+import prefuse.data.Schema;
+import prefuse.data.Tuple;
+import prefuse.data.event.ExpressionListener;
+import prefuse.data.expression.ExpressionVisitor;
+import prefuse.data.expression.Predicate;
+import prefuse.data.expression.parser.ExpressionParser;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
 import prefuse.render.DefaultRendererFactory;
+import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
+import prefuse.render.Renderer;
+import prefuse.render.RendererFactory;
 import prefuse.util.ColorLib;
+import prefuse.visual.EdgeItem;
+import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import twitter4j.*;
 //import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
@@ -73,7 +86,7 @@ public class TwitVizView extends FrameView {
     public TwitVizView(SingleFrameApplication app) {
         super(app);
 
-
+        
         initComponents();
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -149,9 +162,9 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
-    //TODO: Visualization of keywords and strangers!
+    //Visualization of keywords and strangers!
     private void displayKeyviz() {
-        tabs_control.setSelectedIndex(1);
+        //tabs_control.setSelectedIndex(0);
 
         //Read the database
         try {
@@ -162,91 +175,83 @@ public class TwitVizView extends FrameView {
         }
 
         if(kwvis!=null) {
+
             kwvis.removeGroup("graph");
             kwvis.add("graph",kwgraph);
+            
             kwvis.repaint();
+
             kwvis.run("colour");
             kwvis.run("layout");
             kwvis.run("size");
-        }else{
-            kwvis = new Visualization();
-            kwvis.add("graph", kwgraph);
+            
         }
 
-        // draw the "keyword" label for NodeItems
-        LabelRenderer r = new LabelRenderer("keyword");
-        r.setRoundedCorner(8, 8); // round the corners
+            kwvis = new Visualization();
+            kwvis.add("graph", kwgraph);
+        
 
-        LabelRenderer names = new LabelRenderer("screenName");
-        names.setRoundedCorner(8,8);
+            LabelRenderer rend = new CustomLabelRenderer();
+            rend.setRoundedCorner(8, 8);
 
-        DefaultRendererFactory drf = new DefaultRendererFactory(r,names);
+            kwvis.setRendererFactory( new DefaultRendererFactory(rend));
 
-        kwvis.setRendererFactory(drf);
+            int[] edgesColor = new int[] {
+                ColorLib.rgb(255,255,153),
+                ColorLib.rgb(153,255,153)
+            };
 
-        int[] edgesColor = new int[] {
-            ColorLib.rgb(255,255,153),
-            ColorLib.rgb(153,255,153)
-        };
+            //Lets colorize! :D
+            DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
+                Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
 
-        //Lets colorize! :D
-        DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
-            Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
+            ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
 
-        ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
+            ColorAction edges = new ColorAction("graph.edges", VisualItem.STROKECOLOR, ColorLib.rgb(0,0,0));
 
-        ColorAction edges = new ColorAction("graph.edges", VisualItem.STROKECOLOR, ColorLib.rgb(0,0,0));
+            ActionList color = new ActionList();
+            color.add(nodes);
+            color.add(text);
+            color.add(edges);
 
+            DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
 
-        ActionList color = new ActionList();
-        color.add(nodes);
-        color.add(text);
-        color.add(edges);
+            ActionList size = new ActionList();
+            size.add(sizes);
 
-        DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
+            ActionList layout = new ActionList(Activity.INFINITY);
+            layout.add(new ForceDirectedLayout("graph"));
+            layout.add(new RepaintAction());
 
-        ActionList size = new ActionList();
-        size.add(sizes);
+            kwvis.putAction("color", color);
+            kwvis.putAction("size", size);
+            kwvis.putAction("layout", layout);
 
-        ActionList layout = new ActionList(Activity.INFINITY);
-        layout.add(new ForceDirectedLayout("graph"));
-        layout.add(new RepaintAction());
+            Display display = new Display(kwvis);
+            display.setSize(1024, 683); //this is the size of the background image
+            display.pan(400, 300);	// pan to the middle
+            display.addControlListener(new DragControl());
+            display.addControlListener(new PanControl());
+            display.addControlListener(new ZoomControl());
+            display.addControlListener(new WheelZoomControl());
+            display.addControlListener(new ZoomToFitControl());
+            display.addControlListener(new NeighborHighlightControl());
 
-        kwvis.putAction("color", color);
-        kwvis.putAction("size", size);
-        kwvis.putAction("layout", layout);
+            // add the display (which holds the visualization) to the window
+            keyword_viz.add(display);
+            keyword_viz.validate();
+            keyword_viz.setVisible(true);
 
-        Display display = new Display(kwvis);
-        display.setSize(1024, 683); //this is the size of the background image
-        display.pan(400, 300);	// pan to the middle
-        display.addControlListener(new DragControl());
-        display.addControlListener(new PanControl());
-        display.addControlListener(new ZoomControl());
-        display.addControlListener(new WheelZoomControl());
-        display.addControlListener(new ZoomToFitControl());
-        display.addControlListener(new NeighborHighlightControl());
-
-        // add the display (which holds the visualization) to the window
-        keyword_viz.add(display);
-        keyword_viz.validate();
-        keyword_viz.setVisible(true);
-
-        kwvis.run("color");  // assign the colors
-        kwvis.run("size"); //assign the sizes
-        kwvis.run("layout"); // start up the animated layout
+            kwvis.run("color");  // assign the colors
+            kwvis.run("size"); //assign the sizes
+            kwvis.run("layout"); // start up the animated layout
+        
     }
 
     //Function that gets a specific node by keyword.
     //--If it doesn't exist, creates one automatically and returns it
     private Node getKeywordFromGraph(String name) {
         
-        /*try {
-            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }*/
-
         Node key = null;
         for(int i=0;i<kwgraph.getNodeCount();i++) {
             key = kwgraph.getNode(i);
@@ -258,6 +263,14 @@ public class TwitVizView extends FrameView {
 
         key = kwgraph.addNode();
         key.setString("keyword", name);
+
+        //Save to graph file
+        try{
+            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+        }catch(DataIOException e){
+            e.printStackTrace();
+        }
+        //--end save graph file
         
         return key;
     }
@@ -928,7 +941,7 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        //buildSocialNetwork(user);
+                        buildSocialNetwork(user);
 
                         displayTwitviz();
 
@@ -1039,12 +1052,12 @@ public class TwitVizView extends FrameView {
                                 familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
 
                                 //lets check if the stranger is somehow related to someone already on our list
-                                List<Node> related = getRelatedToSomeone(familiar_stranger);
+                                /*List<Node> related = getRelatedToSomeone(familiar_stranger);
                                 if(related!=null) {
                                     for(int k=0;k<related.size();k++) {
-                                        kwgraph.addEdge(related.get(i), familiar_stranger);
+                                        kwgraph.addEdge(related.get(k), familiar_stranger);
                                     }
-                                }
+                                }*/
 
                                 //Associate the person to the keywords we are following
                                 for(int k=0;k<keywordsmap.getSize();k++) {
@@ -1070,6 +1083,7 @@ public class TwitVizView extends FrameView {
 
             } catch (TwitterException ex) {
                 setFeedback("Error loading public line :(", Color.RED);
+                //displayKeyviz();
             }
         }
     }
@@ -1185,7 +1199,7 @@ public class TwitVizView extends FrameView {
             }
 
             //Change to the keyword visualization
-            tabs_control.setSelectedIndex(1);
+            tabs_control.setSelectedIndex(0);
             displayKeyviz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -1193,7 +1207,6 @@ public class TwitVizView extends FrameView {
     //Function that refreshes the view according to the tab clicked
     private void tabs_controlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabs_controlStateChanged
         
-
     }//GEN-LAST:event_tabs_controlStateChanged
 
     //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
@@ -1228,7 +1241,7 @@ public class TwitVizView extends FrameView {
                     setFeedback("Error while searching:" + ex.getMessage(), Color.RED);
                 }
 
-                processTwitts(twitts);
+                //processTwitts(twitts);
 
                 //Change to the keyword visualization
                 tabs_control.setSelectedIndex(1);
@@ -1236,7 +1249,7 @@ public class TwitVizView extends FrameView {
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    public void processTwitts(List<Tweet> twitts){
+    /*public void processTwitts(List<Tweet> twitts){
         try{
         for(Tweet twitt : twitts)
         {
@@ -1265,7 +1278,7 @@ public class TwitVizView extends FrameView {
         {
              setFeedback("Error loading public line :(", Color.RED);
         }
-    }
+    }*/
 
     public void displayTwitviz() {
         //make tab visible, if it already isn't
