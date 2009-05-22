@@ -170,7 +170,21 @@ public class TwitVizView extends FrameView {
 
     //Visualization of keywords and strangers!
     private void displayKeyviz() {
-        //tabs_control.setSelectedIndex(0);
+        
+        if(kwvis!=null) {
+            kwvis.removeGroup("graph");
+            try {
+                kwvis.add("graph", kwgraph = new GraphMLReader().readGraph("kwviz.xml"));
+                kwvis.repaint();
+                kwvis.run("color");  // assign the colors
+                kwvis.run("size"); //assign the sizes
+                kwvis.run("layout"); // start up the animated layout
+            } catch (DataIOException ex) {
+                Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            return;
+        }
 
         //Read the database
         try {
@@ -180,77 +194,65 @@ public class TwitVizView extends FrameView {
             System.exit(1);
         }
 
-        if(kwvis!=null) {
+        kwvis = new Visualization();
+        kwvis.add("graph", kwgraph);
 
-            kwvis.removeGroup("graph");
-            kwvis.add("graph",kwgraph);
-            
-            kwvis.repaint();
+        LabelRenderer rend = new CustomLabelRenderer();
+        rend.setRoundedCorner(8, 8);
 
-            kwvis.run("colour");
-            kwvis.run("layout");
-            kwvis.run("size");
-            
-        }
+        kwvis.setRendererFactory( new DefaultRendererFactory(rend));
 
-            kwvis = new Visualization();
-            kwvis.add("graph", kwgraph);
-        
+        int[] edgesColor = new int[] {
+            ColorLib.rgb(255,255,153),
+            ColorLib.rgb(153,255,153)
+        };
 
-            LabelRenderer rend = new CustomLabelRenderer();
-            rend.setRoundedCorner(8, 8);
+        //Lets colorize! :D
+        DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
+            Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
 
-            kwvis.setRendererFactory( new DefaultRendererFactory(rend));
+        ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
 
-            int[] edgesColor = new int[] {
-                ColorLib.rgb(255,255,153),
-                ColorLib.rgb(153,255,153)
-            };
+        ColorAction edges = new ColorAction("graph.edges", VisualItem.STROKECOLOR, ColorLib.rgb(0,0,0));
 
-            //Lets colorize! :D
-            DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
-                Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
+        ActionList color = new ActionList();
+        color.add(nodes);
+        color.add(text);
+        color.add(edges);
 
-            ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
+        DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
 
-            ColorAction edges = new ColorAction("graph.edges", VisualItem.STROKECOLOR, ColorLib.rgb(0,0,0));
+        ActionList size = new ActionList();
+        size.add(sizes);
 
-            ActionList color = new ActionList();
-            color.add(nodes);
-            color.add(text);
-            color.add(edges);
+        ActionList layout = new ActionList(Activity.INFINITY);
+        layout.add(new ForceDirectedLayout("graph"));
+        layout.add(new RepaintAction());
 
-            DataSizeAction sizes = new DataSizeAction("graph.nodes", "relevance");
+        kwvis.putAction("color", color);
+        kwvis.putAction("size", size);
+        kwvis.putAction("layout", layout);
 
-            ActionList size = new ActionList();
-            size.add(sizes);
+        Display display = new Display(kwvis);
+        display.setSize(1024, 683); //this is the size of the background image
+        display.pan(400, 300);	// pan to the middle
+        display.addControlListener(new DragControl());
+        display.addControlListener(new PanControl());
+        display.addControlListener(new ZoomControl());
+        display.addControlListener(new WheelZoomControl());
+        display.addControlListener(new ZoomToFitControl());
+        display.addControlListener(new NeighborHighlightControl());
 
-            ActionList layout = new ActionList(Activity.INFINITY);
-            layout.add(new ForceDirectedLayout("graph"));
-            layout.add(new RepaintAction());
+        // add the display (which holds the visualization) to the window
+        keyword_viz.add(display);
+        keyword_viz.validate();
+        keyword_viz.setVisible(true);
 
-            kwvis.putAction("color", color);
-            kwvis.putAction("size", size);
-            kwvis.putAction("layout", layout);
+        kwvis.repaint();
 
-            Display display = new Display(kwvis);
-            display.setSize(1024, 683); //this is the size of the background image
-            display.pan(400, 300);	// pan to the middle
-            display.addControlListener(new DragControl());
-            display.addControlListener(new PanControl());
-            display.addControlListener(new ZoomControl());
-            display.addControlListener(new WheelZoomControl());
-            display.addControlListener(new ZoomToFitControl());
-            display.addControlListener(new NeighborHighlightControl());
-
-            // add the display (which holds the visualization) to the window
-            keyword_viz.add(display);
-            keyword_viz.validate();
-            keyword_viz.setVisible(true);
-
-            kwvis.run("color");  // assign the colors
-            kwvis.run("size"); //assign the sizes
-            kwvis.run("layout"); // start up the animated layout
+        kwvis.run("color");  // assign the colors
+        kwvis.run("size"); //assign the sizes
+        kwvis.run("layout"); // start up the animated layout
         
     }
 
@@ -711,6 +713,11 @@ public class TwitVizView extends FrameView {
 
         password.setText(resourceMap.getString("password.text")); // NOI18N
         password.setName("password"); // NOI18N
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
+        });
 
         btn_login.setText(resourceMap.getString("btn_login.text")); // NOI18N
         btn_login.setName("btn_login"); // NOI18N
@@ -1262,6 +1269,12 @@ public class IconListRenderer extends DefaultListCellRenderer {
                 displayKeyviz();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        if(evt.getKeyCode()==10) {
+            btn_login.doClick();
+        }
+    }//GEN-LAST:event_passwordKeyPressed
 
     /*public void processTwitts(List<Tweet> twitts){
         try{

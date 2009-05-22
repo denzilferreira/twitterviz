@@ -17,7 +17,7 @@ public class CustomLabelRenderer extends LabelRenderer {
 
     @Override
     protected String getText(VisualItem item) {
-        String safety = "";
+        String safety="";
 
         if (item instanceof NodeItem && item!=null) {
             if(item.canGetString("screenName") && item.getString("screenName").compareTo("null")!=0) {
