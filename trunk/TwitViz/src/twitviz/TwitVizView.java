@@ -377,11 +377,10 @@ public class TwitVizView extends FrameView {
                     relation.setInt("relationship", 1);
                 }
 
-                while(depth>0) {
+                if(depth>0) {
                     try{
                         getSubfriends(link.getFriends(Integer.toString(friend.getId())),tmp);
                     }catch(Exception e) {}
-                    depth--;
                 }
             }
         }
@@ -396,65 +395,69 @@ public class TwitVizView extends FrameView {
     }
 
     private void getSubfriends(List<User> friends, Node source) {
-        for(User friend: friends) {
-            //There are users with protected profiles and data
-            List<User> followers = null;
-            try {
-                followers = link.getFollowers(Integer.toString(friend.getId()));
-            } catch (TwitterException ex) {
-                Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        depth--;
+        if(depth>0) {
+            
+            for(User friend: friends) {
+                //There are users with protected profiles and data
+                List<User> followers = null;
+                try {
+                    followers = link.getFollowers(Integer.toString(friend.getId()));
+                } catch (TwitterException ex) {
+                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            if(!friend.isProtected()) {
-                Node tmp = null;
-                int friendPos = -1;
-                for(int a=0;a<graph.getNodeCount();a++) {
-                    tmp = graph.getNode(a);
-                    if(tmp.getLong("id")==friend.getId()) {
-                       friendPos = a;
-                       break;
+                if(!friend.isProtected()) {
+                    Node tmp = null;
+                    int friendPos = -1;
+                    for(int a=0;a<graph.getNodeCount();a++) {
+                        tmp = graph.getNode(a);
+                        if(tmp.getLong("id")==friend.getId()) {
+                           friendPos = a;
+                           break;
+                        }
                     }
+
+                    //New friend
+                    if(friendPos==-1) {
+                        tmp = graph.addNode();
+                    //restore saved
+                    }else{
+                        tmp = graph.getNode(friendPos);
+                    }
+
+                    //set node data
+                    tmp.setLong("id", friend.getId());
+                    tmp.setString("screenName", friend.getScreenName());
+                    tmp.setBoolean("protectedUser", friend.isProtected());
+
+                    //The relevance might already be a different number!
+                    if(friendPos==-1) {
+                        tmp.setInt("relevance", 1);
+                    }else{
+                        tmp.setInt("relevance", tmp.getInt("relevance"));
+                    }
+                    //--end node data
+
+                    //Link to source
+                    Edge relation = graph.getEdge(source,tmp);
+                    if(relation==null) {
+                        graph.addEdge(source, tmp);
+                        relation = graph.getEdge(source,tmp);
+                    }
+
+                    if(isFollowing(followers, friend)) {
+                        tmp.setBoolean("follows", true);
+                        relation.setInt("relationship", 2);
+                    }else{
+                        tmp.setBoolean("follows", false);
+                        relation.setInt("relationship", 1);
+                    }
+
+                    try{
+                        getSubfriends(link.getFriends(Integer.toString(friend.getId())),tmp);
+                    }catch(Exception e) {}
                 }
-
-                //New friend
-                if(friendPos==-1) {
-                    tmp = graph.addNode();
-                //restore saved
-                }else{
-                    tmp = graph.getNode(friendPos);
-                }
-
-                //set node data
-                tmp.setLong("id", friend.getId());
-                tmp.setString("screenName", friend.getScreenName());
-                tmp.setBoolean("protectedUser", friend.isProtected());
-
-                //The relevance might already be a different number!
-                if(friendPos==-1) {
-                    tmp.setInt("relevance", 1);
-                }else{
-                    tmp.setInt("relevance", tmp.getInt("relevance"));
-                }
-                //--end node data
-
-                //Link to source
-                Edge relation = graph.getEdge(source,tmp);
-                if(relation==null) {
-                    graph.addEdge(source, tmp);
-                    relation = graph.getEdge(source,tmp);
-                }
-
-                if(isFollowing(followers, friend)) {
-                    tmp.setBoolean("follows", true);
-                    relation.setInt("relationship", 2);
-                }else{
-                    tmp.setBoolean("follows", false);
-                    relation.setInt("relationship", 1);
-                }
-
-                try{
-                    getSubfriends(link.getFriends(Integer.toString(friend.getId())),tmp);
-                }catch(Exception e) {}
             }
         }
     }
@@ -911,7 +914,6 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        depth = 1;
                         buildSocialNetwork(user);
 
                         displayTwitviz();
@@ -956,7 +958,7 @@ public class TwitVizView extends FrameView {
                     }
                     faces.add(twitts);
                     twittsList.setListData(faces);
-
+                    
                 } catch (TwitterException ex) {
                     //setFeedback("Error loading friends timeline", Color.RED);
                 }
@@ -1068,6 +1070,7 @@ public class TwitVizView extends FrameView {
         return keywords;
     }
 
+    //Load previous selected keywords
     private void loadKeywords() {
         
     }
@@ -1309,6 +1312,7 @@ public class TwitVizView extends FrameView {
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
 
+    //Twitviz parameters
     private int depth = 1;
 
     private JDialog aboutBox;
