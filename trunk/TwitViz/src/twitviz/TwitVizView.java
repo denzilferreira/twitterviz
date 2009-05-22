@@ -945,12 +945,12 @@ public class TwitVizView extends FrameView {
                         loadKeywords();
 
                         //Start public line monitor, updates every 20 seconds
-                        /*java.util.Timer timer = new java.util.Timer();
+                        java.util.Timer timer = new java.util.Timer();
                         timer.scheduleAtFixedRate(new java.util.TimerTask() {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 20000); //Get public line every 20 */
+                        }, 5000, 20000); //Get public line every 20 
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -990,7 +990,29 @@ public class TwitVizView extends FrameView {
 
         }
 }//GEN-LAST:event_btn_loginActionPerformed
-    //TODO: needs to be adaptated to the new xml file
+
+    private boolean isStrangerAFriend(User stranger) {
+        boolean friend = false;
+
+        //restore saved database
+        try {
+            graph = new GraphMLReader().readGraph("twitviz.xml");
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        for(int i=0; i<graph.getNodeCount(); i++) {
+            Node tmp = graph.getNode(i);
+            if(tmp.getInt("id")==stranger.getId()) {
+                friend = true;
+                break;
+            }
+        }
+
+        return friend;
+    }
+
     private void get_PublicLine() {
         //we only start processing the public line if we have keywords on the list!
         if(keywordsmap.getSize()>0) {
@@ -1022,6 +1044,9 @@ public class TwitVizView extends FrameView {
                                 //Relevance will change according to how important the user is
                                 familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+interests.size());
                             }
+
+                            //Check if the familiar stranger is in reality my friend!
+                            familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
 
                             //lets check if the stranger is somehow related to someone already on our list
                             List<Node> related = getRelatedToSomeone(familiar_stranger);
