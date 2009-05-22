@@ -151,7 +151,6 @@ public class TwitVizView extends FrameView {
 
     //TODO: Visualization of keywords and strangers!
     private void displayKeyviz() {
-        //make tab visible, if it already isn't
         tabs_control.setSelectedIndex(1);
 
         //Read the database
@@ -241,12 +240,12 @@ public class TwitVizView extends FrameView {
     //--If it doesn't exist, creates one automatically and returns it
     private Node getKeywordFromGraph(String name) {
         
-        try {
+        /*try {
             kwgraph = new GraphMLReader().readGraph("kwviz.xml");
         } catch (DataIOException e) {
             e.printStackTrace();
             System.exit(1);
-        }
+        }*/
 
         Node key = null;
         for(int i=0;i<kwgraph.getNodeCount();i++) {
@@ -260,13 +259,6 @@ public class TwitVizView extends FrameView {
         key = kwgraph.addNode();
         key.setString("keyword", name);
         
-        //Save to graph file
-        try{
-            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-        }catch(DataIOException e){
-            e.printStackTrace();
-        }
-        //--end save graph file
         return key;
     }
 
@@ -869,7 +861,9 @@ public class TwitVizView extends FrameView {
     }// </editor-fold>//GEN-END:initComponents
 
     private Node getUserFromKeyGraph(User tweeterer) {
+        
         int nodePosition = -1;
+
         for(int j=0;j<kwgraph.getNodeCount();j++) {
             Node tmp = kwgraph.getNode(j);
 
@@ -885,7 +879,20 @@ public class TwitVizView extends FrameView {
             user = kwgraph.getNode(nodePosition);
         }else {
             user = kwgraph.addNode();
+
+            user.setLong("id", tweeterer.getId());
+            user.setString("screenName", tweeterer.getScreenName());
+            user.setInt("relevance", 1);
+            user.setBoolean("friend", isStrangerAFriend(tweeterer));
         }
+
+        //Save to graph file
+        try{
+            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+        }catch(DataIOException e){
+            e.printStackTrace();
+        }
+        //--end save graph file
 
         return user;
     }
@@ -935,7 +942,7 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        buildSocialNetwork(user);
+                        //buildSocialNetwork(user);
 
                         displayTwitviz();
 
@@ -948,7 +955,7 @@ public class TwitVizView extends FrameView {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 20000); //Get public line every 20 
+                        }, 5000, 10000); //Get public line every 10
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -1036,31 +1043,29 @@ public class TwitVizView extends FrameView {
                             //check if we already have the user or not    
                             Node familiar_stranger = getUserFromKeyGraph(tweeterer);
 
-                            if(familiar_stranger.getString("screenName").compareTo("null")==0) {
-                                familiar_stranger.setLong("id", tweeterer.getId());
-                                familiar_stranger.setString("screenName", tweeterer.getScreenName());
-                                familiar_stranger.setBoolean("protectedUser", tweeterer.isProtected());
-                                familiar_stranger.setInt("relevance", 1);
-                            }else{
+                            if(familiar_stranger!=null) {
+                                
                                 //Relevance will change according to how important the user is
                                 familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+interests.size());
-                            }
 
-                            //Check if the familiar stranger is in reality my friend!
-                            familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
 
-                            //lets check if the stranger is somehow related to someone already on our list
-                            List<Node> related = getRelatedToSomeone(familiar_stranger);
-                            if(related!=null) {
-                                for(int k=0;k<related.size();k++) {
-                                    kwgraph.addEdge(related.get(i), familiar_stranger);
+                                //Check if the familiar stranger is in reality my friend!
+                                familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
+
+                                //lets check if the stranger is somehow related to someone already on our list
+                                List<Node> related = getRelatedToSomeone(familiar_stranger);
+                                if(related!=null) {
+                                    for(int k=0;k<related.size();k++) {
+                                        kwgraph.addEdge(related.get(i), familiar_stranger);
+                                    }
                                 }
-                            }
 
-                            //Associate the person to the keywords we are following
-                            for(int k=0;k<keywordsmap.getSize();k++) {
-                                Node keyword = getKeywordFromGraph((String)keywordsmap.get(k));
-                                kwgraph.addEdge(keyword, familiar_stranger);
+                                //Associate the person to the keywords we are following
+                                for(int k=0;k<keywordsmap.getSize();k++) {
+                                    Node keyword = getKeywordFromGraph((String)keywordsmap.get(k));
+
+                                    kwgraph.addEdge(keyword, familiar_stranger);
+                                }
                             }
                         }
                     }
