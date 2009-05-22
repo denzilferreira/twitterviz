@@ -262,31 +262,23 @@ public class TwitVizView extends FrameView {
         for(int i=0;i<kwgraph.getNodeCount();i++) {
             key = kwgraph.getNode(i);
             //screenName == null when its a keyword node
-            if(key.getString("keyword").compareToIgnoreCase(name)==0 && key.getString("screenName").compareTo("null")==0) {
+            if(key.getString("keyword").compareTo(name)==0 && key.getString("screenName").compareTo("null")==0) {
                 return key;
             }
         }
 
         key = kwgraph.addNode();
         key.setString("keyword", name);
-
-        //Save to graph file
-        try{
-            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-        }catch(DataIOException e){
-            e.printStackTrace();
-        }
-        //--end save graph file
         
         return key;
     }
 
-    private Node getUserFromKeyGraph(int id) {
+    private Node getUserFromKeyGraph(User tweeterer) {
         int nodePosition = -1;
         for(int j=0;j<kwgraph.getNodeCount();j++) {
             Node tmp = kwgraph.getNode(j);
 
-            if(tmp.getInt("id") == id) {
+            if(tmp.getInt("id") == tweeterer.getId()) {
                 nodePosition = j;
                 break;
             }
@@ -298,6 +290,10 @@ public class TwitVizView extends FrameView {
             user = kwgraph.getNode(nodePosition);
         }else {
             user = kwgraph.addNode();
+            user.setLong("id", tweeterer.getId());
+            user.setString("screenName", tweeterer.getScreenName());
+            user.setInt("relevance", 1);
+            user.setBoolean("friend", isStrangerAFriend(tweeterer));
         }
 
         return user;
@@ -730,11 +726,6 @@ public class TwitVizView extends FrameView {
         feedback_label.setName("feedback_label"); // NOI18N
 
         tabs_control.setName("tabs_control"); // NOI18N
-        tabs_control.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                tabs_controlStateChanged(evt);
-            }
-        });
 
         keyword_viz.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         keyword_viz.setName("keyword_viz"); // NOI18N
@@ -945,7 +936,7 @@ public class TwitVizView extends FrameView {
 
                         buildSocialNetwork(user);
 
-                        //displayTwitviz();
+                        displayTwitviz();
 
                         //TODO: load previous stored keywords
                         loadKeywords();
@@ -956,7 +947,7 @@ public class TwitVizView extends FrameView {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 10000); //Get public line every 10
+                        }, 5000, 20000); //Get public line every 10
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -1078,7 +1069,7 @@ public class IconListRenderer extends DefaultListCellRenderer {
                         if(!tweeterer.isProtected()) {
 
                             //check if we already have the user or not    
-                            Node familiar_stranger = getUserFromKeyGraph(tweeterer.getId());
+                            Node familiar_stranger = getUserFromKeyGraph(tweeterer);
 
                             if(familiar_stranger!=null) {
                                 
@@ -1089,19 +1080,15 @@ public class IconListRenderer extends DefaultListCellRenderer {
                                 //Check if the familiar stranger is in reality my friend!
                                 familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
 
-                                //lets check if the stranger is somehow related to someone already on our list
-                                /*List<Node> related = getRelatedToSomeone(familiar_stranger);
-                                if(related!=null) {
-                                    for(int k=0;k<related.size();k++) {
-                                        kwgraph.addEdge(related.get(k), familiar_stranger);
-                                    }
-                                }*/
-
-                                //Associate the person to the keywords we are following
+                                //Associate the person to the keywords we are following and he said!
                                 for(int k=0;k<keywordsmap.getSize();k++) {
                                     Node keyword = getKeywordFromGraph((String)keywordsmap.get(k));
 
-                                    kwgraph.addEdge(keyword, familiar_stranger);
+                                    for(int l=0;l<interests.size();l++) {
+                                        if(keyword.getString("keyword").compareTo((String)interests.elementAt(l))==0) {
+                                            kwgraph.addEdge(keyword, familiar_stranger);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1121,21 +1108,8 @@ public class IconListRenderer extends DefaultListCellRenderer {
 
             } catch (TwitterException ex) {
                 setFeedback("Error loading public line :(", Color.RED);
-                //displayKeyviz();
             }
         }
-    }
-
-    //Get list of related nodes
-    private List<Node> getRelatedToSomeone(Node who) {
-        List<Node> tmp = null;
-        
-        for(int i=0;i<kwgraph.getEdgeCount();i++) {
-            if(kwgraph.getEdge(i).getTargetNode()==who) {
-                tmp.add(kwgraph.getEdge(i).getSourceNode());
-            }
-        }
-        return tmp;
     }
 
     private Vector getInterests(Status stat) {
@@ -1143,7 +1117,7 @@ public class IconListRenderer extends DefaultListCellRenderer {
 
         for(int i=0;i<keywordsmap.getSize();i++) {
             if(stat.getText().matches(".*"+keywordsmap.get(i).toString()+".*")) {
-                keywords.addElement(keywordsmap.get(i).toString());
+                keywords.addElement((String)keywordsmap.get(i));
             }
         }
         return keywords;
@@ -1236,16 +1210,18 @@ public class IconListRenderer extends DefaultListCellRenderer {
                 setFeedback("Keyword added successfully", Color.WHITE);
             }
 
+            //Save to graph file
+            try{
+                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+            }catch(DataIOException e){
+                e.printStackTrace();
+            }
+            //--end save graph file
+
             //Change to the keyword visualization
             tabs_control.setSelectedIndex(0);
-            displayKeyviz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
-
-    //Function that refreshes the view according to the tab clicked
-    private void tabs_controlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabs_controlStateChanged
-        
-    }//GEN-LAST:event_tabs_controlStateChanged
 
     //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
@@ -1282,7 +1258,7 @@ public class IconListRenderer extends DefaultListCellRenderer {
                 //processTwitts(twitts);
 
                 //Change to the keyword visualization
-                tabs_control.setSelectedIndex(1);
+                tabs_control.setSelectedIndex(0);
                 displayKeyviz();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
@@ -1320,7 +1296,7 @@ public class IconListRenderer extends DefaultListCellRenderer {
 
     public void displayTwitviz() {
         //make tab visible, if it already isn't
-        tabs_control.setSelectedIndex(0);
+        tabs_control.setSelectedIndex(1);
 
         //Read the database
         try {

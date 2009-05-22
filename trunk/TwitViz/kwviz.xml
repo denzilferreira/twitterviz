@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Fri May 22 20:00:18 WEST 2009 -->
+  <!-- prefuse GraphML Writer | Fri May 22 23:18:18 WEST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -27,112 +27,14 @@
       <data key="friend">false</data>
     </node>
     <node id="1">
-      <data key="keyword">hate</data>
-      <data key="id">0L</data>
-      <data key="screenName">null</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="2">
       <data key="keyword">null</data>
-      <data key="id">17529463L</data>
-      <data key="screenName">KBLOVE901</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="3">
-      <data key="keyword">null</data>
-      <data key="id">34785226L</data>
-      <data key="screenName">MzJaiMii</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="4">
-      <data key="keyword">null</data>
-      <data key="id">6287562L</data>
-      <data key="screenName">mebner</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="5">
-      <data key="keyword">null</data>
-      <data key="id">22900817L</data>
-      <data key="screenName">slantdnenchantd</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="6">
-      <data key="keyword">null</data>
-      <data key="id">696043L</data>
-      <data key="screenName">hayles</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="7">
-      <data key="keyword">null</data>
-      <data key="id">24118839L</data>
-      <data key="screenName">adrianiT</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="8">
-      <data key="keyword">null</data>
-      <data key="id">28730129L</data>
-      <data key="screenName">MissKiaNYC</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="9">
-      <data key="keyword">null</data>
-      <data key="id">28829910L</data>
-      <data key="screenName">LovePeaceHappi</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="10">
-      <data key="keyword">null</data>
-      <data key="id">38282350L</data>
-      <data key="screenName">DropKickKaylee</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="11">
-      <data key="keyword">null</data>
-      <data key="id">4905551L</data>
-      <data key="screenName">masontech</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="12">
-      <data key="keyword">null</data>
-      <data key="id">25380451L</data>
-      <data key="screenName">MegBoone</data>
+      <data key="id">24060593L</data>
+      <data key="screenName">george_wilson</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
     </node>
 
     <!-- edges -->
-    <edge id="0" source="0" target="2"/>
-    <edge id="1" source="1" target="2"/>
-    <edge id="2" source="0" target="3"/>
-    <edge id="3" source="1" target="3"/>
-    <edge id="4" source="0" target="4"/>
-    <edge id="5" source="1" target="4"/>
-    <edge id="6" source="0" target="5"/>
-    <edge id="7" source="1" target="5"/>
-    <edge id="8" source="0" target="6"/>
-    <edge id="9" source="1" target="6"/>
-    <edge id="10" source="0" target="7"/>
-    <edge id="11" source="1" target="7"/>
-    <edge id="12" source="0" target="8"/>
-    <edge id="13" source="1" target="8"/>
-    <edge id="14" source="0" target="9"/>
-    <edge id="15" source="1" target="9"/>
-    <edge id="16" source="0" target="10"/>
-    <edge id="17" source="1" target="10"/>
-    <edge id="18" source="0" target="11"/>
-    <edge id="19" source="1" target="11"/>
-    <edge id="20" source="0" target="12"/>
-    <edge id="21" source="1" target="12"/>
+    <edge id="0" source="0" target="1"/>
   </graph>
 </graphml>
