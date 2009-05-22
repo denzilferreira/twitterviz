@@ -937,7 +937,7 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        //buildSocialNetwork(user);
+                        buildSocialNetwork(user);
 
                         displayTwitviz();
 
