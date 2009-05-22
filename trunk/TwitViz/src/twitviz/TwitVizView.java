@@ -7,6 +7,7 @@ package twitviz;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Graphics2D;
 import java.awt.Label;
 import java.awt.PopupMenu;
@@ -25,8 +26,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 import javax.swing.Icon;
@@ -37,6 +41,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicSplitPaneUI.BasicVerticalLayoutManager;
+import javax.swing.plaf.metal.MetalIconFactory;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -593,12 +599,12 @@ public class TwitVizView extends FrameView {
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel4)
-                    .add(keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                    .add(keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                         .add(searchButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)))
+                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -651,11 +657,7 @@ public class TwitVizView extends FrameView {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        twittsList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        twittsList.setAutoscrolls(false);
         twittsList.setName("twittsList"); // NOI18N
         jScrollPane2.setViewportView(twittsList);
 
@@ -741,7 +743,7 @@ public class TwitVizView extends FrameView {
         keyword_viz.setLayout(keyword_vizLayout);
         keyword_vizLayout.setHorizontalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 562, Short.MAX_VALUE)
+            .add(0, 578, Short.MAX_VALUE)
         );
         keyword_vizLayout.setVerticalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -757,7 +759,7 @@ public class TwitVizView extends FrameView {
         panel_viz.setLayout(panel_vizLayout);
         panel_vizLayout.setHorizontalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 562, Short.MAX_VALUE)
+            .add(0, 578, Short.MAX_VALUE)
         );
         panel_vizLayout.setVerticalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -782,7 +784,7 @@ public class TwitVizView extends FrameView {
                         .add(18, 18, 18)
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                         .add(132, 132, 132)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -868,11 +870,11 @@ public class TwitVizView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1254, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1276, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1058, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1080, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -943,7 +945,7 @@ public class TwitVizView extends FrameView {
 
                         buildSocialNetwork(user);
 
-                        displayTwitviz();
+                        //displayTwitviz();
 
                         //TODO: load previous stored keywords
                         loadKeywords();
@@ -961,42 +963,78 @@ public class TwitVizView extends FrameView {
                     }
 
                 }
+
+                //Last 20 friends twitts list content
                 try {
-
+                   
                     List<Status> statusList = link.getFriendsTimeline();
+                    
                     twittsList.setVisibleRowCount(statusList.size());
-                    Vector faces = new Vector();
-                    Vector twitts = new Vector();
-
+                    twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+                   
+                    String twitt = null;
+                    Icon icon = null;
+                    Map<Object, Icon> icons = new HashMap<Object, Icon>();
+                    Object[] obj = new Object[statusList.size()];
                     for(int i=0;i<statusList.size();i++){
-                        Status status =statusList.get(i);
 
-                        String screenName = status.getUser().getScreenName();
-                        String text = status.getText();
-                        String dt = status.getCreatedAt().toString();
-                        String twitt = screenName + " " + text + dt;
-                        //System.out.println(twitt);
-
-                        ImageIcon icon = new ImageIcon(status.getUser().getProfileImageURL());
-                        JLabel label = new JLabel(icon);
-
-                        faces.addElement(icon);
-                        twitts.addElement(twitt.toString());
+                        Status status =statusList.get(i); 
+                        twitt = status.getUser().getScreenName() + " " + status.getText() + "\n" +status.getCreatedAt().toString();
+      
+                        icon = new ImageIcon(status.getUser().getProfileImageURL());
+                        icons.put(twitt,icon);
+                        obj[i]=twitt;
                     }
-                    faces.add(twitts);
-                    twittsList.setListData(faces);
-                    twittsList.setLayoutOrientation(JList.VERTICAL_WRAP);
-                    twittsList.setVisible(true);
-                    twittsList.repaint();
+                   
+                   twittsList.setListData(obj);
+                   twittsList.setCellRenderer(new IconListRenderer(icons));
+                   twittsList.setVisible(true);
+                   twittsList.repaint();
                     
                 } catch (TwitterException ex) {
-                    //setFeedback("Error loading friends timeline", Color.RED);
+                    setFeedback("Error loading friends timeline", Color.RED);
                 }
 
             }
 
         }
 }//GEN-LAST:event_btn_loginActionPerformed
+
+// Last 20 friends twitts list Renderer 
+public class IconListRenderer extends DefaultListCellRenderer {
+
+	private Map<Object, Icon> icons = null;
+
+	public IconListRenderer(Map<Object, Icon> icons) {
+		this.icons = icons;
+	}
+
+	@Override
+	public Component getListCellRendererComponent(
+		JList list, Object value, int index,
+		boolean isSelected, boolean cellHasFocus) {
+
+		// Get the renderer component from parent class
+
+		JLabel label =
+			(JLabel) super.getListCellRendererComponent(list,
+				value, index, isSelected, cellHasFocus);
+
+		// Get icon to use for the list item value
+
+		Icon icon = icons.get(value);
+
+		// Set icon to display for value
+
+		label.setSize(48, 48);
+
+        //label.setLayout(new GridLayout());
+
+        label.setIcon(icon);
+		return label;
+	}
+}
+
 
     private boolean isStrangerAFriend(User stranger) {
         boolean friend = false;
