@@ -344,6 +344,9 @@
                 <Property name="text" type="java.lang.String" resourceKey="password.text"/>
                 <Property name="name" type="java.lang.String" value="password" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="passwordKeyPressed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_login">
               <Properties>
