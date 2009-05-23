@@ -171,29 +171,7 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
-    private void refreshKeyViz() {
-        Graph kwgraph = null;
-        //Read the database
-        try {
-            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        kwvis.removeGroup("graph");
-        kwvis.add("graph", kwgraph);
-        kwvis.repaint();
-
-        keyword_viz.validate();
-        keyword_viz.setVisible(true);
-
-        kwvis.run("color");  // assign the colors
-        kwvis.run("size"); //assign the sizes
-        kwvis.run("layout"); // start up the animated layout
-       
-    }
-
+    
     //Visualization of keywords and strangers!
     private void displayKeyviz() {
         
@@ -205,8 +183,19 @@ public class TwitVizView extends FrameView {
             System.exit(1);
         }
 
-        kwvis = new Visualization();
-        kwvis.add("graph", kwgraph);
+        if(kwvis!=null) {
+            kwvis.removeGroup("graph");
+            kwvis.add("graph", kwgraph);
+
+            kwvis.repaint();
+
+            kwvis.run("color");  // assign the colors
+            kwvis.run("size"); //assign the sizes
+            kwvis.run("layout"); // start up the animated layout
+        }else{
+            kwvis = new Visualization();
+            kwvis.add("graph", kwgraph);
+        }
 
         LabelRenderer rend = new CustomLabelRenderer();
         rend.setRoundedCorner(8, 8);
@@ -974,9 +963,9 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        //buildSocialNetwork(user);
+                        buildSocialNetwork(user);
 
-                        //displayTwitviz();
+                        displayTwitviz();
 
                         //load previous stored keywords
                         loadKeywords();
@@ -987,7 +976,7 @@ public class TwitVizView extends FrameView {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 10000); //Get public line every 10
+                        }, 5000, 20000); //Get public line every 10
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -1023,10 +1012,7 @@ public class TwitVizView extends FrameView {
         return friend;
     }
 
-    private void get_PublicLine() {
-        //Reload visualization
-        displayKeyviz();
-        //refreshKeyViz();
+    private void get_PublicLine() { 
         //we only start processing the public line if we have keywords on the list!
         if(keywordsmap.getSize()>0) {
 
@@ -1079,6 +1065,9 @@ public class TwitVizView extends FrameView {
                     e.printStackTrace();
                 }
                 //--end save graph file
+
+                //Reload visualization
+                displayKeyviz();
             } catch (TwitterException ex) {
                 setFeedback("Error loading public line :(", Color.RED);
             }
@@ -1193,7 +1182,7 @@ public class TwitVizView extends FrameView {
 
             //Change to the keyword visualization
             tabs_control.setSelectedIndex(0);
-            refreshKeyViz();
+            displayKeyviz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
