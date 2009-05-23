@@ -626,11 +626,12 @@ public class TwitVizView extends FrameView {
         jPanel3 = new javax.swing.JPanel();
         countLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        updateTextField = new javax.swing.JTextField();
         updateButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         twittsList = new javax.swing.JList();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        updateTextArea = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
         lbl_username = new javax.swing.JLabel();
         username = new javax.swing.JTextField();
@@ -706,13 +707,13 @@ public class TwitVizView extends FrameView {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel4)
-                    .add(keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .add(jPanel2Layout.createSequentialGroup()
                         .add(searchButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
@@ -729,8 +730,8 @@ public class TwitVizView extends FrameView {
                     .add(searchButton)
                     .add(addButton))
                 .add(5, 5, 5)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 400, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -744,13 +745,6 @@ public class TwitVizView extends FrameView {
         jLabel6.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-
-        updateTextField.setName("updateTextField"); // NOI18N
-        updateTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                updateTextFieldKeyReleased(evt);
-            }
-        });
 
         updateButton.setText(resourceMap.getString("updateButton.text")); // NOI18N
         updateButton.setEnabled(false);
@@ -775,43 +769,63 @@ public class TwitVizView extends FrameView {
 
         twittsList.setAutoscrolls(false);
         twittsList.setName("twittsList"); // NOI18N
+        twittsList.setSelectionBackground(resourceMap.getColor("twittsList.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(twittsList);
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        updateTextArea.setColumns(20);
+        updateTextArea.setLineWrap(true);
+        updateTextArea.setRows(3);
+        updateTextArea.setName("updateTextArea"); // NOI18N
+        updateTextArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                updateTextAreaKeyReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(updateTextArea);
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
-                .add(9, 9, 9)
-                .add(jLabel6)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 169, Short.MAX_VALUE)
-                .add(countLabel)
-                .add(8, 8, 8))
-            .add(updateTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)
-            .add(jPanel3Layout.createSequentialGroup()
-                .add(12, 12, 12)
-                .add(jLabel7)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 210, Short.MAX_VALUE)
-                .add(updateButton))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 317, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .add(jLabel6)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 124, Short.MAX_VALUE)
+                        .add(countLabel)
+                        .addContainerGap())
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                        .add(20, 20, 20))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel7)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 163, Short.MAX_VALUE)
+                        .add(updateButton)
+                        .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(countLabel))
+                    .add(countLabel)
+                    .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(6, 6, 6)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(44, 44, 44)
+                        .add(jLabel7))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(18, 18, 18)
+                        .add(updateButton)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(updateTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(updateButton)
-                    .add(jLabel7))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -897,11 +911,11 @@ public class TwitVizView extends FrameView {
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(18, 18, 18)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                        .add(132, 132, 132)
+                        .add(feedback_label, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -911,31 +925,26 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(9, 9, 9)
                         .add(btn_login)))
-                .add(74, 74, 74))
+                .add(551, 551, 551))
         );
         twitvizPanelLayout.setVerticalGroup(
             twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(twitvizPanelLayout.createSequentialGroup()
                 .add(20, 20, 20)
-                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 38, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(9, 9, 9))
-                    .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(lbl_password)
-                            .add(lbl_username)
-                            .add(btn_login))
-                        .add(18, 18, 18)))
+                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 38, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(lbl_password)
+                    .add(lbl_username)
+                    .add(btn_login))
+                .add(9, 9, 9)
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 525, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 513, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
@@ -986,11 +995,11 @@ public class TwitVizView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1276, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1252, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1080, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1056, Short.MAX_VALUE)
                 .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(statusAnimationLabel)
@@ -1081,7 +1090,6 @@ public class TwitVizView extends FrameView {
                 }
                 
             }
-
             setTwittsList();
         }
 }//GEN-LAST:event_btn_loginActionPerformed
@@ -1213,12 +1221,14 @@ public class TwitVizView extends FrameView {
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         try {
-            link.updateStatus(updateTextField.getText());
-            updateTextField.setText("");
+            link.updateStatus(updateTextArea.getText());
+            updateTextArea.setText("");
+            setTwittsList();
             setFeedback("Updated status successful", Color.WHITE);
         } catch (TwitterException ex) {
             setFeedback("Error updating status", Color.RED);
         }
+
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void keywordsTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keywordsTextFieldFocusGained
@@ -1235,17 +1245,6 @@ public class TwitVizView extends FrameView {
         }
         
     }//GEN-LAST:event_keywordsTextFieldFocusLost
-
-    private void updateTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateTextFieldKeyReleased
-        // TODO add your handling code here:
-        int cl = 140 -(updateTextField.getText().length());
-        if(cl<0){
-            countLabel.setForeground(Color.RED);
-        }else{
-            countLabel.setForeground(Color.GRAY);
-        }
-        countLabel.setText(Integer.toString(cl));
-    }//GEN-LAST:event_updateTextFieldKeyReleased
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
 
@@ -1409,6 +1408,18 @@ public class TwitVizView extends FrameView {
        setTwittsList();
     }//GEN-LAST:event_updateButtonKeyReleased
 
+    private void updateTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateTextAreaKeyReleased
+        // TODO add your handling code here:
+        int cl = 140 -(updateTextArea.getText().length());
+        if(cl<0){
+            countLabel.setForeground(Color.RED);
+        }else{
+            countLabel.setForeground(Color.GRAY);
+        }
+        countLabel.setText(Integer.toString(cl));
+
+    }//GEN-LAST:event_updateTextAreaKeyReleased
+
     /*public void processTwitts(List<Tweet> twitts){
         try{
         for(Tweet twitt : twitts)
@@ -1535,6 +1546,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList keyword_list;
     private javax.swing.JPanel keyword_viz;
     private javax.swing.JTextField keywordsTextField;
@@ -1553,7 +1565,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JList twittsList;
     private javax.swing.JPanel twitvizPanel;
     private javax.swing.JButton updateButton;
-    private javax.swing.JTextField updateTextField;
+    private javax.swing.JTextArea updateTextArea;
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
 
