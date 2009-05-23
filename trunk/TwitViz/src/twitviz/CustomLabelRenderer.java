@@ -20,11 +20,17 @@ public class CustomLabelRenderer extends LabelRenderer {
         String safety="";
 
         if (item instanceof NodeItem && item!=null) {
-            if(item.canGetString("screenName") && item.getString("screenName").compareTo("null")!=0) {
-                safety = item.getString("screenName");
-            }else if(item.canGetString("keyword") && item.getString("keyword").compareTo("null")!=0) {
-                safety = item.getString("keyword");
-            }
+            try{
+                if(item.canGetString("screenName") && item.getString("screenName").compareTo("null")!=0) {
+                    safety = item.getString("screenName");
+                }
+            }catch(Exception e) {}
+
+            try{
+                if(item.canGetString("keyword") && item.getString("keyword").compareTo("null")!=0) {
+                    safety = item.getString("keyword");
+                }
+            }catch(Exception e) {}
         }
         return safety;
     }

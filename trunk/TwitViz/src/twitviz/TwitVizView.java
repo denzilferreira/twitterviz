@@ -171,24 +171,32 @@ public class TwitVizView extends FrameView {
         TwitVizApp.getApplication().show(aboutBox);
     }
 
+    private void refreshKeyViz() {
+        Graph kwgraph = null;
+        //Read the database
+        try {
+            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
+        } catch (DataIOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        kwvis.removeGroup("graph");
+        kwvis.add("graph", kwgraph);
+        kwvis.repaint();
+
+        keyword_viz.validate();
+        keyword_viz.setVisible(true);
+
+        kwvis.run("color");  // assign the colors
+        kwvis.run("size"); //assign the sizes
+        kwvis.run("layout"); // start up the animated layout
+       
+    }
+
     //Visualization of keywords and strangers!
     private void displayKeyviz() {
         
-        if(kwvis!=null) {
-            kwvis.removeGroup("graph");
-            try {
-                kwvis.add("graph", kwgraph = new GraphMLReader().readGraph("kwviz.xml"));
-                kwvis.repaint();
-                kwvis.run("color");  // assign the colors
-                kwvis.run("size"); //assign the sizes
-                kwvis.run("layout"); // start up the animated layout
-            } catch (DataIOException ex) {
-                Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            return;
-        }
-
         //Read the database
         try {
             kwgraph = new GraphMLReader().readGraph("kwviz.xml");
@@ -274,6 +282,14 @@ public class TwitVizView extends FrameView {
 
         key = kwgraph.addNode();
         key.setString("keyword", name);
+
+        //Save to graph file
+        try{
+            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+        }catch(DataIOException e){
+            e.printStackTrace();
+        }
+        //--end save graph file
         
         return key;
     }
@@ -299,6 +315,15 @@ public class TwitVizView extends FrameView {
             user.setString("screenName", tweeterer.getScreenName());
             user.setInt("relevance", 1);
             user.setBoolean("friend", isStrangerAFriend(tweeterer));
+
+            //Save to graph file
+            try{
+                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+            }catch(DataIOException e){
+                e.printStackTrace();
+            }
+            //--end save graph file
+
         }
 
         return user;
@@ -953,7 +978,7 @@ public class TwitVizView extends FrameView {
 
                         //displayTwitviz();
 
-                        //TODO: load previous stored keywords
+                        //load previous stored keywords
                         loadKeywords();
 
                         //Start public line monitor, updates every 20 seconds
@@ -962,7 +987,7 @@ public class TwitVizView extends FrameView {
                             public void run() {
                                 get_PublicLine();
                             }
-                        }, 5000, 20000); //Get public line every 10
+                        }, 5000, 10000); //Get public line every 10
 
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
@@ -1000,6 +1025,9 @@ public class TwitVizView extends FrameView {
     }
 
     private void get_PublicLine() {
+        //Reload visualization
+        displayKeyviz();
+        //refreshKeyViz();
         //we only start processing the public line if we have keywords on the list!
         if(keywordsmap.getSize()>0) {
 
@@ -1052,21 +1080,17 @@ public class TwitVizView extends FrameView {
                     e.printStackTrace();
                 }
                 //--end save graph file
-
-                //Reload visualization
-                displayKeyviz();
-
             } catch (TwitterException ex) {
                 setFeedback("Error loading public line :(", Color.RED);
             }
         }
     }
 
+    //Returns the keywords present on a tweet
     private Vector getInterests(Status stat) {
         Vector keywords = new Vector();
-
         for(int i=0;i<keywordsmap.getSize();i++) {
-            if(stat.getText().matches(".*"+keywordsmap.get(i).toString()+".*")) {
+            if(stat.getText().matches(".*"+(String)keywordsmap.get(i)+".*")) {
                 keywords.addElement((String)keywordsmap.get(i));
             }
         }
@@ -1170,6 +1194,7 @@ public class TwitVizView extends FrameView {
 
             //Change to the keyword visualization
             tabs_control.setSelectedIndex(0);
+            refreshKeyViz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
