@@ -8,17 +8,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Label;
-import java.awt.PopupMenu;
 import java.awt.Toolkit;
-import java.awt.geom.Point2D;
-import java.io.IOException;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.event.DocumentEvent;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -26,9 +22,9 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,10 +38,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListModel;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicSplitPaneUI.BasicVerticalLayoutManager;
-import javax.swing.plaf.metal.MetalIconFactory;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -56,6 +48,7 @@ import prefuse.action.assignment.DataColorAction;
 import prefuse.action.assignment.DataSizeAction;
 import prefuse.action.layout.graph.ForceDirectedLayout;
 import prefuse.activity.Activity;
+import prefuse.controls.Control;
 import prefuse.controls.DragControl;
 import prefuse.controls.NeighborHighlightControl;
 import prefuse.controls.PanControl;
@@ -65,22 +58,12 @@ import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Edge;
 import prefuse.data.Graph;//Prefuse Visualization toolkit
 import prefuse.data.Node;
-import prefuse.data.Schema;
-import prefuse.data.Tuple;
-import prefuse.data.event.ExpressionListener;
-import prefuse.data.expression.ExpressionVisitor;
-import prefuse.data.expression.Predicate;
-import prefuse.data.expression.parser.ExpressionParser;
 import prefuse.data.io.DataIOException;
 import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
 import prefuse.render.DefaultRendererFactory;
-import prefuse.render.EdgeRenderer;
 import prefuse.render.LabelRenderer;
-import prefuse.render.Renderer;
-import prefuse.render.RendererFactory;
 import prefuse.util.ColorLib;
-import prefuse.visual.EdgeItem;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import twitter4j.*;
@@ -226,16 +209,16 @@ public class TwitVizView extends FrameView {
         size.add(sizes);
 
         ActionList layout = new ActionList(Activity.INFINITY);
-        layout.add(new ForceDirectedLayout("graph"));
+        layout.add(new ForceDirectedLayout("graph",true));
         layout.add(new RepaintAction());
 
         kwvis.putAction("color", color);
         kwvis.putAction("size", size);
         kwvis.putAction("layout", layout);
-
+        
         Display display = new Display(kwvis);
-        display.setSize(1024, 683); //this is the size of the background image
-        display.pan(400, 300);	// pan to the middle
+        display.setSize(580, 479); //this is the size of the background image
+        display.pan(580, 479);	// pan to the middle
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
@@ -243,11 +226,124 @@ public class TwitVizView extends FrameView {
         display.addControlListener(new ZoomToFitControl());
         display.addControlListener(new NeighborHighlightControl());
 
+        display.addControlListener(new Control() {
+
+
+            public void itemClicked(VisualItem item, MouseEvent e) {
+                if(item instanceof NodeItem) {
+                    try{
+                        if(item.canGetString("screenName")) {
+                            twittsList.removeAll();
+                            Vector data = new Vector();
+
+                            data.addElement(item.getString("screenName"));
+
+                            twittsList.setListData(data);
+                            twittsList.repaint();
+                            twittsList.setVisible(true);
+                        }
+                    }catch(Exception xpto){}
+                }
+            }
+
+            public void itemPressed(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemReleased(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemEntered(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemExited(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemKeyPressed(VisualItem item, KeyEvent e) {
+                
+            }
+
+            public void itemKeyReleased(VisualItem item, KeyEvent e) {
+                
+            }
+
+            public void itemKeyTyped(VisualItem item, KeyEvent e) {
+                
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                
+            }
+
+            public void mouseExited(MouseEvent e) {
+                
+            }
+
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            public void mouseClicked(MouseEvent e) {
+                
+            }
+
+            public void mouseDragged(MouseEvent e) {
+                
+            }
+
+            public void mouseMoved(MouseEvent e) {
+                
+            }
+
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                
+            }
+
+            public void keyPressed(KeyEvent e) {
+                
+            }
+
+            public void keyReleased(KeyEvent e) {
+                
+            }
+
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            public boolean isEnabled() {
+                return true;
+            }
+
+            public void setEnabled(boolean enabled) {
+                
+            }
+
+            public void itemDragged(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemMoved(VisualItem item, MouseEvent e) {
+                
+            }
+
+            public void itemWheelMoved(VisualItem item, MouseWheelEvent e) {
+                
+            }
+        });
+
         // add the display (which holds the visualization) to the window
         keyword_viz.add(display);
         keyword_viz.validate();
         keyword_viz.setVisible(true);
-
+        
         kwvis.repaint();
 
         kwvis.run("color");  // assign the colors
