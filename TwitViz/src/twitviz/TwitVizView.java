@@ -7,8 +7,10 @@ package twitviz;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Label;
 import java.awt.PopupMenu;
 import java.awt.Toolkit;
@@ -24,6 +26,7 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
@@ -647,6 +650,11 @@ public class TwitVizView extends FrameView {
                 updateButtonActionPerformed(evt);
             }
         });
+        updateButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                updateButtonKeyReleased(evt);
+            }
+        });
 
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
         jLabel7.setForeground(resourceMap.getColor("jLabel7.foreground")); // NOI18N
@@ -941,9 +949,9 @@ public class TwitVizView extends FrameView {
 
                         updateButton.setEnabled(true);
 
-                        buildSocialNetwork(user);
+                        //buildSocialNetwork(user);
 
-                        displayTwitviz();
+                        //displayTwitviz();
 
                         //TODO: load previous stored keywords
                         loadKeywords();
@@ -962,77 +970,12 @@ public class TwitVizView extends FrameView {
 
                 }
 
-                //Last 20 friends twitts list content
-                try {
-                   
-                    List<Status> statusList = link.getFriendsTimeline();
-                    
-                    twittsList.setVisibleRowCount(statusList.size());
-                    twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-                   
-                    String twitt = null;
-                    Icon icon = null;
-                    Map<Object, Icon> icons = new HashMap<Object, Icon>();
-                    Object[] obj = new Object[statusList.size()];
-                    for(int i=0;i<statusList.size();i++){
-
-                        Status status =statusList.get(i); 
-                        twitt = status.getUser().getScreenName() + " " + status.getText() + "\n" +status.getCreatedAt().toString();
-      
-                        icon = new ImageIcon(status.getUser().getProfileImageURL());
-                        icons.put(twitt,icon);
-                        obj[i]=twitt;
-                    }
-                   
-                   twittsList.setListData(obj);
-                   twittsList.setCellRenderer(new IconListRenderer(icons));
-                   twittsList.setVisible(true);
-                   twittsList.repaint();
-                    
-                } catch (TwitterException ex) {
-                    setFeedback("Error loading friends timeline", Color.RED);
-                }
+     
 
             }
 
         }
 }//GEN-LAST:event_btn_loginActionPerformed
-
-// Last 20 friends twitts list Renderer 
-public class IconListRenderer extends DefaultListCellRenderer {
-
-	private Map<Object, Icon> icons = null;
-
-	public IconListRenderer(Map<Object, Icon> icons) {
-		this.icons = icons;
-	}
-
-	@Override
-	public Component getListCellRendererComponent(
-		JList list, Object value, int index,
-		boolean isSelected, boolean cellHasFocus) {
-
-		// Get the renderer component from parent class
-
-		JLabel label =
-			(JLabel) super.getListCellRendererComponent(list,
-				value, index, isSelected, cellHasFocus);
-
-		// Get icon to use for the list item value
-
-		Icon icon = icons.get(value);
-
-		// Set icon to display for value
-
-		label.setSize(48, 48);
-
-        //label.setLayout(new GridLayout());
-
-        label.setIcon(icon);
-		return label;
-	}
-}
-
 
     private boolean isStrangerAFriend(User stranger) {
         boolean friend = false;
@@ -1275,6 +1218,83 @@ public class IconListRenderer extends DefaultListCellRenderer {
             btn_login.doClick();
         }
     }//GEN-LAST:event_passwordKeyPressed
+
+    // Last 20 friends twitts list Renderer
+    public class IconListRenderer extends DefaultListCellRenderer {
+
+        private Map<Object, Icon> icons = null;
+
+        public IconListRenderer(Map<Object, Icon> icons) {
+            this.icons = icons;
+        }
+
+        @Override
+        public Component getListCellRendererComponent(
+            JList list, Object value, int index,
+            boolean isSelected, boolean cellHasFocus) {
+
+            // Get the renderer component from parent class
+
+            JLabel label =
+                (JLabel) super.getListCellRendererComponent(list,
+                    value, index, isSelected, cellHasFocus);
+
+            // Get icon to use for the list item value
+
+            Icon icon = icons.get(value);
+
+            // Set icon to display for value
+
+            label.setSize(12, 12);
+
+            //label.setLayout(new GridLayout());
+
+            label.setIcon(icon);
+            label.setVisible(true);
+            return label;
+        }
+    }
+
+    private void updateButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateButtonKeyReleased
+        // TODO add your handling code here:
+                //Last 20 friends twitts list content
+                try {
+
+                    List<Status> statusList = link.getFriendsTimeline();
+
+                    twittsList.setVisibleRowCount(statusList.size());
+                    twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+
+                    String twitt = null;
+                    ImageIcon icon = null;
+                    Map<Object, Icon> icons = new HashMap<Object, Icon>();
+                    Object[] obj = new Object[statusList.size()];
+                    Image img;
+                    for(int i=0;i<statusList.size();i++){
+
+                        Status status =statusList.get(i);
+                        twitt = status.getUser().getScreenName() + " " + status.getText() + "\n" +status.getCreatedAt().toString();
+
+                        icon = new ImageIcon(status.getUser().getProfileImageURL());
+                        img = icon.getImage();
+                        icons.put(twitt,icon);
+                        BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                        Graphics g = bi.createGraphics();
+                        g.drawImage(img, 0, 0, 24, 24, null);
+                        icon = new ImageIcon(bi);
+
+                        obj[i]=twitt;
+                    }
+
+                   twittsList.setListData(obj);
+                   twittsList.setCellRenderer(new IconListRenderer(icons));
+                   twittsList.setVisible(true);
+                   twittsList.repaint();
+
+                } catch (TwitterException ex) {
+                    setFeedback("Error loading friends timeline", Color.RED);
+                }
+    }//GEN-LAST:event_updateButtonKeyReleased
 
     /*public void processTwitts(List<Tweet> twitts){
         try{
