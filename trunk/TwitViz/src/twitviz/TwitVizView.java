@@ -994,11 +994,10 @@ public class TwitVizView extends FrameView {
                     }
 
                 }
-
-     
-
+                
             }
 
+            setTwittsList();
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
@@ -1280,45 +1279,49 @@ public class TwitVizView extends FrameView {
         }
     }
 
+    public void setTwittsList(){
+        //Last 20 friends twitts list content
+        try {
+
+            List<Status> statusList = link.getFriendsTimeline();
+
+            twittsList.setVisibleRowCount(statusList.size());
+            twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+
+            String twitt = null;
+            ImageIcon icon = null;
+            Map<Object, Icon> icons = new HashMap<Object, Icon>();
+            Object[] obj = new Object[statusList.size()];
+            Image img;
+            for(int i=0;i<statusList.size();i++){
+
+                Status status =statusList.get(i);
+                twitt = status.getUser().getScreenName() + " " + status.getText() + "\n" +status.getCreatedAt().toString();
+
+                icon = new ImageIcon(status.getUser().getProfileImageURL());
+                img = icon.getImage();
+                icons.put(twitt,icon);
+                BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics g = bi.createGraphics();
+                g.drawImage(img, 0, 0, 24, 24, null);
+                icon = new ImageIcon(bi);
+
+                obj[i]=twitt;
+            }
+
+           twittsList.setListData(obj);
+           twittsList.setCellRenderer(new IconListRenderer(icons));
+           twittsList.setVisible(true);
+           twittsList.repaint();
+
+        } catch (TwitterException ex) {
+            setFeedback("Error loading friends timeline", Color.RED);
+        }
+    }
+
     private void updateButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateButtonKeyReleased
         // TODO add your handling code here:
-                //Last 20 friends twitts list content
-                try {
-
-                    List<Status> statusList = link.getFriendsTimeline();
-
-                    twittsList.setVisibleRowCount(statusList.size());
-                    twittsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-
-                    String twitt = null;
-                    ImageIcon icon = null;
-                    Map<Object, Icon> icons = new HashMap<Object, Icon>();
-                    Object[] obj = new Object[statusList.size()];
-                    Image img;
-                    for(int i=0;i<statusList.size();i++){
-
-                        Status status =statusList.get(i);
-                        twitt = status.getUser().getScreenName() + " " + status.getText() + "\n" +status.getCreatedAt().toString();
-
-                        icon = new ImageIcon(status.getUser().getProfileImageURL());
-                        img = icon.getImage();
-                        icons.put(twitt,icon);
-                        BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-                        Graphics g = bi.createGraphics();
-                        g.drawImage(img, 0, 0, 24, 24, null);
-                        icon = new ImageIcon(bi);
-
-                        obj[i]=twitt;
-                    }
-
-                   twittsList.setListData(obj);
-                   twittsList.setCellRenderer(new IconListRenderer(icons));
-                   twittsList.setVisible(true);
-                   twittsList.repaint();
-
-                } catch (TwitterException ex) {
-                    setFeedback("Error loading friends timeline", Color.RED);
-                }
+       setTwittsList();
     }//GEN-LAST:event_updateButtonKeyReleased
 
     /*public void processTwitts(List<Tweet> twitts){
