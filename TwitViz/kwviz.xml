@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Sat May 23 11:49:48 WEST 2009 -->
+  <!-- prefuse GraphML Writer | Sat May 23 21:49:09 WEST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -27,165 +27,14 @@
       <data key="friend">false</data>
     </node>
     <node id="1">
-      <data key="keyword">hate</data>
-      <data key="id">0L</data>
-      <data key="screenName">null</data>
-      <data key="relevance">10</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="2">
       <data key="keyword">null</data>
-      <data key="id">15148807L</data>
-      <data key="screenName">shefaly</data>
-      <data key="relevance">2</data>
-      <data key="friend">true</data>
-    </node>
-    <node id="3">
-      <data key="keyword">null</data>
-      <data key="id">19234434L</data>
-      <data key="screenName">laurahd</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="4">
-      <data key="keyword">jQuery</data>
-      <data key="id">0L</data>
-      <data key="screenName">null</data>
-      <data key="relevance">10</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="5">
-      <data key="keyword">null</data>
-      <data key="id">40753212L</data>
-      <data key="screenName">PatrioticGifter</data>
-      <data key="relevance">2</data>
-      <data key="friend">true</data>
-    </node>
-    <node id="6">
-      <data key="keyword">null</data>
-      <data key="id">23386725L</data>
-      <data key="screenName">XjanineX</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="7">
-      <data key="keyword">null</data>
-      <data key="id">20043748L</data>
-      <data key="screenName">Tomjnewton</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="8">
-      <data key="keyword">null</data>
-      <data key="id">28077822L</data>
-      <data key="screenName">alyssabennett</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="9">
-      <data key="keyword">null</data>
-      <data key="id">22031488L</data>
-      <data key="screenName">LarryOji</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="10">
-      <data key="keyword">null</data>
-      <data key="id">24205871L</data>
-      <data key="screenName">lizzieeeh</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="11">
-      <data key="keyword">null</data>
-      <data key="id">30831502L</data>
-      <data key="screenName">hiddenstar13</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="12">
-      <data key="keyword">null</data>
-      <data key="id">14875303L</data>
-      <data key="screenName">xuebles</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="13">
-      <data key="keyword">null</data>
-      <data key="id">39768928L</data>
-      <data key="screenName">allstationsdown</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="14">
-      <data key="keyword">null</data>
-      <data key="id">33560091L</data>
-      <data key="screenName">KilroyCafe</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="15">
-      <data key="keyword">null</data>
-      <data key="id">9439882L</data>
-      <data key="screenName">xr0038</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="16">
-      <data key="keyword">null</data>
-      <data key="id">39687272L</data>
-      <data key="screenName">nadynadi</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="17">
-      <data key="keyword">null</data>
-      <data key="id">14267677L</data>
-      <data key="screenName">AnonymousDiary</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="18">
-      <data key="keyword">null</data>
-      <data key="id">17097648L</data>
-      <data key="screenName">exialla</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="19">
-      <data key="keyword">null</data>
-      <data key="id">25489685L</data>
-      <data key="screenName">Shezzaz</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-    </node>
-    <node id="20">
-      <data key="keyword">null</data>
-      <data key="id">15162703L</data>
-      <data key="screenName">SarahInTheSkyy</data>
+      <data key="id">20822308L</data>
+      <data key="screenName">Max_is_awesome</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
     </node>
 
     <!-- edges -->
-    <edge id="0" source="0" target="2"/>
-    <edge id="1" source="0" target="3"/>
-    <edge id="2" source="0" target="5"/>
-    <edge id="3" source="0" target="6"/>
-    <edge id="4" source="0" target="7"/>
-    <edge id="5" source="1" target="8"/>
-    <edge id="6" source="0" target="9"/>
-    <edge id="7" source="0" target="10"/>
-    <edge id="8" source="1" target="11"/>
-    <edge id="9" source="0" target="12"/>
-    <edge id="10" source="0" target="13"/>
-    <edge id="11" source="0" target="14"/>
-    <edge id="12" source="1" target="15"/>
-    <edge id="13" source="1" target="16"/>
-    <edge id="14" source="1" target="17"/>
-    <edge id="15" source="0" target="18"/>
-    <edge id="16" source="1" target="19"/>
-    <edge id="17" source="0" target="18"/>
-    <edge id="18" source="1" target="20"/>
+    <edge id="0" source="0" target="1"/>
   </graph>
 </graphml>
