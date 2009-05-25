@@ -175,6 +175,7 @@ public class TwitVizView extends FrameView {
             kwvis.run("color");  // assign the colors
             kwvis.run("size"); //assign the sizes
             kwvis.run("layout"); // start up the animated layout
+            return; //this will avoid the threads from overlapping visualizations over and over making it slow!
         }else{
             kwvis = new Visualization();
             kwvis.add("graph", kwgraph);
@@ -185,14 +186,14 @@ public class TwitVizView extends FrameView {
 
         kwvis.setRendererFactory( new DefaultRendererFactory(rend));
 
-        int[] edgesColor = new int[] {
+        int[] nodesColor = new int[] {
             ColorLib.rgb(255,255,153),
             ColorLib.rgb(153,255,153)
         };
 
         //Lets colorize! :D
         DataColorAction nodes = new DataColorAction("graph.nodes", "friend",
-            Constants.NOMINAL, VisualItem.FILLCOLOR, edgesColor);
+            Constants.NOMINAL, VisualItem.FILLCOLOR, nodesColor);
 
         ColorAction text = new ColorAction("graph.nodes",VisualItem.TEXTCOLOR, ColorLib.gray(0));
 
@@ -217,8 +218,8 @@ public class TwitVizView extends FrameView {
         kwvis.putAction("layout", layout);
         
         Display display = new Display(kwvis);
-        display.setSize(580, 479); //this is the size of the background image
-        display.pan(580, 479);	// pan to the middle
+        display.setSize(580, 486); //this is the size of the background image
+        display.pan(580, 486);	// pan to the middle
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
@@ -280,25 +281,26 @@ public class TwitVizView extends FrameView {
     }
 
     private boolean doWeFollow(int id) {
-        IDs followers;
+        IDs following;
         try {
-            followers = link.getFollowersIDs(id);
+            following = link.getFriendsIDs();
             
-            for(int follower: followers.getIDs()) {
-                if(follower==id) {
+            for(int followed: following.getIDs()) {
+                if(followed==id) {
                     return true;
                 }
             }
             return false;
         } catch (TwitterException ex) {
-            setFeedback("Unable to get followers list...", Color.RED);
+            setFeedback("Unable to get who you follow list...", Color.RED);
         }
         return false;
     }
 
-    private void getUserInfo(final int id) {
+    private void getUserInfo(int id) {
         try {
-            User node = link.getUserDetail(String.valueOf(id));
+            final User node = link.getUserDetail(String.valueOf(id));
+
             if (node != null && !node.isProtected()) {
                 section_tabs.setSelectedIndex(1);
                 info_screenname.setText("Screenname: " + node.getScreenName());
@@ -314,33 +316,44 @@ public class TwitVizView extends FrameView {
                     btn_follow.setEnabled(false);
                 }else{
                     //Check if we follow already
-                    if(! doWeFollow(id)) {
-                        //If not following already...
+                    if(! doWeFollow(node.getId())) { //If not following already...
+                        btn_follow.setEnabled(true);
+                        btn_follow.setText("Follow");
                         btn_follow.addActionListener( new ActionListener() {
                             public void actionPerformed(ActionEvent arg0) {
                                 try {
-                                    link.enableNotification(String.valueOf(id));
-                                    setFeedback("User followed successfully", Color.WHITE);
+                                    link.enableNotification(String.valueOf(node.getId()));
+                                    setFeedback(node.getScreenName()+" followed successfully", Color.WHITE);
+                                    //update the social network
+                                    buildSocialNetwork(user);
+                                    displayTwitviz();
                                 } catch (TwitterException ex) {
-                                    setFeedback("Unable to follow user!", Color.RED);
+                                    setFeedback("Unable to follow "+node.getScreenName()+"!", Color.RED);
                                 }
                             }
                         });
+                        btn_follow.repaint();
+                        btn_follow.setVisible(true);
                     }else{
+                        btn_follow.setEnabled(true);
                         btn_follow.setText("Unfollow");
                         btn_follow.addActionListener( new ActionListener() {
                             public void actionPerformed(ActionEvent arg0) {
                                 try {
-                                    link.destroyFriendship(String.valueOf(id));
-                                    setFeedback("User unfollowed successfully", Color.WHITE);
+                                    link.destroyFriendship(String.valueOf(node.getId()));
+                                    setFeedback(node.getScreenName()+" unfollowed successfully", Color.WHITE);
+                                    //update the social network
+                                    buildSocialNetwork(user);
+                                    displayTwitviz();
                                 } catch (TwitterException ex) {
-                                    setFeedback("Unable to unfollow user!", Color.RED);
+                                    setFeedback("Unable to unfollow "+node.getScreenName()+"!", Color.RED);
                                 }
                             }
                         });
+                        btn_follow.repaint();
+                        btn_follow.setVisible(true);
                     }
                 }
-
             }else{
                 setFeedback("Couldn't load user information!", Color.RED);
             }
@@ -1549,6 +1562,7 @@ public class TwitVizView extends FrameView {
                             }
                         }
                         kwgraph.removeNode(tmp);
+                        break;
                     }
                 }
             }
