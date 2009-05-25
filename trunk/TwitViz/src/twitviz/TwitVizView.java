@@ -232,7 +232,7 @@ public class TwitVizView extends FrameView {
                 if(item instanceof NodeItem) {
                     try{
                         if(item.canGetLong("id") && item.getString("keyword").compareTo("null")==0) {
-                            getUserInfo(item.getLong("id"));
+                            getUserInfo(new Long(item.getLong("id")).intValue());
                         }
                     }catch(Exception xpto){}
                 }
@@ -279,36 +279,37 @@ public class TwitVizView extends FrameView {
         
     }
 
-    private boolean doWeFollow(long id) {
+    private boolean doWeFollow(int id) {
         IDs followers;
         try {
-            followers = link.getFollowersIDs(String.valueOf(id));
+            followers = link.getFollowersIDs(id);
             
             for(int follower: followers.getIDs()) {
                 if(follower==id) {
                     return true;
                 }
             }
+            return false;
         } catch (TwitterException ex) {
             setFeedback("Unable to get followers list...", Color.RED);
         }
         return false;
     }
 
-    private void getUserInfo(final long id) {
+    private void getUserInfo(final int id) {
         try {
-            User user = link.getUserDetail(String.valueOf(id));
-            if (user != null && !user.isProtected()) {
+            User node = link.getUserDetail(String.valueOf(id));
+            if (node != null && !node.isProtected()) {
                 section_tabs.setSelectedIndex(1);
-                info_screenname.setText("Screenname:" + user.getScreenName());
-                info_name.setText("Name:" + user.getName());
-                info_description.setText(user.getDescription());
-                info_location.setText("Location:" + user.getLocation());
-                info_last_status.setText(user.getStatusText());
-                info_picture.setIcon(new ImageIcon(user.getProfileImageURL()));
-                info_followerCount.setText(String.valueOf(user.getFollowersCount()));
+                info_screenname.setText("Screenname: " + node.getScreenName());
+                info_name.setText("Name: " + node.getName());
+                info_description.setText(node.getDescription());
+                info_location.setText("Location: " + node.getLocation());
+                info_last_status.setText(node.getStatusText());
+                info_picture.setIcon(new ImageIcon(node.getProfileImageURL()));
+                info_followerCount.setText(String.valueOf(node.getFollowersCount()));
 
-                if(user.getId()==this.user.getId()) {
+                if(node.getId()==user.getId()) {
                     btn_follow.setText("You!!!");
                     btn_follow.setEnabled(false);
                 }else{
@@ -1193,6 +1194,9 @@ public class TwitVizView extends FrameView {
 
                         getUserInfo(user.getId());
 
+                        //By default we want to display our network...
+                        tabs_control.setSelectedIndex(1);
+
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
                     }
@@ -1383,8 +1387,7 @@ public class TwitVizView extends FrameView {
             }
             //--end save graph file
 
-            //Change to the keyword visualization
-            tabs_control.setSelectedIndex(0);
+            //display keyword visualization
             displayKeyviz();
         }
     }//GEN-LAST:event_addButtonActionPerformed
@@ -1423,8 +1426,7 @@ public class TwitVizView extends FrameView {
 
                 //processTwitts(twitts);
 
-                //Change to the keyword visualization
-                tabs_control.setSelectedIndex(0);
+                //display keyword visualization
                 displayKeyviz();
         }
     }//GEN-LAST:event_searchButtonActionPerformed
@@ -1601,9 +1603,7 @@ public class TwitVizView extends FrameView {
     }*/
 
     public void displayTwitviz() {
-        //make tab visible, if it already isn't
-        tabs_control.setSelectedIndex(1);
-
+        
         //Read the database
         try {
             graph = new GraphMLReader().readGraph("twitviz.xml");
@@ -1677,7 +1677,7 @@ public class TwitVizView extends FrameView {
                 if(item instanceof NodeItem) {
                     try{
                         if(item.canGetLong("id")) {
-                            getUserInfo(item.getLong("id"));
+                            getUserInfo(new Long(item.getLong("id")).intValue()); //dirty hack to get int from long...
                         }
                     }catch(Exception xpto){}
                 }
