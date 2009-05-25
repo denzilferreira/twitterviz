@@ -23,7 +23,6 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
@@ -228,10 +227,11 @@ public class TwitVizView extends FrameView {
         display.addControlListener(new NeighborHighlightControl());
 
         display.addControlListener(new Control() {
+            //When we click a user, not a keyword
             public void itemClicked(VisualItem item, MouseEvent e) {
                 if(item instanceof NodeItem) {
                     try{
-                        if(item.canGetLong("id")) {
+                        if(item.canGetLong("id") && item.getString("keyword").compareTo("null")==0) {
                             getUserInfo(item.getLong("id"));
                         }
                     }catch(Exception xpto){}
@@ -279,7 +279,23 @@ public class TwitVizView extends FrameView {
         
     }
 
-    private void getUserInfo(long id) {
+    private boolean doWeFollow(long id) {
+        IDs followers;
+        try {
+            followers = link.getFollowersIDs(String.valueOf(id));
+            
+            for(int follower: followers.getIDs()) {
+                if(follower==id) {
+                    return true;
+                }
+            }
+        } catch (TwitterException ex) {
+            setFeedback("Unable to get followers list...", Color.RED);
+        }
+        return false;
+    }
+
+    private void getUserInfo(final long id) {
         try {
             User user = link.getUserDetail(String.valueOf(id));
             if (user != null && !user.isProtected()) {
@@ -291,6 +307,39 @@ public class TwitVizView extends FrameView {
                 info_last_status.setText(user.getStatusText());
                 info_picture.setIcon(new ImageIcon(user.getProfileImageURL()));
                 info_followerCount.setText(String.valueOf(user.getFollowersCount()));
+
+                if(user.getId()==this.user.getId()) {
+                    btn_follow.setText("You!!!");
+                    btn_follow.setEnabled(false);
+                }else{
+                    //Check if we follow already
+                    if(! doWeFollow(id)) {
+                        //If not following already...
+                        btn_follow.addActionListener( new ActionListener() {
+                            public void actionPerformed(ActionEvent arg0) {
+                                try {
+                                    link.enableNotification(String.valueOf(id));
+                                    setFeedback("User followed successfully", Color.WHITE);
+                                } catch (TwitterException ex) {
+                                    setFeedback("Unable to follow user!", Color.RED);
+                                }
+                            }
+                        });
+                    }else{
+                        btn_follow.setText("Unfollow");
+                        btn_follow.addActionListener( new ActionListener() {
+                            public void actionPerformed(ActionEvent arg0) {
+                                try {
+                                    link.destroyFriendship(String.valueOf(id));
+                                    setFeedback("User unfollowed successfully", Color.WHITE);
+                                } catch (TwitterException ex) {
+                                    setFeedback("Unable to unfollow user!", Color.RED);
+                                }
+                            }
+                        });
+                    }
+                }
+
             }else{
                 setFeedback("Couldn't load user information!", Color.RED);
             }
@@ -583,7 +632,7 @@ public class TwitVizView extends FrameView {
         info_screenname = new javax.swing.JLabel();
         info_picture = new javax.swing.JLabel();
         info_name = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btn_follow = new javax.swing.JButton();
         info_location = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         info_followerCount = new javax.swing.JLabel();
@@ -674,13 +723,13 @@ public class TwitVizView extends FrameView {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                     .add(jPanel2Layout.createSequentialGroup()
                         .add(searchButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
+                        .add(addButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -760,8 +809,8 @@ public class TwitVizView extends FrameView {
         info_name.setText(resourceMap.getString("info_name.text")); // NOI18N
         info_name.setName("info_name"); // NOI18N
 
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
+        btn_follow.setText(resourceMap.getString("btn_follow.text")); // NOI18N
+        btn_follow.setName("btn_follow"); // NOI18N
 
         info_location.setText(resourceMap.getString("info_location.text")); // NOI18N
         info_location.setName("info_location"); // NOI18N
@@ -818,7 +867,7 @@ public class TwitVizView extends FrameView {
                                     .add(jScrollPane5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(jButton1)
+                                    .add(btn_follow)
                                     .add(info_picture, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 85, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                         .add(49, 49, 49))))
         );
@@ -836,15 +885,15 @@ public class TwitVizView extends FrameView {
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(info_picture, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 84, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton1)))
+                        .add(btn_follow)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 9, Short.MAX_VALUE)
                 .add(info_location)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(info_followerCount, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 45, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(asdasd, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 62, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(asdasd, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(61, 61, 61))
         );
 
@@ -1142,6 +1191,8 @@ public class TwitVizView extends FrameView {
                             }
                         }, 5000, 20000); //Get public line every 10
 
+                        getUserInfo(user.getId());
+
                     } catch (TwitterException ex) {
                         setFeedback("Error getting user information, please try again...", Color.RED);
                     }
@@ -1291,13 +1342,11 @@ public class TwitVizView extends FrameView {
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void keywordsTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keywordsTextFieldFocusGained
-        // TODO add your handling code here:
         keywordsTextField.setText("");
         keywordsTextField.setForeground(Color.BLACK);
     }//GEN-LAST:event_keywordsTextFieldFocusGained
 
     private void keywordsTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keywordsTextFieldFocusLost
-        // TODO add your handling code here:
         if(keywordsTextField.getText().length()==0){
             keywordsTextField.setText("Keywords");
             keywordsTextField.setForeground(Color.GRAY);
@@ -1463,12 +1512,10 @@ public class TwitVizView extends FrameView {
     }
 
     private void updateButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateButtonKeyReleased
-        // TODO add your handling code here:
        setTwittsList();
     }//GEN-LAST:event_updateButtonKeyReleased
 
     private void updateTextAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_updateTextAreaKeyReleased
-        // TODO add your handling code here:
         int cl = 140 -(updateTextArea.getText().length());
         if(cl<0){
             countLabel.setForeground(Color.RED);
@@ -1483,30 +1530,24 @@ public class TwitVizView extends FrameView {
     private void keyword_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_keyword_listKeyPressed
 
         //if we hit the backspace key
-        if(evt.getKeyCode()==8 && keywordsmap.size()>=1) {
+        if(evt.getKeyCode()==8 && keywordsmap.size()>1) {
+            
             //delete edges and nodes related to the keyword
             for(int i=0;i<kwgraph.getNodeCount();i++) {
                 Node tmp = kwgraph.getNode(i);
+                if(tmp.isValid()) {
+                    //If it is a keyword
+                    if(tmp.getString("keyword").compareTo("null")!=0 && tmp.getString("keyword").compareTo((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
 
-                //If it is a keyword
-                if(tmp.getString("keyword").compareTo("null")!=0 && tmp.getString("keyword").compareTo((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
-
-                    //remove edges sourced with this keyword
-                    for(int j=0;j<kwgraph.getEdgeCount();j++) {
-                        Edge edge = kwgraph.getEdge(j);
-
-                        if(edge.getSourceNode().equals(tmp)) {
-                            //remove the target node
-                            Node target = edge.getTargetNode();
-                            kwgraph.removeNode(target);
-
-                            if(edge.isValid()) {
-                                kwgraph.removeEdge(edge);
+                        //getChild to remove dependencies
+                        for(int j=0;j<tmp.getChildCount();j++) {
+                            Node child = tmp.getChild(j);
+                            if(child.isValid()) {
+                                kwgraph.removeNode(child);
                             }
                         }
+                        kwgraph.removeNode(tmp);
                     }
-
-                    kwgraph.removeNode(tmp);
                 }
             }
 
@@ -1683,6 +1724,7 @@ public class TwitVizView extends FrameView {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JScrollPane asdasd;
+    private javax.swing.JButton btn_follow;
     private javax.swing.JButton btn_login;
     private javax.swing.JLabel countLabel;
     private javax.swing.JLabel feedback_label;
@@ -1693,7 +1735,6 @@ public class TwitVizView extends FrameView {
     private javax.swing.JLabel info_name;
     private javax.swing.JLabel info_picture;
     private javax.swing.JLabel info_screenname;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
