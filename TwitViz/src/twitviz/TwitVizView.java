@@ -81,6 +81,9 @@ public class TwitVizView extends FrameView {
         
         initComponents();
 
+        tabs_control.setSelectedIndex(0);
+        displayKeyviz();
+
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.getFrame().setBounds((screen.width-400)/2, (screen.height-200)/2, 400, 200);
         this.getFrame().setResizable(true);
@@ -187,8 +190,8 @@ public class TwitVizView extends FrameView {
         kwvis.setRendererFactory( new DefaultRendererFactory(rend));
 
         int[] nodesColor = new int[] {
-            ColorLib.rgb(255,255,153),
-            ColorLib.rgb(153,255,153)
+            ColorLib.rgb(153,255,153),
+            ColorLib.rgb(255,255,153)
         };
 
         //Lets colorize! :D
@@ -426,14 +429,19 @@ public class TwitVizView extends FrameView {
 
     //Function that checks if someone is following you back
     private boolean isFollowing(List<User> list, User who) {
-        for(int i=0;i<list.size();i++) {
-            User tmp = list.get(i);
+        //list is your followers list...
+        if(list!=null) {
+            for(int i=0;i<list.size();i++) {
+                User tmp = list.get(i);
 
-            if(!tmp.isProtected()) {
-                if(tmp.getId()==who.getId()) {
-                    return true;
+                if(!tmp.isProtected()) {
+                    //is my friend among my followers?
+                    if(tmp.getId()==who.getId()) {
+                        return true;
+                    }
                 }
             }
+            return false;
         }
         return false;
     }
@@ -1359,16 +1367,17 @@ public class TwitVizView extends FrameView {
 }//GEN-LAST:event_updateButtonActionPerformed
 
     private void keywordsTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keywordsTextFieldFocusGained
-        keywordsTextField.setText("");
-        keywordsTextField.setForeground(Color.BLACK);
+        if(keywordsTextField.getText().compareTo("Keywords")==0) {
+            keywordsTextField.setText("");
+            keywordsTextField.setForeground(Color.BLACK);
+        }
     }//GEN-LAST:event_keywordsTextFieldFocusGained
 
     private void keywordsTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_keywordsTextFieldFocusLost
         if(keywordsTextField.getText().length()==0){
             keywordsTextField.setText("Keywords");
             keywordsTextField.setForeground(Color.GRAY);
-        }
-        
+        } 
     }//GEN-LAST:event_keywordsTextFieldFocusLost
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
@@ -1407,40 +1416,34 @@ public class TwitVizView extends FrameView {
 
     //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        if(keywordsTextField.getText().length()>0) {
 
-            if(keywordsTextField.getText().length()>0) {
+            QueryResult results = null;
+            List<Tweet> twitts = null;
+            Query queryString = new Query(keywordsTextField.getText());
+            try {
+                results = link.search(queryString);
+                twitts = results.getTweets();
 
-                boolean alreadyDefined = false;
-                for(int i=0;i<keywordsmap.size();i++) {
-                    if(((String)keywordsmap.get(i)).compareTo(keywordsTextField.getText())==0) {
-                        alreadyDefined=true;
-                        break;
-                    }
+                processTwitts(twitts);
+
+                //Save to graph file
+                try{
+                    new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+                }catch(DataIOException e){
+                    e.printStackTrace();
                 }
-                if(! alreadyDefined) {
-                    keywordsmap.addElement(keywordsTextField.getText());
-                    keyword_list.setModel(keywordsmap);
-                }
+                //--end save graph file
 
-                Node key = getKeywordFromGraph(keywordsTextField.getText());
-                if(! alreadyDefined) {
-                    setFeedback("Keyword added successfully", Color.WHITE);
-                }
-
-                QueryResult results = null;
-                List<Tweet> twitts = null;
-                Query queryString = new Query(keywordsTextField.getText());
-                try {
-                    results = link.search(queryString);
-                    twitts = results.getTweets();
-                } catch (TwitterException ex) {
-                    setFeedback("Error while searching:" + ex.getMessage(), Color.RED);
-                }
-
-                //processTwitts(twitts);
-
-                //display keyword visualization
+                //refresh the keyword visualization
+                tabs_control.setSelectedIndex(0);
                 displayKeyviz();
+
+            } catch (TwitterException ex) {
+                setFeedback("Error while searching: " + keywordsTextField.getText(), Color.RED);
+            }
+        }else{
+            setFeedback("You need to type a keyword...", Color.RED);
         }
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -1549,7 +1552,9 @@ public class TwitVizView extends FrameView {
             
             //delete edges and nodes related to the keyword
             for(int i=0;i<kwgraph.getNodeCount();i++) {
+
                 Node tmp = kwgraph.getNode(i);
+
                 if(tmp.isValid()) {
                     //If it is a keyword
                     if(tmp.getString("keyword").compareTo("null")!=0 && tmp.getString("keyword").compareTo((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
@@ -1585,36 +1590,31 @@ public class TwitVizView extends FrameView {
         }
     }//GEN-LAST:event_keyword_listKeyPressed
 
-    /*public void processTwitts(List<Tweet> twitts){
-        try{
+    public void processTwitts(List<Tweet> twitts) {
+        
         for(Tweet twitt : twitts)
         {
-            Node user = getUserFromKeyGraph(twitt.getFromUserId());
-            if(user.getString("screenName") != null){
-                // set user data
-                //User twitter = link.getUserDetail(String.valueOf(twitt.getFromUserId()));
-                user.setString("keyword", null);
-                user.setLong("id", 0);
-                user.setString("screenName", twitt.getFromUser());
-                user.setInt("relevance", 1);
-                user.setBoolean("friend", )
+            User twitterer;
+            try {
+                twitterer = link.getUserDetail(String.valueOf(twitt.getFromUserId()));
 
-                // end setting user data
+                if(twitterer!=null && !twitterer.isProtected()) {
+                
+                    Node familiar_stranger = getUserFromKeyGraph(twitterer); //this already creates the user node
+                    Node keyword = getKeywordFromGraph(keywordsTextField.getText()); //this already creates the keyword node
 
-                //Link to source
-                    Edge relation = keyword_viz.getEdge(,tmp);
-                    if(relation==null) {
-                        keyword_viz.addEdge(source, tmp);
-                        relation = keyword_viz.getEdge(source,tmp);
-                    }
+                    //Check if the person is in reality my friend!
+                    familiar_stranger.setBoolean("friend", isStrangerAFriend(twitterer));
+                    familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance")+1);
+
+                    // Create connection between keyword and tweeter
+                    kwgraph.addEdge(keyword, familiar_stranger);
+                }
+            } catch (TwitterException ex) {
+                setFeedback("Error getting a result user's info...", Color.RED);
             }
         }
-        }
-        catch(TwitterException e)
-        {
-             setFeedback("Error loading public line :(", Color.RED);
-        }
-    }*/
+    }
 
     public void displayTwitviz() {
         
