@@ -77,12 +77,8 @@ public class TwitVizView extends FrameView {
 
     public TwitVizView(SingleFrameApplication app) {
         super(app);
-
         
         initComponents();
-
-        tabs_control.setSelectedIndex(0);
-        displayKeyviz();
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.getFrame().setBounds((screen.width-400)/2, (screen.height-200)/2, 400, 200);
