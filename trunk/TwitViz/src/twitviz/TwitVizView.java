@@ -68,8 +68,6 @@ import prefuse.util.ColorLib;
 import prefuse.visual.NodeItem;
 import prefuse.visual.VisualItem;
 import twitter4j.*;
-//import winterwell.jtwitter.Twitter;//JavaDoc for Twitter Java API: http://www.winterwell.com/software/jtwitter/javadoc/
-//import winterwell.jtwitter.Twitter.User;
 
 /**
  * The application's main frame.
@@ -874,9 +872,9 @@ public class TwitVizView extends FrameView {
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel1)
-                                    .add(info_location, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
+                                    .add(info_location, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
                                 .add(18, 18, 18)
-                                .add(info_followerCount, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(info_followerCount, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 5, Short.MAX_VALUE)
                                 .add(222, 222, 222))
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -1151,12 +1149,53 @@ public class TwitVizView extends FrameView {
     }// </editor-fold>//GEN-END:initComponents
 
 
+    private void cleanUpGUI()
+    {
+        // clean-up session information
+        link = null;
+        user = null;
+
+        // reset social network tab
+        panel_viz.removeAll();
+        panel_viz.validate();
+        panel_viz.repaint();
+
+        // reset keywords tab
+        keyword_viz.removeAll();
+        keyword_viz.validate();
+        keyword_viz.repaint();
+        updateButton.setEnabled(false);
+        addButton.setEnabled(false);
+        removeButton.setEnabled(false);
+        
+        // reset keywords textbox
+        keywordsTextField.setText("Keywords");
+        keywordsTextField.setForeground(Color.GRAY);
+
+        // reset keywords list
+        keywordsmap.clear();
+        //keyword_list.setModel(keywordsmap);
+
+        // reset update text area
+        updateTextArea.setText("");
+
+        // reset home screen
+        twittsList.setModel(new DefaultListModel());
+        twittsList.validate();
+        twittsList.repaint();
+
+        info_followerCount.setText(null);
+        info_last_status.setText("");
+        
+
+    }
+
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         //trying to logout
         //if(link != null) {
         if(btn_login.getText().equals("Logout") )
         {
-            //restore GUI
+            //restore GUI to initial state (pre-login)
             lbl_username.setVisible(true);
             username.setText("");
             username.setVisible(true);
@@ -1167,17 +1206,7 @@ public class TwitVizView extends FrameView {
 
             btn_login.setText("Login");
 
-            link = null;
-            user = null;
-            /*panel_viz.removeAll();
-            panel_viz.validate();
-            panel_viz.repaint();
-            keyword_viz.removeAll();
-            keyword_viz.validate();
-            keyword_viz.repaint();*/
-            updateButton.setEnabled(false);
-            addButton.setEnabled(false);
-            removeButton.setEnabled(false);
+            cleanUpGUI();
         }
         else
         {
@@ -1186,14 +1215,14 @@ public class TwitVizView extends FrameView {
                 //user logging in for the first time
                 if(username.getText().length() > 0 && password.getPassword().length > 0) {
                     //establish connection to twitter servers using given credentials
-                    link = new Twitter(username.getText(),String.valueOf(password.getPassword()));
+                    link = new Twitter(username.getText(), String.valueOf(password.getPassword()));
 
                     //Lets make publicity :D
                     link.setUserAgent("TwitViz");
                     link.setClientVersion("TwitViz");
                     link.setSource("TwitViz");
 
-                    if(link!=null) {
+                    if(link != null) {
                         try {
                             user = link.getUserDetail(username.getText());
 
