@@ -1205,7 +1205,6 @@ public class TwitVizView extends FrameView {
             lbl_username.setVisible(true);
             username.setText("");
             username.setVisible(true);
-
             lbl_password.setVisible(true);
             password.setText("");
             password.setVisible(true);
