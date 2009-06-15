@@ -326,7 +326,7 @@ public class TwitVizView extends FrameView {
                                     buildSocialNetwork(user);
                                     displayTwitviz();
                                 } catch (TwitterException ex) {
-                                    setFeedback("Unable to follow "+node.getScreenName()+"!", Color.RED);
+                                    setFeedback("Unable to follow " + node.getScreenName() + "!", Color.RED);
                                 }
                             }
                         });
@@ -368,7 +368,7 @@ public class TwitVizView extends FrameView {
         for(int i=0;i<kwgraph.getNodeCount();i++) {
             key = kwgraph.getNode(i);
             //screenName == null when its a keyword node
-            if(key.getString("keyword").compareTo(name)==0 && key.getString("screenName").compareTo("null")==0) {
+            if(key.getString("keyword").compareToIgnoreCase(name)==0 && key.getString("screenName").compareTo("null")==0) {
                 return key;
             }
         }
@@ -1184,10 +1184,16 @@ public class TwitVizView extends FrameView {
         twittsList.validate();
         twittsList.repaint();
 
-        info_followerCount.setText(null);
+        // reset information screen
+        info_screenname.setText("Screenname: ");
+        info_name.setText("Name: ");
+        info_description.setText("");
+        info_location.setText("Location: ");
         info_last_status.setText("");
-        
-
+        info_picture.setIcon(null);
+        info_followerCount.setText("");
+        btn_follow.setEnabled(false);
+        btn_follow.setText("Follow");
     }
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
@@ -1325,7 +1331,7 @@ public class TwitVizView extends FrameView {
                                     Node keyword = getKeywordFromGraph((String)keywordsmap.get(k));
 
                                     for(int l=0;l<interests.size();l++) {
-                                        if(keyword.getString("keyword").compareTo((String)interests.elementAt(l))==0) {
+                                        if(keyword.getString("keyword").compareToIgnoreCase((String)interests.elementAt(l))==0) {
                                             kwgraph.addEdge(keyword, familiar_stranger);
                                         }
                                     }
@@ -1421,10 +1427,15 @@ public class TwitVizView extends FrameView {
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
 
         if(keywordsTextField.getText().length() > 0) {
-            
+
+            // empty keyword text field
+            keywordsTextField.setText("");
+            keywordsTextField.setForeground(Color.BLACK);
+
+            // add keyword to keywords map and find related twitters
             boolean alreadyDefined = false;
             for(int i = 0; i < keywordsmap.size(); i++) {
-                if(((String)keywordsmap.get(i)).compareTo(keywordsTextField.getText()) == 0) {
+                if(((String)keywordsmap.get(i)).compareToIgnoreCase(keywordsTextField.getText()) == 0) {
                     alreadyDefined = true;
                     break;
                 }
@@ -1600,7 +1611,7 @@ public class TwitVizView extends FrameView {
 
                 if(tmp.isValid()) {
                     //If it is a keyword
-                    if(tmp.getString("keyword").compareTo("null")!=0 && tmp.getString("keyword").compareTo((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
+                    if(tmp.getString("keyword").compareTo("null")!=0 && tmp.getString("keyword").compareToIgnoreCase((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
 
                         //getChild to remove dependencies
                         for(int j=0;j<tmp.getChildCount();j++) {
@@ -1642,7 +1653,7 @@ public class TwitVizView extends FrameView {
 
                 if(tmp.isValid()) {
                     //If it is a keyword
-                    if(tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareTo((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
+                    if(tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String)keywordsmap.elementAt(keyword_list.getSelectedIndex()))==0) {
 
                         //getChild to remove dependencies
                         for(int j = 0; j < tmp.getChildCount(); j++) {
