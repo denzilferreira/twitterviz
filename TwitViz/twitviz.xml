@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Mon Jun 15 01:06:33 BST 2009 -->
+  <!-- prefuse GraphML Writer | Tue Jun 16 01:05:18 BST 2009 -->
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
   </key>
@@ -36,17 +36,17 @@
       <data key="isFollowed">false</data>
     </node>
     <node id="1">
-      <data key="id">16492188L</data>
+      <data key="id">17118156L</data>
       <data key="protectedUser">false</data>
-      <data key="screenName">liznedarierref</data>
+      <data key="screenName">ducdeluxe</data>
       <data key="relevance">1</data>
       <data key="follows">false</data>
       <data key="isFollowed">false</data>
     </node>
     <node id="2">
-      <data key="id">17118156L</data>
+      <data key="id">16492188L</data>
       <data key="protectedUser">false</data>
-      <data key="screenName">ducdeluxe</data>
+      <data key="screenName">liznedarierref</data>
       <data key="relevance">1</data>
       <data key="follows">false</data>
       <data key="isFollowed">false</data>
