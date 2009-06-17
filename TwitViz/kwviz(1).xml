@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
+  http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <!-- prefuse GraphML Writer | Tue Jun 16 16:10:36 BST 2009 -->
+  <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
+  <key id="id" for="node" attr.name="id" attr.type="long">
+    <default>0</default>
+  </key>
+  <key id="screenName" for="node" attr.name="screenName" attr.type="string"/>
+  <key id="relevance" for="node" attr.name="relevance" attr.type="int">
+    <default>10</default>
+  </key>
+  <key id="friend" for="node" attr.name="friend" attr.type="boolean">
+    <default>false</default>
+  </key>
+  <key id="follower" for="node" attr.name="follower" attr.type="boolean">
+    <default>false</default>
+  </key>
+
+  <graph edgedefault="directed">
+    <!-- nodes -->
+    <node id="0">
+      <data key="keyword">Obama</data>
+      <data key="id">0L</data>
+      <data key="screenName">null</data>
+      <data key="relevance">10</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+    </node>
+
+    <!-- edges -->
+  </graph>
+</graphml>

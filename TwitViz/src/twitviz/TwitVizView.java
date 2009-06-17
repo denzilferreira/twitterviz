@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import org.json.HTTP;
 import prefuse.Constants;
 import prefuse.Display;
 import prefuse.Visualization;
@@ -64,8 +62,9 @@ import prefuse.data.io.GraphMLReader;
 import prefuse.data.io.GraphMLWriter;
 import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
-import prefuse.util.ColorLib;
+import prefuse.util.*;
 import prefuse.visual.NodeItem;
+import prefuse.visual.VisualGraph;
 import prefuse.visual.VisualItem;
 import twitter4j.*;
 
@@ -158,28 +157,41 @@ public class TwitVizView extends FrameView {
     //Visualization of keywords and strangers!
     private void displayKeyviz() {
 
-        //Read the database
-        try {
-            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
         if (kwvis != null) {
             kwvis.removeGroup("graph");
-            kwvis.add("graph", kwgraph);
-
+            kwvis.addGraph("graph", kwgraph);
             kwvis.repaint();
 
             kwvis.run("color");  // assign the colors
             kwvis.run("size"); //assign the sizes
-            kwvis.run("layout"); // start up the animated layout
+            kwvis.run("layout"); // start up the animated layout*/
             return; //this will avoid the threads from overlapping visualizations over and over making it slow!
         } else {
             kwvis = new Visualization();
-            kwvis.add("graph", kwgraph);
+            kwvis.addGraph("graph", kwgraph);
         }
+
+         /*kwgraph.addGraphModelListener(new GraphListener(){
+            public void graphChanged(Graph g, String table, int start, int end, int col, int type){
+
+                for(int i = start; i <= end; i++){
+                    switch(type){
+                        case EventConstants.INSERT:
+                            g.
+                            break;
+                    }
+                }
+                kwvis.removeGroup("graph");
+                kwvis.add("graph", g);
+                kwvis.run("draw");
+            }
+        });
+        TupleSetListener tset = new TupleSetListener() {
+            public void tupleSetChanged(TupleSet tset, Tuple[] added, Tuple[] removed){
+                tset.
+            }
+        };
+        kwgraph.addTupleSetListener(tset);*/
 
         LabelRenderer rend = new CustomLabelRenderer();
         rend.setRoundedCorner(8, 8);
@@ -325,350 +337,6 @@ public class TwitVizView extends FrameView {
         kwvis.run("size"); //assign the sizes
         kwvis.run("layout"); // start up the animated layout
 
-    }
-
-    private boolean doWeFollow(int id) {
-        IDs following;
-        try {
-            following = link.getFriendsIDs();
-
-            for (int followed : following.getIDs()) {
-                if (followed == id) {
-                    return true;
-                }
-            }
-            return false;
-        } catch (TwitterException ex) {
-            setFeedback("Unable to get who you follow list...", Color.RED);
-        }
-        return false;
-    }
-
-    private void getUserInfo(int id) {
-        try {
-            final User node = link.getUserDetail(String.valueOf(id));
-
-            if (node != null && !node.isProtected()) {
-                section_tabs.setSelectedIndex(1);
-                info_screenname.setText("Screenname: " + node.getScreenName());
-                info_name.setText("Name: " + node.getName());
-                info_description.setText(node.getDescription());
-                info_location.setText("Location: " + node.getLocation());
-                info_last_status.setText(node.getStatusText());
-                info_picture.setIcon(new ImageIcon(node.getProfileImageURL()));
-                info_followerCount.setText(String.valueOf(node.getFollowersCount()));
-
-                if (node.getId() == user.getId()) {
-                    btn_follow.setText("You!!!");
-                    btn_follow.setEnabled(false);
-                } else {
-                    //Check if we follow already
-                    if (!doWeFollow(node.getId())) { //If not following already...
-                        btn_follow.setEnabled(true);
-                        btn_follow.setText("Follow");
-                        btn_follow.addActionListener(new ActionListener() {
-
-                            public void actionPerformed(ActionEvent arg0) {
-                                try {
-                                    link.enableNotification(String.valueOf(node.getId()));
-                                    setFeedback(node.getScreenName() + " followed successfully", Color.WHITE);
-                                    //update the social network
-                                    buildSocialNetwork(user);
-                                    displayTwitviz();
-                                } catch (TwitterException ex) {
-                                    setFeedback("Unable to follow " + node.getScreenName() + "!", Color.RED);
-                                }
-                            }
-                        });
-                        btn_follow.repaint();
-                        btn_follow.setVisible(true);
-                    } else {
-                        btn_follow.setEnabled(true);
-                        btn_follow.setText("Unfollow");
-                        btn_follow.addActionListener(new ActionListener() {
-
-                            public void actionPerformed(ActionEvent arg0) {
-                                try {
-                                    link.destroyFriendship(String.valueOf(node.getId()));
-                                    setFeedback(node.getScreenName() + " unfollowed successfully", Color.WHITE);
-                                    //update the social network
-                                    buildSocialNetwork(user);
-                                    displayTwitviz();
-                                } catch (TwitterException ex) {
-                                    setFeedback("Unable to unfollow " + node.getScreenName() + "!", Color.RED);
-                                }
-                            }
-                        });
-                        btn_follow.repaint();
-                        btn_follow.setVisible(true);
-                    }
-                }
-            } else {
-                setFeedback("Couldn't load user information!", Color.RED);
-            }
-        } catch (TwitterException ex) {
-            setFeedback("Couldn't load user information!", Color.RED);
-        }
-    }
-
-    //Function that gets a specific node by keyword.
-    //--If it doesn't exist, creates one automatically and returns it
-    private Node getKeywordFromGraph(String name) {
-
-        Node key = null;
-        for (int i = 0; i < kwgraph.getNodeCount(); i++) {
-            key = kwgraph.getNode(i);
-            //screenName == null when its a keyword node
-            if (key.getString("keyword").compareToIgnoreCase(name) == 0 && key.getString("screenName").compareTo("null") == 0) {
-                return key;
-            }
-        }
-
-        key = kwgraph.addNode();
-        key.setString("keyword", name);
-
-        //Save to graph file
-        try {
-            new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-        } catch (DataIOException e) {
-            e.printStackTrace();
-        }
-        //--end save graph file
-
-        return key;
-    }
-
-    private Node getUserFromKeyGraph(User tweeterer) {
-        int nodePosition = -1;
-        for (int j = 0; j < kwgraph.getNodeCount(); j++) {
-            Node tmp = kwgraph.getNode(j);
-
-            if (tmp.getInt("id") == tweeterer.getId()) {
-                nodePosition = j;
-                break;
-            }
-        }
-
-        Node user = null;
-
-        if (nodePosition >= 0) {
-            user = kwgraph.getNode(nodePosition);
-        } else {
-            user = kwgraph.addNode();
-            user.setLong("id", tweeterer.getId());
-            user.setString("screenName", tweeterer.getScreenName());
-            user.setInt("relevance", 1);
-            user.setBoolean("friend", isStrangerAFriend(tweeterer));
-
-            //Save to graph file
-            try {
-                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-            } catch (DataIOException e) {
-                e.printStackTrace();
-            }
-        //--end save graph file
-
-        }
-
-        return user;
-    }
-
-    //Function that checks if someone is following you back
-    private boolean isFollowing(List<User> list, User who) {
-        //list is your followers list...
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                User tmp = list.get(i);
-
-                if (!tmp.isProtected()) {
-                    //is my friend among my followers?
-                    if (tmp.getId() == who.getId()) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        return false;
-    }
-
-    //Function that builds the logged in user's network
-    private void buildSocialNetwork(User user) {
-
-        //restore saved database
-        try {
-            graph = new GraphMLReader().readGraph("twitviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        Node source = null;
-        if (graph.getNodeCount() > 0) {
-            source = graph.getNode(0); //get the first node = user
-            if (user.getId() != source.getLong("id")) {
-                graph.clear();
-                source = graph.addNode();
-            }
-        }
-
-        source.setLong("id", user.getId());
-        source.setString("screenName", user.getScreenName());
-        source.setBoolean("protectedUser", user.isProtected());
-        source.setInt("relevance", 2);
-
-        List<User> friends = null;
-        try {
-            friends = link.getFriends(Integer.toString(user.getId()));
-        } catch (TwitterException ex) {
-            setFeedback("Error loading friends", Color.RED);
-        }
-
-        List<User> followers = null;
-        try {
-            followers = link.getFollowers();
-        } catch (TwitterException ex) {
-            setFeedback("Error loading followers", Color.RED);
-        }
-
-        for (int i = 0; i < friends.size(); i++) {
-            User friend = friends.get(i);
-
-            //There are users with protected profiles and data
-            if (!friend.isProtected()) {
-
-                Node tmp = null;
-                int friendPos = -1;
-                for (int a = 0; a < graph.getNodeCount(); a++) {
-                    tmp = graph.getNode(a);
-                    if (tmp.getLong("id") == friend.getId()) {
-                        friendPos = a;
-                        break;
-                    }
-                }
-
-                //New friend
-                if (friendPos == -1) {
-                    tmp = graph.addNode();
-                //restore saved
-                } else {
-                    tmp = graph.getNode(friendPos);
-                }
-
-                //set node data
-                tmp.setLong("id", friend.getId());
-                tmp.setString("screenName", friend.getScreenName());
-                tmp.setBoolean("protectedUser", friend.isProtected());
-
-                //The relevance might already be a different number!
-                if (friendPos == -1) {
-                    tmp.setInt("relevance", 1);
-                } else {
-                    tmp.setInt("relevance", tmp.getInt("relevance"));
-                }
-                //--end node data
-
-                //Link to source
-                Edge relation = graph.getEdge(source, tmp);
-                if (relation == null) {
-                    graph.addEdge(source, tmp);
-                    relation = graph.getEdge(source, tmp);
-                }
-
-                if (isFollowing(followers, friend)) {
-                    tmp.setBoolean("follows", true);
-                    relation.setInt("relationship", 2);
-                } else {
-                    tmp.setBoolean("follows", false);
-                    relation.setInt("relationship", 1);
-                }
-
-                if (depth > 0) {
-                    try {
-                        getSubfriends(link.getFriends(Integer.toString(friend.getId())), tmp);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        }
-
-        //Save to graph file
-        try {
-            new GraphMLWriter().writeGraph(graph, new File("twitviz.xml"));
-        } catch (DataIOException e) {
-            e.printStackTrace();
-        }
-    //--end save graph file
-    }
-
-    //Recursive function that will get friends of a friend
-    private void getSubfriends(List<User> friends, Node source) {
-        depth--;
-        if (depth > 0) {
-
-            for (User friend : friends) {
-                //There are users with protected profiles and data
-                List<User> followers = null;
-                try {
-                    followers = link.getFollowers(Integer.toString(friend.getId()));
-                } catch (TwitterException ex) {
-                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                if (!friend.isProtected()) {
-                    Node tmp = null;
-                    int friendPos = -1;
-                    for (int a = 0; a < graph.getNodeCount(); a++) {
-                        tmp = graph.getNode(a);
-                        if (tmp.getLong("id") == friend.getId()) {
-                            friendPos = a;
-                            break;
-                        }
-                    }
-
-                    //New friend
-                    if (friendPos == -1) {
-                        tmp = graph.addNode();
-                    //restore saved
-                    } else {
-                        tmp = graph.getNode(friendPos);
-                    }
-
-                    //set node data
-                    tmp.setLong("id", friend.getId());
-                    tmp.setString("screenName", friend.getScreenName());
-                    tmp.setBoolean("protectedUser", friend.isProtected());
-
-                    //The relevance might already be a different number!
-                    if (friendPos == -1) {
-                        tmp.setInt("relevance", 1);
-                    } else {
-                        tmp.setInt("relevance", tmp.getInt("relevance"));
-                    }
-                    //--end node data
-
-                    //Link to source
-                    Edge relation = graph.getEdge(source, tmp);
-                    if (relation == null) {
-                        graph.addEdge(source, tmp);
-                        relation = graph.getEdge(source, tmp);
-                    }
-
-                    if (isFollowing(followers, friend)) {
-                        tmp.setBoolean("follows", true);
-                        relation.setInt("relationship", 2);
-                    } else {
-                        tmp.setBoolean("follows", false);
-                        relation.setInt("relationship", 1);
-                    }
-
-                    try {
-                        getSubfriends(link.getFriends(Integer.toString(friend.getId())), tmp);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        }
     }
 
     /** This method is called from within the constructor to
@@ -1201,10 +869,371 @@ public class TwitVizView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void getUserInfo(int id) {
+        try {
+            final User node = link.getUserDetail(String.valueOf(id));
+
+            if (node != null && !node.isProtected()) {
+                section_tabs.setSelectedIndex(1);
+                info_screenname.setText("Screenname: " + node.getScreenName());
+                info_name.setText("Name: " + node.getName());
+                info_description.setText(node.getDescription());
+                info_location.setText("Location: " + node.getLocation());
+                info_last_status.setText(node.getStatusText());
+                info_picture.setIcon(new ImageIcon(node.getProfileImageURL()));
+                info_followerCount.setText(String.valueOf(node.getFollowersCount()));
+
+                if (node.getId() == user.getId()) {
+                    btn_follow.setText("You!!!");
+                    btn_follow.setEnabled(false);
+                } else {
+                    //Check if we follow already
+                    if (!doWeFollow(node.getId())) { //If not following already...
+                        btn_follow.setEnabled(true);
+                        btn_follow.setText("Follow");
+                        btn_follow.addActionListener(new ActionListener() {
+
+                            public void actionPerformed(ActionEvent arg0) {
+                                try {
+                                    link.enableNotification(String.valueOf(node.getId()));
+                                    setFeedback(node.getScreenName() + " followed successfully", Color.WHITE);
+                                    //update the social network
+                                    buildSocialNetwork();
+                                    displayTwitviz();
+                                } catch (TwitterException ex) {
+                                    setFeedback("Unable to follow " + node.getScreenName() + "!", Color.RED);
+                                }
+                            }
+                        });
+                        btn_follow.repaint();
+                        btn_follow.setVisible(true);
+                    } else {
+                        btn_follow.setEnabled(true);
+                        btn_follow.setText("Unfollow");
+                        btn_follow.addActionListener(new ActionListener() {
+
+                            public void actionPerformed(ActionEvent arg0) {
+                                try {
+                                    link.destroyFriendship(String.valueOf(node.getId()));
+                                    setFeedback(node.getScreenName() + " unfollowed successfully", Color.WHITE);
+                                    //update the social network
+                                    buildSocialNetwork();
+                                    displayTwitviz();
+                                } catch (TwitterException ex) {
+                                    setFeedback("Unable to unfollow " + node.getScreenName() + "!", Color.RED);
+                                }
+                            }
+                        });
+                        btn_follow.repaint();
+                        btn_follow.setVisible(true);
+                    }
+                }
+            } else {
+                setFeedback("Couldn't load user information!", Color.RED);
+            }
+        } catch (TwitterException ex) {
+            setFeedback("Couldn't load user information!", Color.RED);
+        }
+    }
+
+    //Function that gets a specific node by keyword, from the keyword graph.
+    //--If it doesn't exist, creates one automatically and returns it
+    private Node getKeywordFromGraph(String name) {
+
+        Node key = null;
+        for (int i = 0; i < kwgraph.getNodeCount(); i++) {
+            key = kwgraph.getNode(i);
+            //screenName == null when its a keyword node
+            if(key.getString("keyword") != null)
+                if (key.getString("keyword").compareToIgnoreCase(name) == 0) {
+                    return key;
+            }
+        }
+
+        key = kwgraph.addNode();
+        key.setString("keyword", name);
+
+        //Save to graph file
+        try {
+            graphWriter.writeGraph(kwgraph, keywordsFile);
+        } catch (DataIOException e) {
+            e.printStackTrace();
+        }
+        //--end save graph file
+
+        return key;
+    }
+
+    //Function that gets a specific node by given user node fro the keyword graph.
+    //--If it doesn't exist, creates one automatically and returns it
+    private Node getUserFromKeyGraph(User tweeterer) {
+        int nodePosition = -1;
+        Node tmp = null;
+        Node user_stranger = null;
+
+        for (int j = 0; j < kwgraph.getNodeCount(); j++) {
+            tmp = kwgraph.getNode(j);
+
+            if (tmp.getInt("id") == tweeterer.getId()) {
+                nodePosition = j;
+                break;
+            }
+        }
+
+        if (nodePosition >= 0) {
+            user_stranger = tmp;
+            tmp = null;
+        } else {
+            user_stranger = kwgraph.addNode();
+            user_stranger.setLong("id", tweeterer.getId());
+            user_stranger.setString("screenName", tweeterer.getScreenName());
+            user_stranger.setInt("relevance", 1);
+            user_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
+
+            //Save to graph file
+            try {
+                graphWriter.writeGraph(kwgraph, keywordsFile);
+            } catch (DataIOException e) {
+                e.printStackTrace();
+            }
+        //--end save graph file
+
+        }
+
+        return user_stranger;
+    }
+
+    private boolean doWeFollow(int id) {
+        IDs following;
+        try {
+            following = link.getFriendsIDs();
+
+            for (int followed : following.getIDs()) {
+                if (followed == id) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (TwitterException ex) {
+            setFeedback("Unable to get who you follow list...", Color.RED);
+        }
+        return false;
+    }
+
+    //Function that checks if someone is following you back
+    private boolean isFollowing(List<User> list, User who) {
+        //list is your followers list...
+        if (list != null)
+            return list.contains(who);
+        else
+            return false;
+            /*for (User tmp : list){
+                if (!tmp.isProtected()) {
+                    //is my friend among my followers?
+                    if (tmp.getId() == who.getId()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;*/
+    }
+
+    private boolean isStrangerAFriend(User stranger) {
+        boolean isFriend = false;
+
+        for (int i = 0; i < graph.getNodeCount(); i++) {
+            Node tmp = graph.getNode(i);
+            if (tmp.getInt("id") == stranger.getId()) {
+                isFriend = true;
+                break;
+            }
+        }
+
+        return isFriend;
+    }
+
+    //Function that builds the logged in user's network
+    private void buildSocialNetwork() {
+
+        Node source = null;
+
+        // There was no graph loaded from twitviz.xml
+        /*if (graph == null) {
+            graph = new Graph();
+            source = graph.addNode();
+        } else {*/
+            // There was a graph loaded from twitviz.xml
+            if (graph.getNodeCount() > 0) {
+                source = graph.getNode(0); //get the first node = logged on user
+                if (user.getId() != source.getLong("id")) {
+                    graph.clear();
+                    source = graph.addNode();
+                }
+            }
+        //}
+
+        source.setLong("id", user.getId());
+        source.setString("screenName", user.getScreenName());
+        source.setBoolean("protectedUser", user.isProtected());
+        source.setInt("relevance", 2);
+
+        List<User> friends = null;
+        try {
+            friends = link.getFriends(Integer.toString(user.getId()));
+        } catch (TwitterException ex) {
+            setFeedback("Error loading friends", Color.RED);
+        }
+
+        List<User> followers = null;
+        try {
+            followers = link.getFollowers();
+        } catch (TwitterException ex) {
+            setFeedback("Error loading followers", Color.RED);
+        }
+
+        for (int i = 0; i < friends.size(); i++) {
+            User friend = friends.get(i);
+
+            //There are users with protected profiles and data
+            if (!friend.isProtected()) {
+
+                Node tmp = null;
+                int friendPos = -1;
+                for (int a = 0; a < graph.getNodeCount(); a++) {
+                    tmp = graph.getNode(a);
+                    if (tmp.getLong("id") == friend.getId()) {
+                        friendPos = a;
+                        break;
+                    }
+                }
+
+                //New friend
+                if (friendPos == -1) {
+                    tmp = graph.addNode();
+                //restore saved
+                } else {
+                    tmp = graph.getNode(friendPos);
+                }
+
+                //set node data
+                tmp.setLong("id", friend.getId());
+                tmp.setString("screenName", friend.getScreenName());
+                tmp.setBoolean("protectedUser", friend.isProtected());
+
+                //The relevance might already be a different number!
+                if (friendPos == -1) {
+                    tmp.setInt("relevance", 1);
+                } else {
+                    tmp.setInt("relevance", tmp.getInt("relevance"));
+                }
+                //--end node data
+
+                //Link to source
+                Edge relation = graph.getEdge(source, tmp);
+                if (relation == null) {
+                    graph.addEdge(source, tmp);
+                    relation = graph.getEdge(source, tmp);
+                }
+
+                if (isFollowing(followers, friend)) {
+                    tmp.setBoolean("follows", true);
+                    relation.setInt("relationship", 2);
+                } else {
+                    tmp.setBoolean("follows", false);
+                    relation.setInt("relationship", 1);
+                }
+
+                if (depth > 0) {
+                    try {
+                        getSubfriends(link.getFriends(Integer.toString(friend.getId())), tmp);
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+
+        //Save to graph file
+        try {
+            graphWriter.writeGraph(graph, networkFile);
+        } catch (DataIOException e) {
+            e.printStackTrace();
+        }
+    //--end save graph file
+    }
+
+    //Recursive function that will get friends of a friend
+    private void getSubfriends(List<User> friends, Node source) {
+        depth--;
+        if (depth > 0) {
+
+            for (User friend : friends) {
+                //There are users with protected profiles and data
+                List<User> followers = null;
+                try {
+                    followers = link.getFollowers(Integer.toString(friend.getId()));
+                } catch (TwitterException ex) {
+                    Logger.getLogger(TwitVizView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (!friend.isProtected()) {
+                    Node tmp = null;
+                    int friendPos = -1;
+                    for (int a = 0; a < graph.getNodeCount(); a++) {
+                        tmp = graph.getNode(a);
+                        if (tmp.getLong("id") == friend.getId()) {
+                            friendPos = a;
+                            break;
+                        }
+                    }
+
+                    //New friend
+                    if (friendPos == -1) {
+                        tmp = graph.addNode();
+                    //restore saved
+                    } else {
+                        tmp = graph.getNode(friendPos);
+                    }
+
+                    //set node data
+                    tmp.setLong("id", friend.getId());
+                    tmp.setString("screenName", friend.getScreenName());
+                    tmp.setBoolean("protectedUser", friend.isProtected());
+
+                    //The relevance might already be a different number!
+                    if (friendPos == -1) {
+                        tmp.setInt("relevance", 1);
+                    } else {
+                        tmp.setInt("relevance", tmp.getInt("relevance"));
+                    }
+                    //--end node data
+
+                    //Link to source
+                    Edge relation = graph.getEdge(source, tmp);
+                    if (relation == null) {
+                        graph.addEdge(source, tmp);
+                        relation = graph.getEdge(source, tmp);
+                    }
+
+                    if (isFollowing(followers, friend)) {
+                        tmp.setBoolean("follows", true);
+                        relation.setInt("relationship", 2);
+                    } else {
+                        tmp.setBoolean("follows", false);
+                        relation.setInt("relationship", 1);
+                    }
+
+                    try {
+                        getSubfriends(link.getFriends(Integer.toString(friend.getId())), tmp);
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+    }
+    
     private void cleanUpGUI() {
-        // clean-up session information
-        link = null;
-        user = null;
 
         // reset social network tab
         panel_viz.removeAll();
@@ -1261,6 +1290,12 @@ public class TwitVizView extends FrameView {
 
             btn_login.setText("Login");
 
+            // clean-up session information
+            link = null;
+            user = null;
+            graph = null;
+            kwgraph = null;
+
             cleanUpGUI();
         } else {
             if (btn_login.getText().equals("Login")) {
@@ -1278,7 +1313,7 @@ public class TwitVizView extends FrameView {
 
                             //Lets make publicity :D
                             link.setUserAgent("TwitViz");
-                            link.setClientVersion("TwitViz");
+                            link.setClientVersion("TwitViz 1.0");
                             link.setSource("TwitViz");
 
                             if (link != null) {
@@ -1292,22 +1327,42 @@ public class TwitVizView extends FrameView {
                                 btn_login.setText("Logout");
 
                                 updateButton.setEnabled(true);
+                                addButton.setEnabled(true);
+                                removeButton.setEnabled(true);
 
-                                buildSocialNetwork(user);
+                                //restore saved databases
+                                try {
+
+                                    if (networkFile.exists()) {
+                                        graph = graphReader.readGraph("twitviz.xml");
+                                    }
+
+                                    if (keywordsFile.exists()) {
+                                        kwgraph = graphReader.readGraph("kwviz.xml");
+                                    } /*else {
+                                        kwgraph = new Graph(true);
+                                    }*/
+
+                                } catch (DataIOException e) {
+                                    e.printStackTrace();
+                                    setFeedback(e.getMessage() + "Please restart the application", Color.RED);
+                                }
+
+                                buildSocialNetwork();
 
                                 displayTwitviz();
 
                                 //load previous stored keywords
                                 loadKeywords();
-
-                                //Start public line monitor, updates every 20 seconds
+                                
+                                //Start public line monitor, updates every 20 seconds, in order to get twitters related to the specified keywords
                                 java.util.Timer timer = new java.util.Timer();
                                 timer.scheduleAtFixedRate(new java.util.TimerTask() {
 
                                     public void run() {
                                         get_PublicLine();
                                     }
-                                }, 5000, 20000); //Get public line every 10
+                                }, 5000, refreshInterval); //Get public line every 20 seconds
 
                                 getUserInfo(user.getId());
 
@@ -1316,11 +1371,13 @@ public class TwitVizView extends FrameView {
 
                                 setTwittsList();
                             }
-                        }
                     }
                     else{
                         setFeedback("Bad login! Please try again.", Color.RED);
                     }
+                } else{
+                    setFeedback("Username and password are needed!", Color.RED);
+                }
 
                 } catch (TwitterException ex) {
                     if(ex.getStatusCode() == 401)
@@ -1334,28 +1391,6 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_btn_loginActionPerformed
 
-    private boolean isStrangerAFriend(User stranger) {
-        boolean friend = false;
-
-        //restore saved database
-        try {
-            graph = new GraphMLReader().readGraph("twitviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        for (int i = 0; i < graph.getNodeCount(); i++) {
-            Node tmp = graph.getNode(i);
-            if (tmp.getInt("id") == stranger.getId()) {
-                friend = true;
-                break;
-            }
-        }
-
-        return friend;
-    }
-
     private void get_PublicLine() {
         //we only start processing the public line if we have keywords on the list!
         if (keywordsmap.getSize() > 0) {
@@ -1363,12 +1398,10 @@ public class TwitVizView extends FrameView {
             try {
                 List<Status> publicStatus = link.getPublicTimeline();
 
-                for (int i = 0; i < publicStatus.size(); i++) {
-
-                    Status stat = publicStatus.get(i);
+                for(Status stat : publicStatus){
 
                     //If the user has something on the text, etc that we are interested in...
-                    Vector interests = getInterests(stat);
+                    Vector<String> interests = getInterests(stat);
 
                     if (interests.size() > 0) {
 
@@ -1380,7 +1413,7 @@ public class TwitVizView extends FrameView {
 
                             if (familiar_stranger != null) {
 
-                                //Relevance will change according to how important the user is
+                                //Relevance will change according to how important the user is: number of keywords in common
                                 familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance") + interests.size());
 
 
@@ -1391,9 +1424,12 @@ public class TwitVizView extends FrameView {
                                 for (int k = 0; k < keywordsmap.getSize(); k++) {
                                     Node keyword = getKeywordFromGraph((String) keywordsmap.get(k));
 
-                                    for (int l = 0; l < interests.size(); l++) {
-                                        if (keyword.getString("keyword").compareToIgnoreCase((String) interests.elementAt(l)) == 0) {
-                                            kwgraph.addEdge(keyword, familiar_stranger);
+                                    for (String s : interests) {
+                                        if(keyword.getString("keyword") != null)
+                                        {
+                                            if (keyword.getString("keyword").compareToIgnoreCase(s) == 0) {vKwGraph.addEdge(keyword, familiar_stranger);
+                                                kwgraph.addEdge(keyword, familiar_stranger);
+                                            }
                                         }
                                     }
                                 }
@@ -1404,7 +1440,7 @@ public class TwitVizView extends FrameView {
 
                 //Save to graph file
                 try {
-                    new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+                    graphWriter.writeGraph(kwgraph, keywordsFile);
                 } catch (DataIOException e) {
                     e.printStackTrace();
                 }
@@ -1419,7 +1455,7 @@ public class TwitVizView extends FrameView {
     }
 
     //Returns the keywords present on a tweet
-    private Vector getInterests(Status stat) {
+    private Vector<String> getInterests(Status stat) {
         Vector keywords = new Vector();
         for (int i = 0; i < keywordsmap.getSize(); i++) {
             if (stat.getText().matches(".*" + (String) keywordsmap.get(i) + ".*")) {
@@ -1431,12 +1467,6 @@ public class TwitVizView extends FrameView {
 
     //Load previous selected keywords
     private void loadKeywords() {
-        try {
-            kwgraph = new GraphMLReader().readGraph("kwviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
 
         Node key = null;
         for (int i = 0; i < kwgraph.getNodeCount(); i++) {
@@ -1489,10 +1519,6 @@ public class TwitVizView extends FrameView {
 
         if (keywordsTextField.getText().length() > 0) {
 
-            // empty keyword text field
-            keywordsTextField.setText("");
-            keywordsTextField.setForeground(Color.BLACK);
-
             // add keyword to keywords map and find related twitters
             boolean alreadyDefined = false;
             for (int i = 0; i < keywordsmap.size(); i++) {
@@ -1515,52 +1541,37 @@ public class TwitVizView extends FrameView {
                 setFeedback("Cannot connect to Twitter. Try again later. Error: " + String.valueOf(ex.getStatusCode()), Color.RED);
             }
 
+            // empty keyword text field
+            keywordsTextField.setText("");
+            keywordsTextField.setForeground(Color.BLACK);
+
             //Save to graph file
             try {
-                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+                graphWriter.writeGraph(kwgraph, keywordsFile);
             } catch (DataIOException e) {
                 e.printStackTrace();
             }
             //--end save graph file
 
-            //display keyword visualization
+            //refresh the keyword visualization
+            tabs_control.setSelectedIndex(0);
             displayKeyviz();
+        } else {
+            setFeedback("You need to type a keyword...", Color.RED);
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void searchForKeywords() throws TwitterException {
-        //if(keywordsTextField.getText().length()>0) {
 
         QueryResult results = null;
         List<Tweet> twitts = null;
         Query queryString = new Query(keywordsTextField.getText());
-        //try {
         results = link.search(queryString);
         twitts = results.getTweets();
 
         processTwitts(twitts);
-
-    //Save to graph file
-                    /*try{
-    new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
-    }catch(DataIOException e){
-    e.printStackTrace();
-    }
-    //--end save graph file
-
-    //refresh the keyword visualization
-    tabs_control.setSelectedIndex(0);
-    displayKeyviz();
-
-    /*} catch (TwitterException ex) {
-    setFeedback("Error while searching: " + keywordsTextField.getText(), Color.RED);
-    }
-    }else{
-    setFeedback("You need to type a keyword...", Color.RED);
-    }*/
     }
 
-    //TODO: Refine displaying of search results (twitts) by including more parameters like user, time, source
     private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
         if (evt.getKeyCode() == 10) {
             btn_login.doClick();
@@ -1688,7 +1699,7 @@ public class TwitVizView extends FrameView {
 
             //Save to graph file
             try {
-                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+                graphWriter.writeGraph(kwgraph, keywordsFile);
             } catch (DataIOException e) {
                 e.printStackTrace();
             }
@@ -1738,7 +1749,7 @@ public class TwitVizView extends FrameView {
 
             //Save to graph file
             try {
-                new GraphMLWriter().writeGraph(kwgraph, new File("kwviz.xml"));
+                graphWriter.writeGraph(kwgraph, keywordsFile);
             } catch (DataIOException e) {
                 e.printStackTrace();
             }
@@ -1780,14 +1791,6 @@ public class TwitVizView extends FrameView {
     }
 
     public void displayTwitviz() {
-
-        //Read the database
-        try {
-            graph = new GraphMLReader().readGraph("twitviz.xml");
-        } catch (DataIOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
 
         if (vis != null) {
             vis.removeGroup("graph");
@@ -1993,17 +1996,27 @@ public class TwitVizView extends FrameView {
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
 
+
+    // Constants
+    private static final int refreshInterval = 20000;
+
     //Twitter API vars
     private Twitter link = null;
     private User user = null;
 
+    // File variables
+    File networkFile = new File("twitviz.xml");
+    File keywordsFile = new File("kwviz.xml");
+
     //Prefuse vars
     private Graph graph;
     private Graph kwgraph;
+    private VisualGraph vGraph;
+    private VisualGraph vKwGraph;
     private Visualization vis = null;
     private Visualization kwvis = null;
-    private GraphMLWriter graphWriter;
-    private GraphMLReader graphReader;
+    private GraphMLWriter graphWriter = new GraphMLWriter();
+    private GraphMLReader graphReader = new GraphMLReader();
 
     //Keywords var
     private DefaultListModel keywordsmap = new DefaultListModel();
