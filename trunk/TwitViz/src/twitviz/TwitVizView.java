@@ -160,7 +160,7 @@ public class TwitVizView extends FrameView {
         if (kwvis != null) {
             kwvis.removeGroup("graph");
             kwvis.addGraph("graph", kwgraph);
-            kwvis.repaint();
+            //kwvis.repaint();
 
             kwvis.run("color");  // assign the colors
             kwvis.run("size"); //assign the sizes
@@ -953,14 +953,6 @@ public class TwitVizView extends FrameView {
         key = kwgraph.addNode();
         key.setString("keyword", name);
 
-        //Save to graph file
-        try {
-            graphWriter.writeGraph(kwgraph, keywordsFile);
-        } catch (DataIOException e) {
-            e.printStackTrace();
-        }
-        //--end save graph file
-
         return key;
     }
 
@@ -989,14 +981,6 @@ public class TwitVizView extends FrameView {
             user_stranger.setString("screenName", tweeterer.getScreenName());
             user_stranger.setInt("relevance", 1);
             user_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
-
-            //Save to graph file
-            try {
-                graphWriter.writeGraph(kwgraph, keywordsFile);
-            } catch (DataIOException e) {
-                e.printStackTrace();
-            }
-        //--end save graph file
 
         }
 
@@ -1427,7 +1411,7 @@ public class TwitVizView extends FrameView {
                                     for (String s : interests) {
                                         if(keyword.getString("keyword") != null)
                                         {
-                                            if (keyword.getString("keyword").compareToIgnoreCase(s) == 0) {vKwGraph.addEdge(keyword, familiar_stranger);
+                                            if (keyword.getString("keyword").compareToIgnoreCase(s) == 0){
                                                 kwgraph.addEdge(keyword, familiar_stranger);
                                             }
                                         }
@@ -1469,15 +1453,21 @@ public class TwitVizView extends FrameView {
     private void loadKeywords() {
 
         Node key = null;
-        for (int i = 0; i < kwgraph.getNodeCount(); i++) {
-            key = kwgraph.getNode(i);
-            //screenName == null when its a keyword node
-            if (key.getString("keyword").compareTo("null") != 0 && key.getString("screenName").compareTo("null") == 0) {
-                keywordsmap.addElement(key.getString("keyword"));
+        try {
+            for (int i = 0; i < kwgraph.getNodeCount(); i++) {
+                key = kwgraph.getNode(i);
+                if (key.getString("keyword") != null) {
+                    //screenName == null when it's a keyword node
+                    if (key.getString("keyword").compareTo("null") != 0) {
+                        keywordsmap.addElement(key.getString("keyword"));
+                    }
+                    searchForKeyword(key.getString("keyword"));
+                }
             }
+            keyword_list.setModel(keywordsmap);
+        } catch(TwitterException e) {
+            setFeedback("Couldn't connect to Twitter! Please try again later", Color.RED);
         }
-
-        keyword_list.setModel(keywordsmap);
     }
 
     //Update the feedback_label to specific message + color
@@ -1536,7 +1526,7 @@ public class TwitVizView extends FrameView {
                 setFeedback("Keyword added successfully", Color.WHITE);
             }
             try {
-                searchForKeywords();
+                searchForKeyword(keywordsTextField.getText());
             } catch (TwitterException ex) {
                 setFeedback("Cannot connect to Twitter. Try again later. Error: " + String.valueOf(ex.getStatusCode()), Color.RED);
             }
@@ -1561,15 +1551,23 @@ public class TwitVizView extends FrameView {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
-    private void searchForKeywords() throws TwitterException {
+    private void searchForKeyword(String keyword) throws TwitterException {
 
         QueryResult results = null;
         List<Tweet> twitts = null;
-        Query queryString = new Query(keywordsTextField.getText());
+        Query queryString = new Query(keyword);
         results = link.search(queryString);
         twitts = results.getTweets();
 
-        processTwitts(twitts);
+        processTwitts(twitts, keyword);
+
+        //Save to graph file
+        try {
+            graphWriter.writeGraph(kwgraph, keywordsFile);
+        } catch (DataIOException e) {
+            e.printStackTrace();
+        }
+        //--end save graph file
     }
 
     private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
@@ -1614,7 +1612,7 @@ public class TwitVizView extends FrameView {
         }
     }
 
-    public void setTwittsList() {
+    private void setTwittsList() {
         //Last 20 friends twitts list content
         try {
 
@@ -1682,17 +1680,19 @@ public class TwitVizView extends FrameView {
 
                 if (tmp.isValid()) {
                     //If it is a keyword
-                    if (tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String) keywordsmap.elementAt(keyword_list.getSelectedIndex())) == 0) {
+                    if (tmp.getString("keyword") != null) {
+                        if (tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String) keywordsmap.elementAt(keyword_list.getSelectedIndex())) == 0) {
 
-                        //getChild to remove dependencies
-                        for (int j = 0; j < tmp.getChildCount(); j++) {
-                            Node child = tmp.getChild(j);
-                            if (child.isValid()) {
-                                kwgraph.removeNode(child);
+                            //getChild to remove dependencies
+                            for (int j = 0; j < tmp.getChildCount(); j++) {
+                                Node child = tmp.getChild(j);
+                                if (child.isValid()) {
+                                    kwgraph.removeNode(child);
+                                }
                             }
+                            kwgraph.removeNode(tmp);
+                            break;
                         }
-                        kwgraph.removeNode(tmp);
-                        break;
                     }
                 }
             }
@@ -1765,7 +1765,7 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_removeButtonActionPerformed
 
-    public void processTwitts(List<Tweet> twitts) {
+    private void processTwitts(List<Tweet> twitts,String keywordString) {
 
         for (Tweet twitt : twitts) {
             User twitterer;
@@ -1775,7 +1775,7 @@ public class TwitVizView extends FrameView {
                 if (twitterer != null && !twitterer.isProtected()) {
 
                     Node familiar_stranger = getUserFromKeyGraph(twitterer); //this already creates the user node
-                    Node keyword = getKeywordFromGraph(keywordsTextField.getText()); //this already creates the keyword node
+                    Node keyword = getKeywordFromGraph(keywordString); //this already creates the keyword node
 
                     //Check if the person is in reality my friend!
                     familiar_stranger.setBoolean("friend", isStrangerAFriend(twitterer));
@@ -1790,7 +1790,7 @@ public class TwitVizView extends FrameView {
         }
     }
 
-    public void displayTwitviz() {
+    private void displayTwitviz() {
 
         if (vis != null) {
             vis.removeGroup("graph");
@@ -1998,7 +1998,7 @@ public class TwitVizView extends FrameView {
 
 
     // Constants
-    private static final int refreshInterval = 20000;
+    private static final int refreshInterval = 55000;
 
     //Twitter API vars
     private Twitter link = null;
