@@ -1498,34 +1498,42 @@ public class TwitVizView extends FrameView {
             if (!alreadyDefined) {
                 keywordsmap.addElement(keywordsTextField.getText());
                 keyword_list.setModel(keywordsmap);
-            }
 
-            if (!alreadyDefined) {
                 setFeedback("Keyword added successfully", Color.WHITE);
-            }
-            try {
-                searchForKeyword(keywordsTextField.getText());
-            } catch (TwitterException ex) {
-                setFeedback("Cannot connect to Twitter. Try again later. Error: " + String.valueOf(ex.getStatusCode()), Color.RED);
-            }
 
-            // empty keyword text field
-            keywordsTextField.setText("");
-            keywordsTextField.setForeground(Color.BLACK);
+                try {
+                    searchForKeyword(keywordsTextField.getText());
+                } catch (TwitterException ex) {
+                    setFeedback("Cannot connect to Twitter. Try again later. Error: " + String.valueOf(ex.getStatusCode()), Color.RED);
+                }
 
-            //Save to graph file
-            try {
-                graphWriter.writeGraph(kwgraph, keywordsFile);
-            } catch (DataIOException e) {
-                e.printStackTrace();
+                // empty keyword text field
+                keywordsTextField.setText("");
+                keywordsTextField.setForeground(Color.BLACK);
+
+                //Save to graph file
+                try {
+                    graphWriter.writeGraph(kwgraph, keywordsFile);
+                } catch (DataIOException e) {
+                    e.printStackTrace();
+                }
+                //--end save graph file
+
+                //refresh the keyword visualization
+                tabs_control.setSelectedIndex(0);
+                displayKeyviz();
+            } else {
+                setFeedback("Keyword already exists!", Color.WHITE);
+                // empty keyword text field
+                keywordsTextField.setText("Keywords");
+                keywordsTextField.setForeground(Color.GRAY);
+
             }
-            //--end save graph file
-
-            //refresh the keyword visualization
-            tabs_control.setSelectedIndex(0);
-            displayKeyviz();
         } else {
             setFeedback("You need to type a keyword...", Color.RED);
+            // empty keyword text field
+            keywordsTextField.setText("Keywords");
+            keywordsTextField.setForeground(Color.GRAY);
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -1699,45 +1707,51 @@ public class TwitVizView extends FrameView {
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         if (keywordsmap.size() > 1) {
             //delete edges and nodes related to the keyword
-            for (int i = 0; i < kwgraph.getNodeCount(); i++) {
+            for (Iterator<Node> keywordNodes = kwgraph.nodes(); keywordNodes.hasNext(); ) {
+            //for (int i = 0; i < kwgraph.getNodeCount(); i++) {
 
-                Node tmp = kwgraph.getNode(i);
+                //Node tmp = kwgraph.getNode(i);
+                Node tmp = keywordNodes.next();
 
                 if (tmp.isValid()) {
                     //If it is a keyword
-                    if (tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String) keywordsmap.elementAt(keyword_list.getSelectedIndex())) == 0) {
+                    if(tmp.getString("keyword") != null) {
+                        if (tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String) keywordsmap.elementAt(keyword_list.getSelectedIndex())) == 0) {
 
-                        int nTweeters = tmp.getOutDegree();
-                        if (nTweeters > 0) {
-                            for (Iterator<Node> tweeters = tmp.outNeighbors(); tweeters.hasNext(); ) {
-                                Node tweeter = tweeters.next();
-                                if(tweeter.getInDegree() == 1) {
-                                    //tweeters.remove();
-                                    kwgraph.removeNode(tweeter);
+                            int nTweeters = tmp.getOutDegree();
+                            if (nTweeters > 0) {
+                                for (Iterator<Node> tweeters = tmp.outNeighbors(); tweeters.hasNext(); ) {
+                                    Node tweeter = tweeters.next();
+                                    if(tweeter.getInDegree() == 1) {
+                                        //tweeters.remove();
+                                        kwgraph.removeNode(tweeter);
+                                    }
+                                    tweeters = tmp.outNeighbors();
                                 }
+                                kwgraph.removeNode(tmp);
+                                //getChild to remove dependencies
+                                /*for (int j = 0; j < nKeywords; j++) {
+                                    Node child = tmp.;
+                                    if (child.isValid()) {
+                                        // if user node is connected to another keyword node, then remove only the edge between the current keyword node and the user node
+                                        /*if(child. == 0)
+                                        {*/
+                                        //kwgraph.removeNode(child);
+                                    /*}
+                                    else
+                                    {
+                                    kwgraph.removeEdge(child.getParentEdge());
+                                    }*/
+                                    /*}
+                                }
+                                kwgraph.removeNode(tmp);
+                                break;*/
                             }
-                            kwgraph.removeNode(tmp);
-                            //getChild to remove dependencies
-                            /*for (int j = 0; j < nKeywords; j++) {
-                                Node child = tmp.;
-                                if (child.isValid()) {
-                                    // if user node is connected to another keyword node, then remove only the edge between the current keyword node and the user node
-                                    /*if(child. == 0)
-                                    {*/
-                                    //kwgraph.removeNode(child);
-                                /*}
-                                else
-                                {
-                                kwgraph.removeEdge(child.getParentEdge());
-                                }*/
-                                /*}
-                            }
-                            kwgraph.removeNode(tmp);
-                            break;*/
+
                         }
-                        
                     }
                 }
+                keywordNodes = kwgraph.nodes();
             }
 
             //Save to graph file
