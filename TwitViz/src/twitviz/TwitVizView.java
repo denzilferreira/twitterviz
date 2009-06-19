@@ -78,69 +78,12 @@ public class TwitVizView extends FrameView {
 
         initComponents();
 
+        label_explain.setText("");
+
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.getFrame().setBounds((screen.width - 400) / 2, (screen.height - 200) / 2, 400, 200);
         this.getFrame().setResizable(true);
         this.getFrame().setVisible(true);
-
-
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
-            }
-        });
-        messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
-        for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
-        }
-        busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
-                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
-            }
-        });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
-
-        // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
-                    }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
-                } else if ("message".equals(propertyName)) {
-                    String text = (String) (evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.restart();
-                } else if ("progress".equals(propertyName)) {
-                    int value = (Integer) (evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
-                }
-            }
-        });
-
 
     }
 
@@ -207,8 +150,8 @@ public class TwitVizView extends FrameView {
         kwvis.putAction("layout", layout);
 
         Display display = new Display(kwvis);
-        display.setSize(580, 486); //this is the size of the background image
-        display.pan(580, 486);	// pan to the middle
+        display.setSize(580, 430); //this is the size of the background image
+        display.pan(580, 430);	// pan to the middle
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
@@ -365,16 +308,13 @@ public class TwitVizView extends FrameView {
         tabs_control = new javax.swing.JTabbedPane();
         keyword_viz = new javax.swing.JPanel();
         panel_viz = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        label_explain = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
-        statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
-        statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(twitviz.TwitVizApp.class).getContext().getResourceMap(TwitVizView.class);
         mainPanel.setBackground(resourceMap.getColor("mainPanel.background")); // NOI18N
@@ -541,6 +481,7 @@ public class TwitVizView extends FrameView {
         asdasd.setName("asdasd"); // NOI18N
 
         info_last_status.setColumns(20);
+        info_last_status.setEditable(false);
         info_last_status.setLineWrap(true);
         info_last_status.setRows(5);
         info_last_status.setText(resourceMap.getString("info_last_status.text")); // NOI18N
@@ -550,6 +491,7 @@ public class TwitVizView extends FrameView {
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         info_description.setColumns(20);
+        info_description.setEditable(false);
         info_description.setLineWrap(true);
         info_description.setRows(5);
         info_description.setName("info_description"); // NOI18N
@@ -570,9 +512,9 @@ public class TwitVizView extends FrameView {
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(jLabel1)
-                                    .add(info_location, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+                                    .add(info_location, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE))
                                 .add(18, 18, 18)
-                                .add(info_followerCount, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 5, Short.MAX_VALUE)
+                                .add(info_followerCount, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(222, 222, 222))
                             .add(jPanel1Layout.createSequentialGroup()
                                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -601,7 +543,7 @@ public class TwitVizView extends FrameView {
                         .add(info_picture, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 84, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btn_follow)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 9, Short.MAX_VALUE)
                 .add(info_location)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -684,6 +626,11 @@ public class TwitVizView extends FrameView {
         feedback_label.setName("feedback_label"); // NOI18N
 
         tabs_control.setName("tabs_control"); // NOI18N
+        tabs_control.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabs_controlMouseClicked(evt);
+            }
+        });
 
         keyword_viz.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         keyword_viz.setName("keyword_viz"); // NOI18N
@@ -696,7 +643,7 @@ public class TwitVizView extends FrameView {
         );
         keyword_vizLayout.setVerticalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 501, Short.MAX_VALUE)
+            .add(0, 428, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("keyword_viz.TabConstraints.tabTitle"), null, keyword_viz, resourceMap.getString("keyword_viz.TabConstraints.tabToolTip")); // NOI18N
@@ -712,10 +659,33 @@ public class TwitVizView extends FrameView {
         );
         panel_vizLayout.setVerticalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 501, Short.MAX_VALUE)
+            .add(0, 428, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("panel_viz.TabConstraints.tabTitle"), null, panel_viz, resourceMap.getString("panel_viz.TabConstraints.tabToolTip")); // NOI18N
+
+        jPanel4.setBackground(resourceMap.getColor("jPanel4.background")); // NOI18N
+        jPanel4.setName("jPanel4"); // NOI18N
+
+        label_explain.setText(resourceMap.getString("label_explain.text")); // NOI18N
+        label_explain.setName("label_explain"); // NOI18N
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(label_explain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(label_explain)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         org.jdesktop.layout.GroupLayout twitvizPanelLayout = new org.jdesktop.layout.GroupLayout(twitvizPanel);
         twitvizPanel.setLayout(twitvizPanelLayout);
@@ -728,14 +698,9 @@ public class TwitVizView extends FrameView {
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(twitvizPanelLayout.createSequentialGroup()
                         .add(18, 18, 18)
                         .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 520, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 93, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 71, Short.MAX_VALUE)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -745,7 +710,17 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(btn_login)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
+                    .add(twitvizPanelLayout.createSequentialGroup()
+                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(twitvizPanelLayout.createSequentialGroup()
+                                .add(14, 14, 14)
+                                .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(twitvizPanelLayout.createSequentialGroup()
+                                .add(18, 18, 18)
+                                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .add(69, 69, 69))
         );
         twitvizPanelLayout.setVerticalGroup(
@@ -764,11 +739,13 @@ public class TwitVizView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .add(1, 1, 1)
-                        .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 531, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(46, Short.MAX_VALUE))
+                        .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 476, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
@@ -803,47 +780,8 @@ public class TwitVizView extends FrameView {
 
         menuBar.add(helpMenu);
 
-        statusPanel.setBackground(resourceMap.getColor("statusPanel.background")); // NOI18N
-        statusPanel.setName("statusPanel"); // NOI18N
-
-        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
-
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-
-        progressBar.setName("progressBar"); // NOI18N
-
-        org.jdesktop.layout.GroupLayout statusPanelLayout = new org.jdesktop.layout.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1293, Short.MAX_VALUE)
-            .add(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1123, Short.MAX_VALUE)
-                .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(statusAnimationLabel)
-                .addContainerGap())
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelLayout.createSequentialGroup()
-                .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(statusMessageLabel)
-                    .add(statusAnimationLabel)
-                    .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(16, 16, 16))
-        );
-
         setComponent(mainPanel);
         setMenuBar(menuBar);
-        setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
     private void getUserInfo(int id) {
@@ -1772,6 +1710,21 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_removeButtonActionPerformed
 
+    private void tabs_controlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabs_controlMouseClicked
+        // TODO add your handling code here:
+        switch(tabs_control.getSelectedIndex()) {
+            case 0:
+                label_explain.setText("Here you can see who is twitting about your keywords...");
+                break;
+            case 1:
+                label_explain.setText("Here you can see people you are following. Green are those who follow you back!");
+                break;
+            default:
+                label_explain.setText("");
+                break;
+        }
+    }//GEN-LAST:event_tabs_controlMouseClicked
+
     private void processTwitts(List<Tweet> twitts, String keywordString) {
 
         for (Tweet twitt : twitts) {
@@ -1864,8 +1817,8 @@ public class TwitVizView extends FrameView {
         vis.putAction("layout", layout);
 
         Display display = new Display(vis);
-        display.setSize(1024, 683); //this is the size of the background image
-        display.pan(400, 300);	// pan to the middle
+        display.setSize(580, 430); //this is the size of the background image
+        display.pan(300, 230);	// pan to the middle
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
@@ -1990,6 +1943,7 @@ public class TwitVizView extends FrameView {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1997,18 +1951,15 @@ public class TwitVizView extends FrameView {
     private javax.swing.JList keyword_list;
     private javax.swing.JPanel keyword_viz;
     private javax.swing.JTextField keywordsTextField;
+    private javax.swing.JLabel label_explain;
     private javax.swing.JLabel lbl_password;
     private javax.swing.JLabel lbl_username;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JPanel panel_viz;
     private javax.swing.JPasswordField password;
-    private javax.swing.JProgressBar progressBar;
     private javax.swing.JButton removeButton;
     private javax.swing.JTabbedPane section_tabs;
-    private javax.swing.JLabel statusAnimationLabel;
-    private javax.swing.JLabel statusMessageLabel;
-    private javax.swing.JPanel statusPanel;
     private javax.swing.JTabbedPane tabs_control;
     private javax.swing.JList twittsList;
     private javax.swing.JPanel twitvizPanel;
@@ -2040,11 +1991,11 @@ public class TwitVizView extends FrameView {
 
     //Keywords var
     private DefaultListModel keywordsmap = new DefaultListModel();
-    private final Timer messageTimer;
-    private final Timer busyIconTimer;
-    private final Icon idleIcon;
-    private final Icon[] busyIcons = new Icon[15];
-    private int busyIconIndex = 0;
+    //private final Timer messageTimer;
+    //private final Timer busyIconTimer;
+    //private final Icon idleIcon;
+    //private final Icon[] busyIcons = new Icon[15];
+    //private int busyIconIndex = 0;
 
     //Twitviz parameters
     private int depth = 1;
