@@ -375,13 +375,13 @@ public class TwitVizView extends FrameView {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel2Layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
-                    .add(jLabel4)
-                    .add(keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
-                    .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jLabel4)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, keywordsTextField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel2Layout.createSequentialGroup()
                         .add(addButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 83, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(removeButton)))
@@ -398,7 +398,7 @@ public class TwitVizView extends FrameView {
                     .add(addButton)
                     .add(removeButton))
                 .add(5, 5, 5)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -563,6 +563,7 @@ public class TwitVizView extends FrameView {
             .add(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(section_tabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 360, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel3Layout.createSequentialGroup()
                         .add(272, 272, 272)
                         .add(updateButton))
@@ -571,8 +572,7 @@ public class TwitVizView extends FrameView {
                             .add(jLabel6)
                             .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(countLabel))
-                        .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 352, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(section_tabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 360, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 352, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -586,8 +586,8 @@ public class TwitVizView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(updateButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(section_tabs, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 377, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .add(section_tabs, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel9.setIcon(resourceMap.getIcon("jLabel9.icon")); // NOI18N
@@ -625,6 +625,8 @@ public class TwitVizView extends FrameView {
         feedback_label.setText(resourceMap.getString("feedback_label.text")); // NOI18N
         feedback_label.setName("feedback_label"); // NOI18N
 
+        tabs_control.setBackground(resourceMap.getColor("tabs_control.background")); // NOI18N
+        tabs_control.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("tabs_control.border.lineColor"), 1, true)); // NOI18N
         tabs_control.setName("tabs_control"); // NOI18N
         tabs_control.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -639,11 +641,11 @@ public class TwitVizView extends FrameView {
         keyword_viz.setLayout(keyword_vizLayout);
         keyword_vizLayout.setHorizontalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 578, Short.MAX_VALUE)
+            .add(0, 582, Short.MAX_VALUE)
         );
         keyword_vizLayout.setVerticalGroup(
             keyword_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 428, Short.MAX_VALUE)
+            .add(0, 482, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("keyword_viz.TabConstraints.tabTitle"), null, keyword_viz, resourceMap.getString("keyword_viz.TabConstraints.tabToolTip")); // NOI18N
@@ -655,11 +657,11 @@ public class TwitVizView extends FrameView {
         panel_viz.setLayout(panel_vizLayout);
         panel_vizLayout.setHorizontalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 578, Short.MAX_VALUE)
+            .add(0, 582, Short.MAX_VALUE)
         );
         panel_vizLayout.setVerticalGroup(
             panel_vizLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 428, Short.MAX_VALUE)
+            .add(0, 482, Short.MAX_VALUE)
         );
 
         tabs_control.addTab(resourceMap.getString("panel_viz.TabConstraints.tabTitle"), null, panel_viz, resourceMap.getString("panel_viz.TabConstraints.tabToolTip")); // NOI18N
@@ -674,16 +676,15 @@ public class TwitVizView extends FrameView {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(label_explain, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(label_explain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 574, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .add(label_explain)
+                .add(label_explain, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -692,15 +693,23 @@ public class TwitVizView extends FrameView {
         twitvizPanelLayout.setHorizontalGroup(
             twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(twitvizPanelLayout.createSequentialGroup()
-                .add(8, 8, 8)
+                .addContainerGap()
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(twitvizPanelLayout.createSequentialGroup()
+                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jPanel4, 0, 607, Short.MAX_VALUE)
+                            .add(tabs_control))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .add(twitvizPanelLayout.createSequentialGroup()
                         .add(18, 18, 18)
                         .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 520, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 71, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 93, Short.MAX_VALUE)
                         .add(lbl_username)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 90, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -710,42 +719,33 @@ public class TwitVizView extends FrameView {
                         .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(btn_login)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))
-                    .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(twitvizPanelLayout.createSequentialGroup()
-                                .add(14, 14, 14)
-                                .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(twitvizPanelLayout.createSequentialGroup()
-                                .add(18, 18, 18)
-                                .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .add(69, 69, 69))
+                        .add(69, 69, 69))))
         );
         twitvizPanelLayout.setVerticalGroup(
             twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(twitvizPanelLayout.createSequentialGroup()
-                .add(20, 20, 20)
-                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 38, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(lbl_password)
-                        .add(lbl_username)
-                        .add(btn_login)))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(twitvizPanelLayout.createSequentialGroup()
-                        .add(1, 1, 1)
-                        .add(tabs_control, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 476, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .add(21, 21, 21)
+                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jLabel9, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 38, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(feedback_label, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(twitvizPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(password, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(username, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lbl_password)
+                            .add(lbl_username)
+                            .add(btn_login))))
+                .add(8, 8, 8)
+                .add(twitvizPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(tabs_control, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(46, 46, 46))
         );
 
         org.jdesktop.layout.GroupLayout mainPanelLayout = new org.jdesktop.layout.GroupLayout(mainPanel);
