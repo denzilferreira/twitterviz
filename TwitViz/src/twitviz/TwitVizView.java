@@ -16,10 +16,8 @@ import java.awt.event.MouseWheelEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -31,7 +29,6 @@ import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -150,8 +147,9 @@ public class TwitVizView extends FrameView {
         kwvis.putAction("layout", layout);
 
         Display display = new Display(kwvis);
-        display.setSize(580, 430); //this is the size of the background image
-        display.pan(580, 430);	// pan to the middle
+        display.setSize(584, 494); //this is the size of the background image
+        display.pan(584, 494);	// pan to the middle
+        display.setBackground(new Color(238, 238, 238));
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());
@@ -1809,7 +1807,7 @@ public class TwitVizView extends FrameView {
         size.add(sizes);
 
         ActionList layout = new ActionList(Activity.INFINITY);
-        layout.add(new ForceDirectedLayout("graph"));
+        layout.add(new ForceDirectedLayout("graph",true));
         layout.add(new RepaintAction());
 
         vis.putAction("color", color);
@@ -1817,8 +1815,8 @@ public class TwitVizView extends FrameView {
         vis.putAction("layout", layout);
 
         Display display = new Display(vis);
-        display.setSize(580, 430); //this is the size of the background image
-        display.pan(300, 230);	// pan to the middle
+        display.setSize(584, 494); //this is the size of the background image
+        display.pan(584, 494);	// pan to the middle
         display.addControlListener(new DragControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new ZoomControl());

@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Fri Jun 19 20:18:59 WEST 2009 -->
+  <!-- prefuse GraphML Writer | Fri Jun 19 23:54:22 WEST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -24,15 +24,6 @@
   <graph edgedefault="directed">
     <!-- nodes -->
     <node id="0">
-      <data key="keyword">Ubicomp</data>
-      <data key="id">0L</data>
-      <data key="screenName">null</data>
-      <data key="relevance">10</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">null</data>
-    </node>
-    <node id="1">
       <data key="keyword">null</data>
       <data key="id">19181333L</data>
       <data key="screenName">NomineBovis</data>
@@ -41,7 +32,7 @@
       <data key="follower">false</data>
       <data key="status_text">#hci Hasn&apos;t everyone feared a machine? I don&apos;t get the dancing at the start, but still awesome: http://bit.ly/4ekUv</data>
     </node>
-    <node id="2">
+    <node id="1">
       <data key="keyword">HCI</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
@@ -50,7 +41,7 @@
       <data key="follower">false</data>
       <data key="status_text">null</data>
     </node>
-    <node id="3">
+    <node id="2">
       <data key="keyword">null</data>
       <data key="id">13232092L</data>
       <data key="screenName">ebuie</data>
@@ -59,7 +50,7 @@
       <data key="follower">false</data>
       <data key="status_text">@g33kgurrl In practice, perhaps. But not by definition. (Much of my career has involved HCI in government systems. Just FYI. :-)</data>
     </node>
-    <node id="4">
+    <node id="3">
       <data key="keyword">null</data>
       <data key="id">16337680L</data>
       <data key="screenName">bmcnely</data>
@@ -68,7 +59,7 @@
       <data key="follower">false</data>
       <data key="status_text">@preterite There&apos;s quite a bit actually, mostly from HCI folks. I&apos;m working on using persistent backchannels as a curricular practice. :-)</data>
     </node>
-    <node id="5">
+    <node id="4">
       <data key="keyword">null</data>
       <data key="id">17542441L</data>
       <data key="screenName">Human_Capital</data>
@@ -77,7 +68,7 @@
       <data key="follower">false</data>
       <data key="status_text">Check it out - HCI Podcast-The Application of Enterprise Social Networking to Talent Acquisition. http://bit.ly/1xrZjR</data>
     </node>
-    <node id="6">
+    <node id="5">
       <data key="keyword">null</data>
       <data key="id">34578817L</data>
       <data key="screenName">be24at</data>
@@ -87,7 +78,7 @@
       <data key="status_text">Ger&#252;cht wird wahr: HCI Austria wird umgebaut
 http://bit.ly/zeGe8</data>
     </node>
-    <node id="7">
+    <node id="6">
       <data key="keyword">null</data>
       <data key="id">15905105L</data>
       <data key="screenName">alpaykasal</data>
@@ -96,7 +87,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">will be building an #arduino that tweets based on sensor status, and then combining physical computing with #multitouch for total #hci :)</data>
     </node>
-    <node id="8">
+    <node id="7">
       <data key="keyword">null</data>
       <data key="id">15208867L</data>
       <data key="screenName">jozilla</data>
@@ -105,7 +96,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">Getting ready for our HCI reading group session. Today&apos;s papers are about usability evaluation: http://bit.ly/YZmMz http://bit.ly/U6m0T</data>
     </node>
-    <node id="9">
+    <node id="8">
       <data key="keyword">null</data>
       <data key="id">17786416L</data>
       <data key="screenName">CarstenBN</data>
@@ -114,7 +105,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">&#8220;Designing Interfaces: Patterns for Effective Interaction Design&#8221;, http://designinginterfaces.com/ !glu !ux !hci !webdesign</data>
     </node>
-    <node id="10">
+    <node id="9">
       <data key="keyword">null</data>
       <data key="id">37922292L</data>
       <data key="screenName">CMDNHotJobs</data>
@@ -123,7 +114,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">Software Eng-Bluetooth Firmware Dev: Bluetooth technology (lower layer protocol stack (HCI/LM/LC), RTOS, C, Bangalore http://j.cmdn.com/2847</data>
     </node>
-    <node id="11">
+    <node id="10">
       <data key="keyword">null</data>
       <data key="id">3499161L</data>
       <data key="screenName">danielegaliffa</data>
@@ -132,7 +123,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">following HCI Italy 09 through web http://conferenceserv.dis.uniroma1.it/chitaly09/</data>
     </node>
-    <node id="12">
+    <node id="11">
       <data key="keyword">null</data>
       <data key="id">41566176L</data>
       <data key="screenName">Computer_book</data>
@@ -141,7 +132,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">New release: Human-Centered Software Engineering: Software Engineering Models, Patterns and Architectures for HCI (Hum.. http://bit.ly/PY5IB</data>
     </node>
-    <node id="13">
+    <node id="12">
       <data key="keyword">null</data>
       <data key="id">10134302L</data>
       <data key="screenName">acomputerpro</data>
@@ -150,7 +141,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">Thank you @SonicOrange @kevinrj @motownmutt &amp;amp; @schrodingercat. I sprayed the bite with 2% Diphenhydramine HCI &amp;amp; .1% Zinc acetate. I am okay.</data>
     </node>
-    <node id="14">
+    <node id="13">
       <data key="keyword">null</data>
       <data key="id">22322714L</data>
       <data key="screenName">hangwong</data>
@@ -159,7 +150,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">@timharan have any requirements? How far? McCools@Foothill Village. On the U, the Point@HCI. indochineutah.com is close as well.</data>
     </node>
-    <node id="15">
+    <node id="14">
       <data key="keyword">null</data>
       <data key="id">37552085L</data>
       <data key="screenName">aruspexWFP</data>
@@ -168,7 +159,7 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">New Blog Post: HCI Workforce Planning Conference Part 1: Evolving WFP landscape http://tinyurl.com/njzjn4</data>
     </node>
-    <node id="16">
+    <node id="15">
       <data key="keyword">null</data>
       <data key="id">25195134L</data>
       <data key="screenName">jdamn</data>
@@ -177,22 +168,345 @@ http://bit.ly/zeGe8</data>
       <data key="follower">false</data>
       <data key="status_text">@islamqa Computer-mediated communication.&amp;amp; I&apos;ve studied HCI &amp;amp; info science at the graduate level at an excellent institution(no 17 yr-olds).</data>
     </node>
+    <node id="16">
+      <data key="keyword">null</data>
+      <data key="id">21308466L</data>
+      <data key="screenName">jayhawkbabe</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">RT @iGotchi @appletasty 12 Bugs We&apos;ve Found In iPhone OS 3.0 http://bit.ly/vb7a9</data>
+    </node>
+    <node id="17">
+      <data key="keyword">iphone</data>
+      <data key="id">0L</data>
+      <data key="screenName">null</data>
+      <data key="relevance">10</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">null</data>
+    </node>
+    <node id="18">
+      <data key="keyword">null</data>
+      <data key="id">34694158L</data>
+      <data key="screenName">MsFlipper</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">SI #ATT se cree que le voy a pagar el rate del iPhone, estan bien equivocados! #FAIL</data>
+    </node>
+    <node id="19">
+      <data key="keyword">null</data>
+      <data key="id">21915938L</data>
+      <data key="screenName">flashlightmpls</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">RT @EMAKLIVE Copped my new iPhone today and luvin&apos; it.</data>
+    </node>
+    <node id="20">
+      <data key="keyword">null</data>
+      <data key="id">6516012L</data>
+      <data key="screenName">tritterskamp</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">in an attempt to get super organized on my iphone, i managed to erase all of my contacts from both gmail and my computer. ouch. #fb</data>
+    </node>
+    <node id="21">
+      <data key="keyword">null</data>
+      <data key="id">18698123L</data>
+      <data key="screenName">joseeight</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">eureka! iPhone&apos;s Bluetooth audio works wonders with my car&apos;s stereo! truely hands-free :D</data>
+    </node>
+    <node id="22">
+      <data key="keyword">null</data>
+      <data key="id">20736064L</data>
+      <data key="screenName">iphone_app_mkup</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">My Eyes Only&#8482; -Secure Password Manager w/Encryptio &#65509;700 &#8658; &#65509;800 http://iphone.orelabo.jp/app/285835523/ Use My Eyes Only&#8482; to safely</data>
+    </node>
+    <node id="23">
+      <data key="keyword">null</data>
+      <data key="id">10365322L</data>
+      <data key="screenName">mickdarling</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">The new iPhone is in my hands. FYI the  &apos;Mophie juice pack air&apos; has no iPod port for external connections. Need to return it. :(</data>
+    </node>
+    <node id="24">
+      <data key="keyword">null</data>
+      <data key="id">15617925L</data>
+      <data key="screenName">edenhensley</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Off to pick up my iPhone 3GS! I&apos;m so excited.</data>
+    </node>
+    <node id="25">
+      <data key="keyword">null</data>
+      <data key="id">22838404L</data>
+      <data key="screenName">damontaugher</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Good review of what the &amp;quot;S&amp;quot; means for the new iPhone: http://bit.ly/gwcrA</data>
+    </node>
+    <node id="26">
+      <data key="keyword">null</data>
+      <data key="id">14986635L</data>
+      <data key="screenName">kristinquintas</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@nicxjustice hello.... lol =) Hope your friday is going well, mine is I got the new iphone =D</data>
+    </node>
+    <node id="27">
+      <data key="keyword">null</data>
+      <data key="id">46173583L</data>
+      <data key="screenName">TechieGadgetGuy</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Gallery: iPhone 3GS Teardowns Reveal Underclocked CPU, More http://bit.ly/TZI7s</data>
+    </node>
+    <node id="28">
+      <data key="keyword">null</data>
+      <data key="id">48848600L</data>
+      <data key="screenName">Uniteu66</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">How I made $600.00 a week on Twitter. Find out here!  http://tweet4.notlong.com Tehran Tweet Deck iphone AT&amp;amp;T follow Friday TGIF</data>
+    </node>
+    <node id="29">
+      <data key="keyword">null</data>
+      <data key="id">20023128L</data>
+      <data key="screenName">MikeRoth09</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@xerocint But I have money, I could buy a Iphone if I wanted to.</data>
+    </node>
+    <node id="30">
+      <data key="keyword">null</data>
+      <data key="id">12005612L</data>
+      <data key="screenName">ThePurpleDoor</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Love my updated iPhone. Yippee!</data>
+    </node>
+    <node id="31">
+      <data key="keyword">null</data>
+      <data key="id">995821L</data>
+      <data key="screenName">basictheory</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">hmm. should I go get a new iphone?</data>
+    </node>
+    <node id="32">
+      <data key="keyword">null</data>
+      <data key="id">9562092L</data>
+      <data key="screenName">theuptake</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">RT @JasonBarnett: RT @broy: Qik for iPhone 3.0 is now available from Cydia</data>
+    </node>
+    <node id="33">
+      <data key="keyword">3.0</data>
+      <data key="id">0L</data>
+      <data key="screenName">null</data>
+      <data key="relevance">10</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">null</data>
+    </node>
+    <node id="34">
+      <data key="keyword">null</data>
+      <data key="id">15836971L</data>
+      <data key="screenName">wotowiec</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Wow, OS 3.0&apos;s interaction with YahooMail sucks!</data>
+    </node>
+    <node id="35">
+      <data key="keyword">null</data>
+      <data key="id">14507675L</data>
+      <data key="screenName">emscquakes</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">MD 3.0 DODECANESE ISLANDS, GREECE: 2009-06-19&#160;21:47:57.3 UTC Lat: 37.57 N - Long: 26.79 E - Depth: 7 - Mag: MD 3.0 http://tinyurl.com/nmmzba</data>
+    </node>
+    <node id="36">
+      <data key="keyword">null</data>
+      <data key="id">17403601L</data>
+      <data key="screenName">evanphawkins</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Tweetdeck on iPhone NEEDS a landscape keyboard. Especially now that 3.0 is in full effect #tweetdeck #iPhone ...</data>
+    </node>
+    <node id="37">
+      <data key="keyword">null</data>
+      <data key="id">20635171L</data>
+      <data key="screenName">witch_md</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">RT @MuscleNerd: 3.0 JB for mac owners is now out http://is.gd/16t1c   -- youtube issues fixed too!</data>
+    </node>
+    <node id="38">
+      <data key="keyword">null</data>
+      <data key="id">17578749L</data>
+      <data key="screenName">jacobschulman</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@musclenerd any love for iPod touch 2G users that wanna upgrade to 3.0? Will it be jailbroken too?</data>
+    </node>
+    <node id="39">
+      <data key="keyword">null</data>
+      <data key="id">11204582L</data>
+      <data key="screenName">shaff</data>
+      <data key="relevance">3</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">updated my iphone to 3.0 how?  http://is.gd/16Hy3 download custom firmware - put iphone on recovery mode - restore. done</data>
+    </node>
+    <node id="40">
+      <data key="keyword">null</data>
+      <data key="id">16543505L</data>
+      <data key="screenName">Ben_Shute</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Very happy with the improvements to the camera capture speed in OS 3.0. Kids dint sit still long enough!</data>
+    </node>
+    <node id="41">
+      <data key="keyword">null</data>
+      <data key="id">26844822L</data>
+      <data key="screenName">Hericane_</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Going to do the iPhone 3.0 update tonight-does it take long?</data>
+    </node>
+    <node id="42">
+      <data key="keyword">null</data>
+      <data key="id">12971712L</data>
+      <data key="screenName">alexknight</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Weekend is looking up! Great weather, iPhone 3.0 to play with, free tethering with my carrier... oh hell yes!</data>
+    </node>
+    <node id="43">
+      <data key="keyword">null</data>
+      <data key="id">21113L</data>
+      <data key="screenName">coredumpcr</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">iPhone 3.0 haz success! #FB</data>
+    </node>
+    <node id="44">
+      <data key="keyword">null</data>
+      <data key="id">7195012L</data>
+      <data key="screenName">akifbayram</data>
+      <data key="relevance">3</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">trying to find a custom ipsw for iphone 3g for jailbroken 3.0 since quickpwn doesn&apos;t look like it&apos;s gonna come out in a while.</data>
+    </node>
+    <node id="45">
+      <data key="keyword">null</data>
+      <data key="id">11623852L</data>
+      <data key="screenName">papotricia</data>
+      <data key="relevance">3</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">_the1_ pec kadam 20 min bushu uz iphone 3.0 :)</data>
+    </node>
+    <node id="46">
+      <data key="keyword">null</data>
+      <data key="id">37574548L</data>
+      <data key="screenName">softwaretweet</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">iPhone 3g Custom 3.0 IPSW: 
+ Category: Software Subcategory: Mobile phones Size: 234.09&#160;megabyte Ratio: 1 s.. http://tinyurl.com/m2njss</data>
+    </node>
+    <node id="47">
+      <data key="keyword">null</data>
+      <data key="id">22548058L</data>
+      <data key="screenName">ernestogfa</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">null</data>
+    </node>
 
     <!-- edges -->
-    <edge id="0" source="2" target="1"/>
-    <edge id="1" source="2" target="3"/>
-    <edge id="2" source="2" target="4"/>
-    <edge id="3" source="2" target="5"/>
-    <edge id="4" source="2" target="6"/>
-    <edge id="5" source="2" target="7"/>
-    <edge id="6" source="2" target="8"/>
-    <edge id="7" source="2" target="9"/>
-    <edge id="8" source="2" target="10"/>
-    <edge id="9" source="2" target="11"/>
-    <edge id="10" source="2" target="12"/>
-    <edge id="11" source="2" target="13"/>
-    <edge id="12" source="2" target="14"/>
-    <edge id="13" source="2" target="15"/>
-    <edge id="14" source="2" target="16"/>
+    <edge id="0" source="1" target="0"/>
+    <edge id="1" source="1" target="2"/>
+    <edge id="2" source="1" target="3"/>
+    <edge id="3" source="1" target="4"/>
+    <edge id="4" source="1" target="5"/>
+    <edge id="5" source="1" target="6"/>
+    <edge id="6" source="1" target="7"/>
+    <edge id="7" source="1" target="8"/>
+    <edge id="8" source="1" target="9"/>
+    <edge id="9" source="1" target="10"/>
+    <edge id="10" source="1" target="11"/>
+    <edge id="11" source="1" target="12"/>
+    <edge id="12" source="1" target="13"/>
+    <edge id="13" source="1" target="14"/>
+    <edge id="14" source="1" target="15"/>
+    <edge id="15" source="17" target="16"/>
+    <edge id="16" source="17" target="18"/>
+    <edge id="17" source="17" target="19"/>
+    <edge id="18" source="17" target="20"/>
+    <edge id="19" source="17" target="21"/>
+    <edge id="20" source="17" target="22"/>
+    <edge id="21" source="17" target="23"/>
+    <edge id="22" source="17" target="24"/>
+    <edge id="23" source="17" target="25"/>
+    <edge id="24" source="17" target="26"/>
+    <edge id="25" source="17" target="27"/>
+    <edge id="26" source="17" target="28"/>
+    <edge id="27" source="17" target="29"/>
+    <edge id="28" source="17" target="30"/>
+    <edge id="29" source="17" target="31"/>
+    <edge id="30" source="33" target="32"/>
+    <edge id="31" source="33" target="34"/>
+    <edge id="32" source="33" target="35"/>
+    <edge id="33" source="33" target="36"/>
+    <edge id="34" source="33" target="16"/>
+    <edge id="35" source="33" target="37"/>
+    <edge id="36" source="33" target="38"/>
+    <edge id="37" source="33" target="39"/>
+    <edge id="38" source="17" target="39"/>
+    <edge id="39" source="33" target="40"/>
+    <edge id="40" source="33" target="41"/>
+    <edge id="41" source="33" target="42"/>
+    <edge id="42" source="33" target="43"/>
+    <edge id="43" source="33" target="44"/>
+    <edge id="44" source="17" target="44"/>
+    <edge id="45" source="33" target="45"/>
+    <edge id="46" source="17" target="45"/>
+    <edge id="47" source="33" target="46"/>
+    <edge id="48" source="33" target="47"/>
   </graph>
 </graphml>
