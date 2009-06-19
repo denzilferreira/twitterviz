@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -64,7 +65,6 @@ import prefuse.render.DefaultRendererFactory;
 import prefuse.render.LabelRenderer;
 import prefuse.util.*;
 import prefuse.visual.NodeItem;
-import prefuse.visual.VisualGraph;
 import prefuse.visual.VisualItem;
 import twitter4j.*;
 
@@ -160,8 +160,7 @@ public class TwitVizView extends FrameView {
         if (kwvis != null) {
             kwvis.removeGroup("graph");
             kwvis.addGraph("graph", kwgraph);
-            //kwvis.repaint();
-
+            kwvis.repaint();
             kwvis.run("color");  // assign the colors
             kwvis.run("size"); //assign the sizes
             kwvis.run("layout"); // start up the animated layout*/
@@ -170,28 +169,6 @@ public class TwitVizView extends FrameView {
             kwvis = new Visualization();
             kwvis.addGraph("graph", kwgraph);
         }
-
-         /*kwgraph.addGraphModelListener(new GraphListener(){
-            public void graphChanged(Graph g, String table, int start, int end, int col, int type){
-
-                for(int i = start; i <= end; i++){
-                    switch(type){
-                        case EventConstants.INSERT:
-                            g.
-                            break;
-                    }
-                }
-                kwvis.removeGroup("graph");
-                kwvis.add("graph", g);
-                kwvis.run("draw");
-            }
-        });
-        TupleSetListener tset = new TupleSetListener() {
-            public void tupleSetChanged(TupleSet tset, Tuple[] added, Tuple[] removed){
-                tset.
-            }
-        };
-        kwgraph.addTupleSetListener(tset);*/
 
         LabelRenderer rend = new CustomLabelRenderer();
         rend.setRoundedCorner(8, 8);
@@ -981,7 +958,6 @@ public class TwitVizView extends FrameView {
             user_stranger.setString("screenName", tweeterer.getScreenName());
             user_stranger.setInt("relevance", 1);
             user_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
-
         }
 
         return user_stranger;
@@ -1011,17 +987,6 @@ public class TwitVizView extends FrameView {
             return list.contains(who);
         else
             return false;
-            /*for (User tmp : list){
-                if (!tmp.isProtected()) {
-                    //is my friend among my followers?
-                    if (tmp.getId() == who.getId()) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        return false;*/
     }
 
     private boolean isStrangerAFriend(User stranger) {
@@ -1042,13 +1007,6 @@ public class TwitVizView extends FrameView {
     private void buildSocialNetwork() {
 
         Node source = null;
-
-        // There was no graph loaded from twitviz.xml
-        /*if (graph == null) {
-            graph = new Graph();
-            source = graph.addNode();
-        } else {*/
-            // There was a graph loaded from twitviz.xml
             if (graph.getNodeCount() > 0) {
                 source = graph.getNode(0); //get the first node = logged on user
                 if (user.getId() != source.getLong("id")) {
@@ -1056,7 +1014,6 @@ public class TwitVizView extends FrameView {
                     source = graph.addNode();
                 }
             }
-        //}
 
         source.setLong("id", user.getId());
         source.setString("screenName", user.getScreenName());
@@ -1346,7 +1303,7 @@ public class TwitVizView extends FrameView {
                                     public void run() {
                                         get_PublicLine();
                                     }
-                                }, 5000, refreshInterval); //Get public line every 20 seconds
+                                }, 5000, refreshInterval);
 
                                 getUserInfo(user.getId());
 
@@ -1400,23 +1357,20 @@ public class TwitVizView extends FrameView {
                                 //Relevance will change according to how important the user is: number of keywords in common
                                 familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance") + interests.size());
 
-
-                                //Check if the familiar stranger is in reality my friend!
-                                familiar_stranger.setBoolean("friend", isStrangerAFriend(tweeterer));
-
                                 //Associate the person to the keywords we are following and he said!
-                                for (int k = 0; k < keywordsmap.getSize(); k++) {
-                                    Node keyword = getKeywordFromGraph((String) keywordsmap.get(k));
+                                //for (int k = 0; k < keywordsmap.getSize(); k++) {
+                                    //Node keyword = getKeywordFromGraph((String) keywordsmap.get(k));
 
                                     for (String s : interests) {
+                                        Node keyword = getKeywordFromGraph(s);
                                         if(keyword.getString("keyword") != null)
                                         {
-                                            if (keyword.getString("keyword").compareToIgnoreCase(s) == 0){
+                                            //if (keyword.getString("keyword").compareToIgnoreCase(s) == 0){
                                                 kwgraph.addEdge(keyword, familiar_stranger);
-                                            }
+                                            //}
                                         }
                                     }
-                                }
+                                //}
                             }
                         }
                     }
@@ -1438,8 +1392,20 @@ public class TwitVizView extends FrameView {
         }
     }
 
+
     //Returns the keywords present on a tweet
     private Vector<String> getInterests(Status stat) {
+        Vector keywords = new Vector();
+        for (int i = 0; i < keywordsmap.getSize(); i++) {
+            if (stat.getText().matches(".*" + (String) keywordsmap.get(i) + ".*")) {
+                keywords.addElement((String) keywordsmap.get(i));
+            }
+        }
+        return keywords;
+    }
+
+    //Returns the keywords present on a tweet
+    private Vector<String> getInterests(Tweet stat) {
         Vector keywords = new Vector();
         for (int i = 0; i < keywordsmap.getSize(); i++) {
             if (stat.getText().matches(".*" + (String) keywordsmap.get(i) + ".*")) {
@@ -1453,21 +1419,21 @@ public class TwitVizView extends FrameView {
     private void loadKeywords() {
 
         Node key = null;
-        try {
+        //try {
             for (int i = 0; i < kwgraph.getNodeCount(); i++) {
                 key = kwgraph.getNode(i);
                 if (key.getString("keyword") != null) {
                     //screenName == null when it's a keyword node
                     if (key.getString("keyword").compareTo("null") != 0) {
                         keywordsmap.addElement(key.getString("keyword"));
+                        //searchForKeyword(key.getString("keyword"));
                     }
-                    searchForKeyword(key.getString("keyword"));
                 }
             }
             keyword_list.setModel(keywordsmap);
-        } catch(TwitterException e) {
+        /*} catch(TwitterException e) {
             setFeedback("Couldn't connect to Twitter! Please try again later", Color.RED);
-        }
+        }*/
     }
 
     //Update the feedback_label to specific message + color
@@ -1477,6 +1443,18 @@ public class TwitVizView extends FrameView {
         //force update on GUI
         feedback_label.validate();
         feedback_label.repaint();
+
+        //Start alternative thread to go away with the message on the top label
+        java.util.Timer timer = new java.util.Timer();
+        timer.schedule(new java.util.TimerTask() {
+
+            public void run() {
+                feedback_label.setText("");
+                //force update on GUI
+                feedback_label.validate();
+                feedback_label.repaint();
+            }
+        }, feedbackTimeInterval);
     }
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -1551,6 +1529,9 @@ public class TwitVizView extends FrameView {
         }
     }//GEN-LAST:event_addButtonActionPerformed
 
+    /* searches for users related to a given keyword, by their respective twitts (which contain that keyword),
+     * constructs their respective nodes and adds them to the keyword graph (through the method processTwitts())
+    */
     private void searchForKeyword(String keyword) throws TwitterException {
 
         QueryResult results = null;
@@ -1726,23 +1707,35 @@ public class TwitVizView extends FrameView {
                     //If it is a keyword
                     if (tmp.getString("keyword").compareTo("null") != 0 && tmp.getString("keyword").compareToIgnoreCase((String) keywordsmap.elementAt(keyword_list.getSelectedIndex())) == 0) {
 
-                        //getChild to remove dependencies
-                        for (int j = 0; j < tmp.getChildCount(); j++) {
-                            Node child = tmp.getChild(j);
-                            if (child.isValid()) {
-                                // if user node is connected to another keyword node, then remove only the edge between the current keyword node and the user node
-                                /*if(child. == 0)
-                                {*/
-                                kwgraph.removeNode(child);
-                            /*}
-                            else
-                            {
-                            kwgraph.removeEdge(child.getParentEdge());
-                            }*/
+                        int nTweeters = tmp.getOutDegree();
+                        if (nTweeters > 0) {
+                            for (Iterator<Node> tweeters = tmp.outNeighbors(); tweeters.hasNext(); ) {
+                                Node tweeter = tweeters.next();
+                                if(tweeter.getInDegree() == 1) {
+                                    //tweeters.remove();
+                                    kwgraph.removeNode(tweeter);
+                                }
                             }
+                            kwgraph.removeNode(tmp);
+                            //getChild to remove dependencies
+                            /*for (int j = 0; j < nKeywords; j++) {
+                                Node child = tmp.;
+                                if (child.isValid()) {
+                                    // if user node is connected to another keyword node, then remove only the edge between the current keyword node and the user node
+                                    /*if(child. == 0)
+                                    {*/
+                                    //kwgraph.removeNode(child);
+                                /*}
+                                else
+                                {
+                                kwgraph.removeEdge(child.getParentEdge());
+                                }*/
+                                /*}
+                            }
+                            kwgraph.removeNode(tmp);
+                            break;*/
                         }
-                        kwgraph.removeNode(tmp);
-                        break;
+                        
                     }
                 }
             }
@@ -1765,7 +1758,7 @@ public class TwitVizView extends FrameView {
         }
 }//GEN-LAST:event_removeButtonActionPerformed
 
-    private void processTwitts(List<Tweet> twitts,String keywordString) {
+    private void processTwitts(List<Tweet> twitts, String keywordString) {
 
         for (Tweet twitt : twitts) {
             User twitterer;
@@ -1774,15 +1767,29 @@ public class TwitVizView extends FrameView {
 
                 if (twitterer != null && !twitterer.isProtected()) {
 
-                    Node familiar_stranger = getUserFromKeyGraph(twitterer); //this already creates the user node
-                    Node keyword = getKeywordFromGraph(keywordString); //this already creates the keyword node
+                    Node familiar_stranger = getUserFromKeyGraph(twitterer); // this already creates the user node
+                    Node keyword = getKeywordFromGraph(keywordString); // this already creates the keyword node
+                    Vector<String> interests = getInterests(twitt);
 
-                    //Check if the person is in reality my friend!
-                    familiar_stranger.setBoolean("friend", isStrangerAFriend(twitterer));
-                    familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance") + 1);
+                    // Complement tweeter base relevance with number of twitts in common
+                    familiar_stranger.setInt("relevance", familiar_stranger.getInt("relevance") + interests.size());
+                    // Register status text responsible for the established connection between keyword(s) and tweeter
+                    familiar_stranger.setString("status_text", twitt.getText());
 
                     // Create connection between keyword and tweeter
                     kwgraph.addEdge(keyword, familiar_stranger);
+
+                    // Check if tweeter is associated with the other keywords
+                    for (String s : interests) {
+                        if (s.compareToIgnoreCase(keywordString) != 0) { // The keyword introduced by the user has already been considered
+                            Node k = getKeywordFromGraph(s);
+                            if(k.getString("keyword") != null) {
+                                kwgraph.addEdge(k, familiar_stranger);
+
+                            }
+                        }
+                    }
+
                 }
             } catch (TwitterException ex) {
                 setFeedback("Error getting a result user's info...", Color.RED);
@@ -1999,6 +2006,7 @@ public class TwitVizView extends FrameView {
 
     // Constants
     private static final int refreshInterval = 55000;
+    private static final int feedbackTimeInterval = 10000;
 
     //Twitter API vars
     private Twitter link = null;
@@ -2011,8 +2019,6 @@ public class TwitVizView extends FrameView {
     //Prefuse vars
     private Graph graph;
     private Graph kwgraph;
-    private VisualGraph vGraph;
-    private VisualGraph vKwGraph;
     private Visualization vis = null;
     private Visualization kwvis = null;
     private GraphMLWriter graphWriter = new GraphMLWriter();
