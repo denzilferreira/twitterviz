@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Thu Jun 18 23:09:29 BST 2009 -->
+  <!-- prefuse GraphML Writer | Fri Jun 19 03:19:16 BST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -27,149 +27,138 @@
       <data key="keyword">Obama</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
-      <data key="relevance">2</data>
+      <data key="relevance">10</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
       <data key="status_text">null</data>
     </node>
     <node id="1">
       <data key="keyword">null</data>
-      <data key="id">25352563L</data>
-      <data key="screenName">joycefeldman</data>
+      <data key="id">23372761L</data>
+      <data key="screenName">cjn315</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Insurance News:  BIG &#8220;I&#8221; Expresses Support For The Obama Administration&#8217;s T http://tinyurl.com/peqj8s Full http://tinyurl.com/cqyrh8</data>
+      <data key="status_text">RT @arra: Tpoll: Should the RNC demand that Barack Obama produce his actual birth certificate? Yes/No/Don&apos;t Care -  Keep @ARRA in response</data>
     </node>
     <node id="2">
       <data key="keyword">null</data>
-      <data key="id">18638427L</data>
-      <data key="screenName">MacGhil</data>
+      <data key="id">24303284L</data>
+      <data key="screenName">suzq48</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Blog post and comments thread of the day. Obama: I&apos;m a Limited Government Kind of Guy http://bit.ly/SpMCo #obama #lyingliarwholies</data>
+      <data key="status_text">@Freedomlover1 just turned 61 this year and haven&apos;t had insurance for 8 years or more, so guess I won&apos;t have any now either. Thanx Obama</data>
     </node>
     <node id="3">
       <data key="keyword">null</data>
-      <data key="id">18067324L</data>
-      <data key="screenName">JustRSS</data>
-      <data key="relevance">2</data>
+      <data key="id">23696410L</data>
+      <data key="screenName">BrentTeichman</data>
+      <data key="relevance">3</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Reuters Top News : Obama extends benefits, promises more for gays</data>
+      <data key="status_text">RT@goparchitect NBC News &amp;quot;Obama&apos;s ratings have plunged with Independents&amp;quot; we are seeing &amp;quot;Political cracks&amp;quot; in BHO http://tinyurl.com/nooeqr</data>
     </node>
     <node id="4">
       <data key="keyword">null</data>
-      <data key="id">34792980L</data>
-      <data key="screenName">TheGaggle</data>
-      <data key="relevance">5</data>
+      <data key="id">21693607L</data>
+      <data key="screenName">execulive</data>
+      <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Obama: LGBT Benefits Memo &amp;quot;Just a Start&amp;quot;: As expected, President Obama this evening signed an executive memo aut.. http://tinyurl.com/kogsb7</data>
+      <data key="status_text">RT @Shocker: TARP provision allows Obama oversight board to call off any investigations of his staff http://bit.ly/5mK6S #tcot</data>
     </node>
     <node id="5">
       <data key="keyword">null</data>
-      <data key="id">21603682L</data>
-      <data key="screenName">gentlyferal</data>
+      <data key="id">27441005L</data>
+      <data key="screenName">MarkPacker</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">@ranggrol RE http://bit.ly/k4Uhk: Would like to read Obama statement. Link? TIA</data>
+      <data key="status_text">Keith Urban might be the greatest &amp;quot;country&amp;quot; artist of all-time. If he&apos;s country, then I&apos;m Barack Obama.</data>
     </node>
     <node id="6">
       <data key="keyword">null</data>
-      <data key="id">15848032L</data>
-      <data key="screenName">redlomo</data>
-      <data key="relevance">1</data>
+      <data key="id">16349648L</data>
+      <data key="screenName">MikeBates</data>
+      <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Obama signs memo giving partners of gay federal employees some benefits, but not health care. #obamafail
-http://snipurl.com/k88ii</data>
+      <data key="status_text">@Rabiddogg Will Homeland Security designate me a security risk if I say that I hope Obama&apos;s teleprompter fails?</data>
     </node>
     <node id="7">
       <data key="keyword">null</data>
-      <data key="id">22887270L</data>
-      <data key="screenName">KristyMyers</data>
-      <data key="relevance">2</data>
+      <data key="id">21569218L</data>
+      <data key="screenName">charmingtail</data>
+      <data key="relevance">1</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Pres Obama&apos;s Summer of Service started: www.serve.org Register your non-profit to pull volunteers (via @dreamvillage @willrobinsoniii)</data>
+      <data key="status_text">Anyone think the GOP is milk toast? Have balls say NO to obama..it will pay off...be mean you whimpy asses!!!</data>
     </node>
     <node id="8">
       <data key="keyword">null</data>
-      <data key="id">8891212L</data>
-      <data key="screenName">valia</data>
+      <data key="id">38965925L</data>
+      <data key="screenName">TBlair417</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Obama kills a fly on national TV http://www.youtube.com/watch?v=gzgOS8dbF64  Funny, but that fly will be every1 who disagrees with him soon!</data>
+      <data key="status_text">@TaxSpendLiberal  If not apologizing for electing Obama now, we will be!  Both he and alot of the fools that legislate...</data>
     </node>
     <node id="9">
       <data key="keyword">null</data>
-      <data key="id">13887822L</data>
-      <data key="screenName">russell_h</data>
+      <data key="id">14676674L</data>
+      <data key="screenName">juanmiguelon3</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Obama is creating the &amp;quot;White House Olympics Office&amp;quot; - is this how he pays back NBC for their continual ass kissing?</data>
+      <data key="status_text">Censuran a Obama por matar una mosca</data>
     </node>
     <node id="10">
       <data key="keyword">null</data>
-      <data key="id">29293480L</data>
-      <data key="screenName">notachicken6t6</data>
-      <data key="relevance">1</data>
+      <data key="id">20696032L</data>
+      <data key="screenName">TheBuzzByBrian</data>
+      <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">OBAMA&apos;S A FLY MURDERER! &amp;gt;:(</data>
+      <data key="status_text">I am shocked ! http://bit.ly/1Zg1BS Huffpost - Jim Cramer: &amp;quot;Everybody Wishes Obama Would Just Kind Of Go Away&amp;quot; (VIDEO)</data>
     </node>
     <node id="11">
       <data key="keyword">null</data>
-      <data key="id">24740670L</data>
-      <data key="screenName">haaswrites</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @nytimes: Four views: Obama on #iranelection http://bit.ly/hYIw</data>
-    </node>
-    <node id="12">
-      <data key="keyword">null</data>
-      <data key="id">47787183L</data>
-      <data key="screenName">Juanosorioh</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@SenJohnMcCain Dear Mr. McCain I vote Obama, but you makes me remember Churchill !</data>
-    </node>
-    <node id="13">
-      <data key="keyword">null</data>
-      <data key="id">19932301L</data>
-      <data key="screenName">Lenalee_Lee</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">video of Pres Obama killing a fly during an interview haha http://tinyurl.com/mnrd2j</data>
-    </node>
-    <node id="14">
-      <data key="keyword">null</data>
-      <data key="id">22013119L</data>
-      <data key="screenName">pigmydmm</data>
+      <data key="id">43981492L</data>
+      <data key="screenName">FBIAGINI</data>
       <data key="relevance">1</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">http://www.youtube.com/watch?v=Vz8Kczv_A0g
-Michael Savage and Obama&apos;s terrorist associations</data>
+      <data key="status_text">semana loka... frio no rj, obama m,ata mosca, bolsa de ladinho, selic 9,25...</data>
     </node>
-    <node id="15">
+    <node id="12">
       <data key="keyword">null</data>
-      <data key="id">20086045L</data>
-      <data key="screenName">nodeuces</data>
+      <data key="id">18065267L</data>
+      <data key="screenName">cowboy007</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">Mr. President, I don&apos;t envy your struggles w/ this economy, but you continue to fail at equal rights.</data>
+      <data key="status_text">North Korean ship poliferating Missiles, Nukes  http://bit.ly/wB5YF #Obama still hiding under his desk!  #tcot #obama #welcomebackcarter #p2</data>
     </node>
-    <node id="16">
+    <node id="13">
+      <data key="keyword">null</data>
+      <data key="id">29222053L</data>
+      <data key="screenName">ldellis</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">If you could change your name, what would you change it to? &amp;quot;I&#8217;d change Laurea to Laurel, DeAnna to Anna, and Ellis to Ellis-Redford-Obama.&amp;quot;</data>
+    </node>
+    <node id="14">
+      <data key="keyword">null</data>
+      <data key="id">28435891L</data>
+      <data key="screenName">2MarineDad</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">My kids say I should be writing jokes for TV...I&apos;m thinking I could right Obama speeches..same dif.</data>
+    </node>
+    <node id="15">
       <data key="keyword">President</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
@@ -178,609 +167,113 @@ Michael Savage and Obama&apos;s terrorist associations</data>
       <data key="follower">false</data>
       <data key="status_text">null</data>
     </node>
-    <node id="18">
+    <node id="16">
       <data key="keyword">null</data>
-      <data key="id">28692957L</data>
-      <data key="screenName">LeslieKDeutsch</data>
+      <data key="id">16097177L</data>
+      <data key="screenName">propernice</data>
       <data key="relevance">3</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">President Obama seems to be getting back on track with LGBT community. He&apos;s giving more of us reason for hope. Good for him!</data>
+      <data key="status_text">@sglyon lol i swear to you.  direct quote from them:  &amp;quot;Well, I guess it can&apos;t be said that President Obama wouldn&apos;t hurt a fly.&amp;quot;</data>
+    </node>
+    <node id="17">
+      <data key="keyword">null</data>
+      <data key="id">16228391L</data>
+      <data key="screenName">LRM_Ent</data>
+      <data key="relevance">3</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Get this PETA is up set with President Obama for killing a nasty germ spreading house fly!   http://bit.ly/GdxB5 - its not that serious!</data>
+    </node>
+    <node id="18">
+      <data key="keyword">null</data>
+      <data key="id">29205738L</data>
+      <data key="screenName">fast06mustang</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@Anita_de_Jong To there credit thry are respecting him. Unlike the other Media with President Bush.</data>
+    </node>
+    <node id="19">
+      <data key="keyword">null</data>
+      <data key="id">15728976L</data>
+      <data key="screenName">nzheraldbiz</data>
+      <data key="relevance">3</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Obama plan puts too much faith in the Fed, say critics: WASHINGTON - President Barack Obama&apos;s plan to increase o.. http://tinyurl.com/nfjopw</data>
     </node>
     <node id="20">
       <data key="keyword">null</data>
-      <data key="id">32703457L</data>
-      <data key="screenName">AtlantaJJ</data>
-      <data key="relevance">2</data>
+      <data key="id">39603339L</data>
+      <data key="screenName">CascadeCleaning</data>
+      <data key="relevance">3</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">The President is human people!!</data>
+      <data key="status_text">PETA is now made at President Obama for killing a fly..  WOW</data>
+    </node>
+    <node id="21">
+      <data key="keyword">null</data>
+      <data key="id">46828152L</data>
+      <data key="screenName">JAYNEGRIFFIN</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">IF G GORDON LIDDY HAD THIS VOCABULARY WHEN NIXON WAS PRESIDENT HE COULD HAVE TALKED HIMSELF OUT OF TROUBLE....HA...HA....HA...LOL!</data>
     </node>
     <node id="22">
       <data key="keyword">null</data>
-      <data key="id">10880L</data>
-      <data key="screenName">bmo</data>
+      <data key="id">16503846L</data>
+      <data key="screenName">ngeidner</data>
       <data key="relevance">3</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">RT @TimOBrienNYT: RT @DVNJr I&apos;ll be on The Today Show tomorrow at 7:18 a.m. talking about President Obama&apos;s golf game.</data>
+      <data key="status_text">RT @chrisgeidner: New at Salon.com: President Obama has not betrayed the gay community, by Chris Geidner: http://tr.im/p06F #LGBT</data>
     </node>
     <node id="23">
       <data key="keyword">null</data>
-      <data key="id">24981710L</data>
-      <data key="screenName">LizStrand</data>
-      <data key="relevance">2</data>
+      <data key="id">47005158L</data>
+      <data key="screenName">Change_for_Iran</data>
+      <data key="relevance">1</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">My opinion? President doesn&apos;t make the economy better or worse. Congress, and regular people, have more control over it.</data>
+      <data key="status_text">@flimflammman but for start we all want our true president whom we voted for</data>
     </node>
     <node id="24">
       <data key="keyword">null</data>
-      <data key="id">29577698L</data>
-      <data key="screenName">BrianAdkins1</data>
-      <data key="relevance">1</data>
+      <data key="id">17700373L</data>
+      <data key="screenName">BMCronin1</data>
+      <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">@blogyourworld Drinks with the president-elect of the association in 50 minutes; flight was great; never sat in First Class before.  LOL.</data>
+      <data key="status_text">RT @jaketapper: Polls show the American people increasingly concerned about the President&apos;s ec policies...http://bit.ly/lyJhX #TCOT #TLOT</data>
     </node>
     <node id="25">
       <data key="keyword">null</data>
-      <data key="id">47697376L</data>
-      <data key="screenName">ELB55</data>
+      <data key="id">31251441L</data>
+      <data key="screenName">michaeljwagner</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">@ClintonNews ////now maybe the President can sign retirement age for reserve military to 55 as fed employees enjoy...</data>
+      <data key="status_text">null</data>
     </node>
     <node id="26">
       <data key="keyword">null</data>
-      <data key="id">16855827L</data>
-      <data key="screenName">ExRea</data>
+      <data key="id">21130583L</data>
+      <data key="screenName">ReFuelCEO</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">RT @twinelm WE MUST UNDERSTAND OUR LEADERS R THUGS : President did not follow the law in IG Firings - McCaskill http://bit.ly/1AakMS</data>
+      <data key="status_text">null</data>
     </node>
     <node id="27">
       <data key="keyword">null</data>
-      <data key="id">19071132L</data>
-      <data key="screenName">earthtimes</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Cousin of Bolivian president victim of gruesome murder http://tinyurl.com/kokgn3</data>
-    </node>
-    <node id="28">
-      <data key="keyword">null</data>
-      <data key="id">14070158L</data>
-      <data key="screenName">supapimp</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">#PETA bashes #President Obama for slapping and killing fly on camera. No joke</data>
-    </node>
-    <node id="29">
-      <data key="keyword">null</data>
-      <data key="id">16055242L</data>
-      <data key="screenName">davecade</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT BrienLawLLCUS Attorney Humetewa (Hopi) about to be replaced by President Obama. Where are the native tweets?</data>
-    </node>
-    <node id="30">
-      <data key="keyword">null</data>
-      <data key="id">19399518L</data>
-      <data key="screenName">torkaveli</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">oh and btw I&apos;m the President of the @ALorious fan club. Album coming soon!</data>
-    </node>
-    <node id="31">
-      <data key="keyword">null</data>
-      <data key="id">20870838L</data>
-      <data key="screenName">dermagirljulia</data>
+      <data key="id">14254651L</data>
+      <data key="screenName">paul_schmidt</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
       <data key="status_text">null</data>
-    </node>
-    <node id="32">
-      <data key="keyword">null</data>
-      <data key="id">18301196L</data>
-      <data key="screenName">gaycivilrights</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Video: Obama Signs Memo Allowing Same-Sex Partners of Federal Employees (A Few) Benefits #LGBT</data>
-    </node>
-    <node id="33">
-      <data key="keyword">null</data>
-      <data key="id">19879166L</data>
-      <data key="screenName">ookso</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Gay critics say &apos;too little, too late&apos; from Obama - http://bit.ly/oM91B #cnn</data>
-    </node>
-    <node id="34">
-      <data key="keyword">null</data>
-      <data key="id">14759108L</data>
-      <data key="screenName">rossdouglas</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Would have been more impressed if Barack Obama had reanimated the fly after whacking its brains in. #BarackObama @BarackObama</data>
-    </node>
-    <node id="35">
-      <data key="keyword">null</data>
-      <data key="id">18513241L</data>
-      <data key="screenName">IBDeditorials</data>
-      <data key="relevance">4</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Why He Was Booed: Health Care: President Obama talked a lot about cutting medical costs during his 7,300-word sp.. http://tinyurl.com/n5xk9h</data>
-    </node>
-    <node id="36">
-      <data key="keyword">null</data>
-      <data key="id">13195922L</data>
-      <data key="screenName">jameil1922</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@staceyff i wonder if PETA has released a statement on Obama&apos;s fly swat yet...</data>
-    </node>
-    <node id="37">
-      <data key="keyword">null</data>
-      <data key="id">35896634L</data>
-      <data key="screenName">MiuHage</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@quemundodoido kkkkkkkkk talvez o Obama tenha sangue frio.. pobre mosquinha =)</data>
-    </node>
-    <node id="38">
-      <data key="keyword">null</data>
-      <data key="id">21486588L</data>
-      <data key="screenName">tanyabachand</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">I please to report that job Obama &amp;quot;created&amp;quot; in my office will be filled Monday when new hire starts.</data>
-    </node>
-    <node id="39">
-      <data key="keyword">null</data>
-      <data key="id">919881L</data>
-      <data key="screenName">RoxPop</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">can&apos;t find the through-line on Obama&apos;s spaghetti-meet-wall GLBT policies</data>
-    </node>
-    <node id="40">
-      <data key="keyword">null</data>
-      <data key="id">23428158L</data>
-      <data key="screenName">omgcurry</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@jaaake3 I reckon it could be a trending topic in this desperate time of itunes, lakers, obama fly swatting and iranians. #shutupcurry</data>
-    </node>
-    <node id="41">
-      <data key="keyword">null</data>
-      <data key="id">25945980L</data>
-      <data key="screenName">Afroman231</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Senator: Obama may classify detainee pics: The Obama administration has promised to classify photos of alleged U.. http://tinyurl.com/mcoowo</data>
-    </node>
-    <node id="42">
-      <data key="keyword">null</data>
-      <data key="id">18977047L</data>
-      <data key="screenName">guysen</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">L&apos;administration Obama augmente ses pressions sur le gouvernement isra&#233;lien afin que le blocus de la Bande de Ga.. http://tinyurl.com/mdfx9f</data>
-    </node>
-    <node id="43">
-      <data key="keyword">null</data>
-      <data key="id">29634932L</data>
-      <data key="screenName">jasonblogz</data>
-      <data key="relevance">6</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT ThinkIran President Obama Please Come Out Publicly &amp;amp;Say You Support Regime Change In Iran Before Friday Prayers #IranElection Tehran Iran</data>
-    </node>
-    <node id="44">
-      <data key="keyword">null</data>
-      <data key="id">14720743L</data>
-      <data key="screenName">damutah</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">not gonna lie, this was pretty legit lol. RT @kevinrose: &amp;quot;Obama Swats a Fly Like a Boss During an Interview&amp;quot;: http://digg.com/d1u1DP?t</data>
-    </node>
-    <node id="45">
-      <data key="keyword">null</data>
-      <data key="id">18563698L</data>
-      <data key="screenName">macg_og</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Bernard Goldberg just said on O&apos;Reilly that very few Obama critics on Fox News, he did it with a straight face, what a hack</data>
-    </node>
-    <node id="46">
-      <data key="keyword">null</data>
-      <data key="id">18566907L</data>
-      <data key="screenName">RIGHTone</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@clairecmc Don&apos;t let the Obama admin intimidate inspecter generals &amp;amp; smear a respectable man. Go blue dog!</data>
-    </node>
-    <node id="47">
-      <data key="keyword">null</data>
-      <data key="id">14109333L</data>
-      <data key="screenName">HockeyInsight</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Outgoing Senators president Roy Mlakar won&apos;t slam team over departure http://tinyurl.com/l4xf2x</data>
-    </node>
-    <node id="48">
-      <data key="keyword">null</data>
-      <data key="id">20193935L</data>
-      <data key="screenName">ranggrol</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@gentlyferal - http://dailydose.us/2009/06/17/full-text-of-president-obamas-remarks-and-memorandum-on-federal-benefits/</data>
-    </node>
-    <node id="49">
-      <data key="keyword">null</data>
-      <data key="id">15129433L</data>
-      <data key="screenName">rvabusiness</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @katriord: RT @LATimestot What Obama just said &amp;amp; did @ same-sex benefits: Full text of president&apos;s remarks &amp;amp; document http://bit.ly/AD46v</data>
-    </node>
-    <node id="50">
-      <data key="keyword">null</data>
-      <data key="id">16211049L</data>
-      <data key="screenName">jepaco</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Petition: Tell the President and Congress:
-It&apos;s time to repeal DOMA. http://bit.ly/uVmkX #DOMA Please RT</data>
-    </node>
-    <node id="51">
-      <data key="keyword">null</data>
-      <data key="id">24544760L</data>
-      <data key="screenName">larryr18</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @pwkennedy: President did not &apos;follow the law&apos; in IG Firings - McCaskill http://bit.ly/1AakMS || Cool..a lovers&apos; spat btw McCaskill, BO</data>
-    </node>
-    <node id="52">
-      <data key="keyword">null</data>
-      <data key="id">43347964L</data>
-      <data key="screenName">TakeCareJobs</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">#jobs Vice President Client Management - (Conshohocken, PA): Position The VP, Client Management strategical.. http://u.mavrev.com/bzg4</data>
-    </node>
-    <node id="53">
-      <data key="keyword">null</data>
-      <data key="id">33050693L</data>
-      <data key="screenName">IronCurtaiNYC</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">I miss Senator Obama. I wish he were president instead of President Obama. :(</data>
-    </node>
-    <node id="54">
-      <data key="keyword">null</data>
-      <data key="id">15160067L</data>
-      <data key="screenName">reuterstop</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Obama extends benefits, promises more for gays: WASHINGTON (Reuters) - President Barack Obama on Wednesday exten.. http://tinyurl.com/l8e4sv</data>
-    </node>
-    <node id="55">
-      <data key="keyword">null</data>
-      <data key="id">36987190L</data>
-      <data key="screenName">NewsMashup</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Reuters: Obama extends benefits, promises more for gays: WASHINGTON (Reuters) - President Barack Obama o.. http://tinyurl.com/l8e4sv</data>
-    </node>
-    <node id="56">
-      <data key="keyword">null</data>
-      <data key="id">19736562L</data>
-      <data key="screenName">huffpo</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Frank Schaeffer: Maher vs. Obama -- Score One For the President http://tinyurl.com/mf28o3</data>
-    </node>
-    <node id="57">
-      <data key="keyword">null</data>
-      <data key="id">2497401L</data>
-      <data key="screenName">noebie</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">what the vice president meant to say is that there is room in every culture for diversity of thought and practice</data>
-    </node>
-    <node id="58">
-      <data key="keyword">null</data>
-      <data key="id">14415237L</data>
-      <data key="screenName">ChAn_MaN</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">null</data>
-    </node>
-    <node id="59">
-      <data key="keyword">null</data>
-      <data key="id">42974833L</data>
-      <data key="screenName">HeyJude5683</data>
-      <data key="relevance">4</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">according to Fox News, if i dont worship the ground President Obama walks on.... im racist. Welcome to the messed perceptions of some humans</data>
-    </node>
-    <node id="60">
-      <data key="keyword">null</data>
-      <data key="id">21535920L</data>
-      <data key="screenName">todayspaper</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Room for Debate: Obama on Iran http://tinyurl.com/ko82nt</data>
-    </node>
-    <node id="61">
-      <data key="keyword">null</data>
-      <data key="id">35994283L</data>
-      <data key="screenName">troy_n</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@Schwarzenegger if only obama and the Federal government can be a transparent. they campaigned on it but like everything else, failed at it.</data>
-    </node>
-    <node id="62">
-      <data key="keyword">null</data>
-      <data key="id">26532227L</data>
-      <data key="screenName">sharonsaw</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">One step forward - Obama extends benefits, promises more for gays http://bit.ly/oNXUO via @addthis</data>
-    </node>
-    <node id="63">
-      <data key="keyword">null</data>
-      <data key="id">27231008L</data>
-      <data key="screenName">normee77</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">in case you missed it from @msnbc Obama extends limited benefits to federal employees&apos; same-sex partners http://bit.ly/fOEXd</data>
-    </node>
-    <node id="64">
-      <data key="keyword">null</data>
-      <data key="id">15982861L</data>
-      <data key="screenName">barbiesnow</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">getting upset with LGBT&apos;s..selfishness putting stress on Obama</data>
-    </node>
-    <node id="65">
-      <data key="keyword">null</data>
-      <data key="id">39398823L</data>
-      <data key="screenName">delight_charm</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">sorry y&apos;all, but am I the only one who thinks that michelle obama looks sloppy more times than she looks great?</data>
-    </node>
-    <node id="66">
-      <data key="keyword">null</data>
-      <data key="id">14773785L</data>
-      <data key="screenName">ryanreed</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">I thought Obama said in NBCs Inside the Obama White House that he doesn&apos;t watch cable news.  Now he knows all about it.  http://su.pr/AY9nZm</data>
-    </node>
-    <node id="67">
-      <data key="keyword">null</data>
-      <data key="id">36214146L</data>
-      <data key="screenName">chaotickonflikt</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">OBAMA IS CLUELESS. SORRY.,,, NOT BUT HE IS,,,, TWEET IF YOU WAN&apos;T BUT THAT IS THE TRUETH!!!!!!!!!!! OH WELL I GUESS I&apos;LL BE ON THE NO FLY LI</data>
-    </node>
-    <node id="68">
-      <data key="keyword">null</data>
-      <data key="id">28690799L</data>
-      <data key="screenName">FriscoMack415</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@106andpark Barack Obama</data>
-    </node>
-    <node id="69">
-      <data key="keyword">null</data>
-      <data key="id">58633L</data>
-      <data key="screenName">huge</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @neopaine: @huge I think looking ahead to 2012 Mark Sanford is who I would support. ~ Huntsman of Utah works, but I&apos;ll stay with Obama</data>
-    </node>
-    <node id="70">
-      <data key="keyword">null</data>
-      <data key="id">15304856L</data>
-      <data key="screenName">stackiii</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @cqpolitics: Poll Tracker: As Honeymoon Wanes, Public Taking Harder Look at Obama&apos;s Actions http://tinyurl.com/ljvbf9 #fb</data>
-    </node>
-    <node id="71">
-      <data key="keyword">null</data>
-      <data key="id">18425584L</data>
-      <data key="screenName">rdefrancisco</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Obama swats a fly on TV http://bit.ly/xPfVP</data>
-    </node>
-    <node id="72">
-      <data key="keyword">null</data>
-      <data key="id">10720012L</data>
-      <data key="screenName">victor_cheng</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Public Wary of Deficit, Economic Intervention: Obama faces new concerns from the public about the budget deficit.. http://bit.ly/6zLVq</data>
-    </node>
-    <node id="73">
-      <data key="keyword">null</data>
-      <data key="id">14124629L</data>
-      <data key="screenName">DrSuzi</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">I agree with you. RT @Mohammadkoln: I , as a Persian , think Obama must react strongly to Iran election.Of course in a peaceful way.</data>
-    </node>
-    <node id="74">
-      <data key="keyword">null</data>
-      <data key="id">14744173L</data>
-      <data key="screenName">Heady1313</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Check this video out -- President Obama Announces Benefits for Gay Partners of Federal Employees http://www.youtube.com/watch?v=KRSgTIzRCsM</data>
-    </node>
-    <node id="75">
-      <data key="keyword">null</data>
-      <data key="id">43413830L</data>
-      <data key="screenName">diabeticnews</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">National Changing Diabetes Program Issues Statement on President ...: PRINCETON, NJ , June 17 /PRNewswire/ -- Th.. http://bit.ly/DxPmY</data>
-    </node>
-    <node id="76">
-      <data key="keyword">null</data>
-      <data key="id">30473755L</data>
-      <data key="screenName">HenriettaHughes</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">My president has a 2nd name, it&apos;s O-B-A-M-A. Oh we must defeat him evry day (cont) #tcot #p2</data>
-    </node>
-    <node id="77">
-      <data key="keyword">null</data>
-      <data key="id">24772954L</data>
-      <data key="screenName">WYSI</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">#IranElection I saw groups of 5 holding hands praying for the president and God keeping them safe and releasing 5 spiritual gifts to them.</data>
-    </node>
-    <node id="78">
-      <data key="keyword">null</data>
-      <data key="id">21626593L</data>
-      <data key="screenName">tomshade</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@oreillyfactor Hannity and Rove now there&apos;s some fair and balanced talk about the president.  NOT!</data>
-    </node>
-    <node id="79">
-      <data key="keyword">null</data>
-      <data key="id">37338950L</data>
-      <data key="screenName">stendek_</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">President Hussein Obama squashes a fly on national television. Whoop dee doo! I am so impressed. NOT! Camera zoomed in on dead fly. Sigh!</data>
-    </node>
-    <node id="80">
-      <data key="keyword">null</data>
-      <data key="id">24100573L</data>
-      <data key="screenName">MoBlessed</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">President takes a strong stand against totalitarian Iran (The French President, that is) http://tinyurl.com/ngdxrr</data>
-    </node>
-    <node id="81">
-      <data key="keyword">null</data>
-      <data key="id">25747786L</data>
-      <data key="screenName">TheLibertyTree</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">President Obama Gives Benefits of Same Sex Partners to Federal Employees - #tcot http://tinyurl.com/m4kbvz</data>
-    </node>
-    <node id="82">
-      <data key="keyword">null</data>
-      <data key="id">25972010L</data>
-      <data key="screenName">HunniRae</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">SOMEONE JUST SAID THEY MAY GET HER INSERTED TO WHERE SHE WILL DEFIANTLY HAVE A BOY.. HELL HE IS THE PRESIDENT, HE CAN DO ANYTHING HE WANT</data>
-    </node>
-    <node id="83">
-      <data key="keyword">null</data>
-      <data key="id">18165800L</data>
-      <data key="screenName">Ambious</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT  from Iran : What is a President without a Country? - #Iranelection</data>
-    </node>
-    <node id="84">
-      <data key="keyword">null</data>
-      <data key="id">10360832L</data>
-      <data key="screenName">jlparkernyc</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @ClintonNews Statement by the President on the Presidential Memorandum on Federal Benefits and Non-Discrimination http://twurl.nl/gvhkqe</data>
-    </node>
-    <node id="85">
-      <data key="keyword">null</data>
-      <data key="id">14106059L</data>
-      <data key="screenName">Bthypin</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">VIDEO: From one fly hunter to another, well played Mr. President, well played. He stalks his prey, strikes and swaggers. http://is.gd/14OZf</data>
-    </node>
-    <node id="86">
-      <data key="keyword">null</data>
-      <data key="id">10254632L</data>
-      <data key="screenName">GoogleGod</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">My Top News: What Has 132 Rooms and Flies?: Although President Obama managed to kill one, there are .. http://tinyurl.com/n575zg</data>
     </node>
 
     <!-- edges -->
@@ -791,105 +284,30 @@ It&apos;s time to repeal DOMA. http://bit.ly/uVmkX #DOMA Please RT</data>
     <edge id="4" source="0" target="5"/>
     <edge id="5" source="0" target="6"/>
     <edge id="6" source="0" target="7"/>
-    <edge id="7" source="0" target="4"/>
-    <edge id="8" source="0" target="8"/>
-    <edge id="9" source="0" target="9"/>
-    <edge id="10" source="0" target="10"/>
-    <edge id="11" source="0" target="11"/>
-    <edge id="12" source="0" target="12"/>
-    <edge id="13" source="0" target="13"/>
-    <edge id="14" source="0" target="14"/>
-    <edge id="17" source="16" target="18"/>
-    <edge id="18" source="0" target="18"/>
-    <edge id="20" source="16" target="20"/>
-    <edge id="22" source="16" target="22"/>
-    <edge id="23" source="0" target="22"/>
-    <edge id="24" source="16" target="23"/>
-    <edge id="25" source="16" target="24"/>
-    <edge id="26" source="16" target="4"/>
-    <edge id="27" source="0" target="4"/>
-    <edge id="28" source="16" target="25"/>
-    <edge id="29" source="16" target="26"/>
-    <edge id="30" source="16" target="27"/>
-    <edge id="31" source="16" target="28"/>
-    <edge id="32" source="0" target="28"/>
-    <edge id="33" source="16" target="29"/>
-    <edge id="34" source="0" target="29"/>
-    <edge id="35" source="16" target="30"/>
-    <edge id="36" source="0" target="31"/>
-    <edge id="37" source="0" target="32"/>
-    <edge id="38" source="0" target="33"/>
-    <edge id="39" source="0" target="34"/>
-    <edge id="40" source="0" target="35"/>
-    <edge id="41" source="0" target="36"/>
-    <edge id="42" source="0" target="37"/>
-    <edge id="43" source="0" target="38"/>
-    <edge id="44" source="0" target="39"/>
-    <edge id="45" source="0" target="40"/>
-    <edge id="46" source="0" target="41"/>
-    <edge id="47" source="0" target="42"/>
-    <edge id="48" source="0" target="43"/>
-    <edge id="49" source="0" target="44"/>
-    <edge id="50" source="0" target="45"/>
-    <edge id="51" source="0" target="46"/>
-    <edge id="52" source="16" target="47"/>
-    <edge id="53" source="16" target="43"/>
-    <edge id="54" source="0" target="43"/>
-    <edge id="55" source="16" target="48"/>
-    <edge id="56" source="16" target="49"/>
-    <edge id="57" source="0" target="49"/>
-    <edge id="58" source="16" target="50"/>
-    <edge id="59" source="16" target="43"/>
-    <edge id="60" source="0" target="43"/>
-    <edge id="61" source="16" target="51"/>
-    <edge id="62" source="16" target="52"/>
-    <edge id="63" source="16" target="53"/>
-    <edge id="64" source="0" target="53"/>
-    <edge id="65" source="16" target="52"/>
-    <edge id="66" source="16" target="54"/>
-    <edge id="67" source="0" target="54"/>
-    <edge id="68" source="16" target="55"/>
-    <edge id="69" source="0" target="55"/>
-    <edge id="70" source="16" target="30"/>
-    <edge id="71" source="16" target="56"/>
-    <edge id="72" source="0" target="56"/>
-    <edge id="73" source="16" target="57"/>
-    <edge id="74" source="0" target="58"/>
-    <edge id="75" source="0" target="59"/>
-    <edge id="76" source="0" target="60"/>
-    <edge id="77" source="0" target="61"/>
-    <edge id="78" source="0" target="62"/>
-    <edge id="79" source="0" target="63"/>
-    <edge id="80" source="0" target="64"/>
-    <edge id="81" source="0" target="65"/>
-    <edge id="82" source="0" target="66"/>
-    <edge id="83" source="0" target="67"/>
-    <edge id="84" source="0" target="68"/>
-    <edge id="85" source="0" target="69"/>
-    <edge id="86" source="0" target="70"/>
-    <edge id="87" source="0" target="71"/>
-    <edge id="88" source="0" target="72"/>
-    <edge id="89" source="0" target="73"/>
-    <edge id="90" source="16" target="74"/>
-    <edge id="91" source="0" target="74"/>
-    <edge id="92" source="16" target="75"/>
-    <edge id="93" source="16" target="59"/>
-    <edge id="94" source="0" target="59"/>
-    <edge id="95" source="16" target="76"/>
-    <edge id="96" source="16" target="77"/>
-    <edge id="97" source="16" target="78"/>
-    <edge id="98" source="16" target="79"/>
-    <edge id="99" source="0" target="79"/>
-    <edge id="100" source="16" target="80"/>
-    <edge id="101" source="16" target="81"/>
-    <edge id="102" source="0" target="81"/>
-    <edge id="103" source="16" target="82"/>
-    <edge id="104" source="16" target="83"/>
-    <edge id="105" source="16" target="84"/>
-    <edge id="106" source="16" target="35"/>
-    <edge id="107" source="0" target="35"/>
-    <edge id="108" source="16" target="85"/>
-    <edge id="109" source="16" target="86"/>
-    <edge id="110" source="0" target="86"/>
+    <edge id="7" source="0" target="8"/>
+    <edge id="8" source="0" target="9"/>
+    <edge id="9" source="0" target="10"/>
+    <edge id="10" source="0" target="11"/>
+    <edge id="11" source="0" target="12"/>
+    <edge id="12" source="0" target="13"/>
+    <edge id="13" source="0" target="14"/>
+    <edge id="14" source="0" target="3"/>
+    <edge id="15" source="15" target="16"/>
+    <edge id="16" source="0" target="16"/>
+    <edge id="17" source="15" target="17"/>
+    <edge id="18" source="0" target="17"/>
+    <edge id="19" source="15" target="18"/>
+    <edge id="20" source="15" target="19"/>
+    <edge id="21" source="0" target="19"/>
+    <edge id="22" source="15" target="20"/>
+    <edge id="23" source="0" target="20"/>
+    <edge id="24" source="15" target="21"/>
+    <edge id="25" source="15" target="22"/>
+    <edge id="26" source="0" target="22"/>
+    <edge id="27" source="15" target="23"/>
+    <edge id="28" source="15" target="24"/>
+    <edge id="29" source="0" target="25"/>
+    <edge id="30" source="0" target="26"/>
+    <edge id="31" source="0" target="27"/>
   </graph>
 </graphml>
