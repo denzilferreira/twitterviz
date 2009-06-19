@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
   http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <!-- prefuse GraphML Writer | Fri Jun 19 03:19:16 BST 2009 -->
+  <!-- prefuse GraphML Writer | Fri Jun 19 20:18:59 WEST 2009 -->
   <key id="keyword" for="node" attr.name="keyword" attr.type="string"/>
   <key id="id" for="node" attr.name="id" attr.type="long">
     <default>0</default>
@@ -24,7 +24,7 @@
   <graph edgedefault="directed">
     <!-- nodes -->
     <node id="0">
-      <data key="keyword">Obama</data>
+      <data key="keyword">Ubicomp</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
       <data key="relevance">10</data>
@@ -34,132 +34,15 @@
     </node>
     <node id="1">
       <data key="keyword">null</data>
-      <data key="id">23372761L</data>
-      <data key="screenName">cjn315</data>
-      <data key="relevance">2</data>
+      <data key="id">19181333L</data>
+      <data key="screenName">NomineBovis</data>
+      <data key="relevance">1</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">RT @arra: Tpoll: Should the RNC demand that Barack Obama produce his actual birth certificate? Yes/No/Don&apos;t Care -  Keep @ARRA in response</data>
+      <data key="status_text">#hci Hasn&apos;t everyone feared a machine? I don&apos;t get the dancing at the start, but still awesome: http://bit.ly/4ekUv</data>
     </node>
     <node id="2">
-      <data key="keyword">null</data>
-      <data key="id">24303284L</data>
-      <data key="screenName">suzq48</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@Freedomlover1 just turned 61 this year and haven&apos;t had insurance for 8 years or more, so guess I won&apos;t have any now either. Thanx Obama</data>
-    </node>
-    <node id="3">
-      <data key="keyword">null</data>
-      <data key="id">23696410L</data>
-      <data key="screenName">BrentTeichman</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT@goparchitect NBC News &amp;quot;Obama&apos;s ratings have plunged with Independents&amp;quot; we are seeing &amp;quot;Political cracks&amp;quot; in BHO http://tinyurl.com/nooeqr</data>
-    </node>
-    <node id="4">
-      <data key="keyword">null</data>
-      <data key="id">21693607L</data>
-      <data key="screenName">execulive</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @Shocker: TARP provision allows Obama oversight board to call off any investigations of his staff http://bit.ly/5mK6S #tcot</data>
-    </node>
-    <node id="5">
-      <data key="keyword">null</data>
-      <data key="id">27441005L</data>
-      <data key="screenName">MarkPacker</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Keith Urban might be the greatest &amp;quot;country&amp;quot; artist of all-time. If he&apos;s country, then I&apos;m Barack Obama.</data>
-    </node>
-    <node id="6">
-      <data key="keyword">null</data>
-      <data key="id">16349648L</data>
-      <data key="screenName">MikeBates</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@Rabiddogg Will Homeland Security designate me a security risk if I say that I hope Obama&apos;s teleprompter fails?</data>
-    </node>
-    <node id="7">
-      <data key="keyword">null</data>
-      <data key="id">21569218L</data>
-      <data key="screenName">charmingtail</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Anyone think the GOP is milk toast? Have balls say NO to obama..it will pay off...be mean you whimpy asses!!!</data>
-    </node>
-    <node id="8">
-      <data key="keyword">null</data>
-      <data key="id">38965925L</data>
-      <data key="screenName">TBlair417</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@TaxSpendLiberal  If not apologizing for electing Obama now, we will be!  Both he and alot of the fools that legislate...</data>
-    </node>
-    <node id="9">
-      <data key="keyword">null</data>
-      <data key="id">14676674L</data>
-      <data key="screenName">juanmiguelon3</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Censuran a Obama por matar una mosca</data>
-    </node>
-    <node id="10">
-      <data key="keyword">null</data>
-      <data key="id">20696032L</data>
-      <data key="screenName">TheBuzzByBrian</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">I am shocked ! http://bit.ly/1Zg1BS Huffpost - Jim Cramer: &amp;quot;Everybody Wishes Obama Would Just Kind Of Go Away&amp;quot; (VIDEO)</data>
-    </node>
-    <node id="11">
-      <data key="keyword">null</data>
-      <data key="id">43981492L</data>
-      <data key="screenName">FBIAGINI</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">semana loka... frio no rj, obama m,ata mosca, bolsa de ladinho, selic 9,25...</data>
-    </node>
-    <node id="12">
-      <data key="keyword">null</data>
-      <data key="id">18065267L</data>
-      <data key="screenName">cowboy007</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">North Korean ship poliferating Missiles, Nukes  http://bit.ly/wB5YF #Obama still hiding under his desk!  #tcot #obama #welcomebackcarter #p2</data>
-    </node>
-    <node id="13">
-      <data key="keyword">null</data>
-      <data key="id">29222053L</data>
-      <data key="screenName">ldellis</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">If you could change your name, what would you change it to? &amp;quot;I&#8217;d change Laurea to Laurel, DeAnna to Anna, and Ellis to Ellis-Redford-Obama.&amp;quot;</data>
-    </node>
-    <node id="14">
-      <data key="keyword">null</data>
-      <data key="id">28435891L</data>
-      <data key="screenName">2MarineDad</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">My kids say I should be writing jokes for TV...I&apos;m thinking I could right Obama speeches..same dif.</data>
-    </node>
-    <node id="15">
-      <data key="keyword">President</data>
+      <data key="keyword">HCI</data>
       <data key="id">0L</data>
       <data key="screenName">null</data>
       <data key="relevance">10</data>
@@ -167,147 +50,149 @@
       <data key="follower">false</data>
       <data key="status_text">null</data>
     </node>
+    <node id="3">
+      <data key="keyword">null</data>
+      <data key="id">13232092L</data>
+      <data key="screenName">ebuie</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@g33kgurrl In practice, perhaps. But not by definition. (Much of my career has involved HCI in government systems. Just FYI. :-)</data>
+    </node>
+    <node id="4">
+      <data key="keyword">null</data>
+      <data key="id">16337680L</data>
+      <data key="screenName">bmcnely</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@preterite There&apos;s quite a bit actually, mostly from HCI folks. I&apos;m working on using persistent backchannels as a curricular practice. :-)</data>
+    </node>
+    <node id="5">
+      <data key="keyword">null</data>
+      <data key="id">17542441L</data>
+      <data key="screenName">Human_Capital</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Check it out - HCI Podcast-The Application of Enterprise Social Networking to Talent Acquisition. http://bit.ly/1xrZjR</data>
+    </node>
+    <node id="6">
+      <data key="keyword">null</data>
+      <data key="id">34578817L</data>
+      <data key="screenName">be24at</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Ger&#252;cht wird wahr: HCI Austria wird umgebaut
+http://bit.ly/zeGe8</data>
+    </node>
+    <node id="7">
+      <data key="keyword">null</data>
+      <data key="id">15905105L</data>
+      <data key="screenName">alpaykasal</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">will be building an #arduino that tweets based on sensor status, and then combining physical computing with #multitouch for total #hci :)</data>
+    </node>
+    <node id="8">
+      <data key="keyword">null</data>
+      <data key="id">15208867L</data>
+      <data key="screenName">jozilla</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Getting ready for our HCI reading group session. Today&apos;s papers are about usability evaluation: http://bit.ly/YZmMz http://bit.ly/U6m0T</data>
+    </node>
+    <node id="9">
+      <data key="keyword">null</data>
+      <data key="id">17786416L</data>
+      <data key="screenName">CarstenBN</data>
+      <data key="relevance">1</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">&#8220;Designing Interfaces: Patterns for Effective Interaction Design&#8221;, http://designinginterfaces.com/ !glu !ux !hci !webdesign</data>
+    </node>
+    <node id="10">
+      <data key="keyword">null</data>
+      <data key="id">37922292L</data>
+      <data key="screenName">CMDNHotJobs</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Software Eng-Bluetooth Firmware Dev: Bluetooth technology (lower layer protocol stack (HCI/LM/LC), RTOS, C, Bangalore http://j.cmdn.com/2847</data>
+    </node>
+    <node id="11">
+      <data key="keyword">null</data>
+      <data key="id">3499161L</data>
+      <data key="screenName">danielegaliffa</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">following HCI Italy 09 through web http://conferenceserv.dis.uniroma1.it/chitaly09/</data>
+    </node>
+    <node id="12">
+      <data key="keyword">null</data>
+      <data key="id">41566176L</data>
+      <data key="screenName">Computer_book</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">New release: Human-Centered Software Engineering: Software Engineering Models, Patterns and Architectures for HCI (Hum.. http://bit.ly/PY5IB</data>
+    </node>
+    <node id="13">
+      <data key="keyword">null</data>
+      <data key="id">10134302L</data>
+      <data key="screenName">acomputerpro</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">Thank you @SonicOrange @kevinrj @motownmutt &amp;amp; @schrodingercat. I sprayed the bite with 2% Diphenhydramine HCI &amp;amp; .1% Zinc acetate. I am okay.</data>
+    </node>
+    <node id="14">
+      <data key="keyword">null</data>
+      <data key="id">22322714L</data>
+      <data key="screenName">hangwong</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">@timharan have any requirements? How far? McCools@Foothill Village. On the U, the Point@HCI. indochineutah.com is close as well.</data>
+    </node>
+    <node id="15">
+      <data key="keyword">null</data>
+      <data key="id">37552085L</data>
+      <data key="screenName">aruspexWFP</data>
+      <data key="relevance">2</data>
+      <data key="friend">false</data>
+      <data key="follower">false</data>
+      <data key="status_text">New Blog Post: HCI Workforce Planning Conference Part 1: Evolving WFP landscape http://tinyurl.com/njzjn4</data>
+    </node>
     <node id="16">
       <data key="keyword">null</data>
-      <data key="id">16097177L</data>
-      <data key="screenName">propernice</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@sglyon lol i swear to you.  direct quote from them:  &amp;quot;Well, I guess it can&apos;t be said that President Obama wouldn&apos;t hurt a fly.&amp;quot;</data>
-    </node>
-    <node id="17">
-      <data key="keyword">null</data>
-      <data key="id">16228391L</data>
-      <data key="screenName">LRM_Ent</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Get this PETA is up set with President Obama for killing a nasty germ spreading house fly!   http://bit.ly/GdxB5 - its not that serious!</data>
-    </node>
-    <node id="18">
-      <data key="keyword">null</data>
-      <data key="id">29205738L</data>
-      <data key="screenName">fast06mustang</data>
+      <data key="id">25195134L</data>
+      <data key="screenName">jdamn</data>
       <data key="relevance">2</data>
       <data key="friend">false</data>
       <data key="follower">false</data>
-      <data key="status_text">@Anita_de_Jong To there credit thry are respecting him. Unlike the other Media with President Bush.</data>
-    </node>
-    <node id="19">
-      <data key="keyword">null</data>
-      <data key="id">15728976L</data>
-      <data key="screenName">nzheraldbiz</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">Obama plan puts too much faith in the Fed, say critics: WASHINGTON - President Barack Obama&apos;s plan to increase o.. http://tinyurl.com/nfjopw</data>
-    </node>
-    <node id="20">
-      <data key="keyword">null</data>
-      <data key="id">39603339L</data>
-      <data key="screenName">CascadeCleaning</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">PETA is now made at President Obama for killing a fly..  WOW</data>
-    </node>
-    <node id="21">
-      <data key="keyword">null</data>
-      <data key="id">46828152L</data>
-      <data key="screenName">JAYNEGRIFFIN</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">IF G GORDON LIDDY HAD THIS VOCABULARY WHEN NIXON WAS PRESIDENT HE COULD HAVE TALKED HIMSELF OUT OF TROUBLE....HA...HA....HA...LOL!</data>
-    </node>
-    <node id="22">
-      <data key="keyword">null</data>
-      <data key="id">16503846L</data>
-      <data key="screenName">ngeidner</data>
-      <data key="relevance">3</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @chrisgeidner: New at Salon.com: President Obama has not betrayed the gay community, by Chris Geidner: http://tr.im/p06F #LGBT</data>
-    </node>
-    <node id="23">
-      <data key="keyword">null</data>
-      <data key="id">47005158L</data>
-      <data key="screenName">Change_for_Iran</data>
-      <data key="relevance">1</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">@flimflammman but for start we all want our true president whom we voted for</data>
-    </node>
-    <node id="24">
-      <data key="keyword">null</data>
-      <data key="id">17700373L</data>
-      <data key="screenName">BMCronin1</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">RT @jaketapper: Polls show the American people increasingly concerned about the President&apos;s ec policies...http://bit.ly/lyJhX #TCOT #TLOT</data>
-    </node>
-    <node id="25">
-      <data key="keyword">null</data>
-      <data key="id">31251441L</data>
-      <data key="screenName">michaeljwagner</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">null</data>
-    </node>
-    <node id="26">
-      <data key="keyword">null</data>
-      <data key="id">21130583L</data>
-      <data key="screenName">ReFuelCEO</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">null</data>
-    </node>
-    <node id="27">
-      <data key="keyword">null</data>
-      <data key="id">14254651L</data>
-      <data key="screenName">paul_schmidt</data>
-      <data key="relevance">2</data>
-      <data key="friend">false</data>
-      <data key="follower">false</data>
-      <data key="status_text">null</data>
+      <data key="status_text">@islamqa Computer-mediated communication.&amp;amp; I&apos;ve studied HCI &amp;amp; info science at the graduate level at an excellent institution(no 17 yr-olds).</data>
     </node>
 
     <!-- edges -->
-    <edge id="0" source="0" target="1"/>
-    <edge id="1" source="0" target="2"/>
-    <edge id="2" source="0" target="3"/>
-    <edge id="3" source="0" target="4"/>
-    <edge id="4" source="0" target="5"/>
-    <edge id="5" source="0" target="6"/>
-    <edge id="6" source="0" target="7"/>
-    <edge id="7" source="0" target="8"/>
-    <edge id="8" source="0" target="9"/>
-    <edge id="9" source="0" target="10"/>
-    <edge id="10" source="0" target="11"/>
-    <edge id="11" source="0" target="12"/>
-    <edge id="12" source="0" target="13"/>
-    <edge id="13" source="0" target="14"/>
-    <edge id="14" source="0" target="3"/>
-    <edge id="15" source="15" target="16"/>
-    <edge id="16" source="0" target="16"/>
-    <edge id="17" source="15" target="17"/>
-    <edge id="18" source="0" target="17"/>
-    <edge id="19" source="15" target="18"/>
-    <edge id="20" source="15" target="19"/>
-    <edge id="21" source="0" target="19"/>
-    <edge id="22" source="15" target="20"/>
-    <edge id="23" source="0" target="20"/>
-    <edge id="24" source="15" target="21"/>
-    <edge id="25" source="15" target="22"/>
-    <edge id="26" source="0" target="22"/>
-    <edge id="27" source="15" target="23"/>
-    <edge id="28" source="15" target="24"/>
-    <edge id="29" source="0" target="25"/>
-    <edge id="30" source="0" target="26"/>
-    <edge id="31" source="0" target="27"/>
+    <edge id="0" source="2" target="1"/>
+    <edge id="1" source="2" target="3"/>
+    <edge id="2" source="2" target="4"/>
+    <edge id="3" source="2" target="5"/>
+    <edge id="4" source="2" target="6"/>
+    <edge id="5" source="2" target="7"/>
+    <edge id="6" source="2" target="8"/>
+    <edge id="7" source="2" target="9"/>
+    <edge id="8" source="2" target="10"/>
+    <edge id="9" source="2" target="11"/>
+    <edge id="10" source="2" target="12"/>
+    <edge id="11" source="2" target="13"/>
+    <edge id="12" source="2" target="14"/>
+    <edge id="13" source="2" target="15"/>
+    <edge id="14" source="2" target="16"/>
   </graph>
 </graphml>
