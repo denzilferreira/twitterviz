@@ -1,0 +1,2 @@
+It's a visualization tool for Twitter, which outputs the social network of a twitter and his related twitters. It is based on the highly popular Prefuse Java library. It should also allow for criteria searching according to the various user properties available through the Twitter API, assuming the user of the application is logged in Twitter.
+It is being developed as an academic ubiquitous computing project.
